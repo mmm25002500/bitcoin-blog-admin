@@ -1,40 +1,69 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/pages/api-reference/create-next-app).
+# 比特幣中文部落格網站 - 文檔
+## 使用說明
+1. 在寫 Markdown 要使用 HTML 語法的 class的時候要使用 className。
+### 文章
+1. 文章路徑為 `Article/${name}/${mdx name}`
+2. 文章元標頭為：
+> title: "文章標題" <br>
+> description: "文章描述" <br>
+> date: "YYYY-MM-DD HH:MM" <br>
+> tags: ["標籤1", "標籤2", "標籤n"] <br>
+> type: ['News','Post'] （類別：文章為Post，新聞為 News） <br>
+> img: "/Author/JohnCarter/author.png"（必須放在本地，其位置於`public/Author/${name}/author.png`） <br>
+> image: "https://網址/圖片檔名.副檔名" <br>
 
-## Getting Started
+## 網站架構
+### 內部API
+#### ADDR
+路徑：`/api/{name}?lebel_1=val_1&label2=val_2&...`
+#### 功能表
+| API | Input | Output | 簡介 |
+| --- | --- | --- | --- |
+|  | req.query: {  } | res: {  } |  |
 
-First, run the development server:
+### 外部API
+| Hash Rate | Block Height | Price |
+| -------- | -------- | -------- |
+| BlockChair | BlockChair | BlockChair |
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+### 使用資源
+| 內容 | 服務 |
+| ---- | ---- |
+| Post Backend | Supabase |
+| Backend Server | Vercel |
+| Frontend Server | Vercel |
+| BTC info Provider | BlockChair |
+
+### 擷取 Tags
+```sh
+grep -r 'tags' . | sed -n 's/.*tags: \(.*\)/\1/p' | tr -d '[]' | tr ',' '\n' | sed 's/^ *//;s/ *$//' | tr -d '"' | tr -d "'" | sort -u | uniq | sed 's/^/"/;s/$/"/' | sed 's/$/,/'
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
-
-[API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) instead of React pages.
-
-This project uses [`next/font`](https://nextjs.org/docs/pages/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn-pages-router) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/pages/building-your-application/deploying) for more details.
+## Hot Reloading & Deployment
+### pnpm (recommendation)
+```bash
+# install necessary pkg
+pnpm i
+# hot reloading dev
+pnpm dev
+# deploy & compile
+pnpm build
+```
+### npm (Not recommended)
+```bash
+# install necessary pkg
+npm i
+# hot reloading dev
+npm run dev
+# deploy & compile
+npm run build
+```
+### yarn (Not recommended)
+```bash
+# install necessary pkg
+yarn
+# hot reloading dev
+yarn dev
+# deploy & compile
+yarn build
+```
