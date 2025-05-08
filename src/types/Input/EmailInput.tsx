@@ -1,7 +1,5 @@
-export interface InputProps {
-  type: string;
+export interface EmailInputProps {
   placeholder: string;
-  value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   className?: string;
 }
