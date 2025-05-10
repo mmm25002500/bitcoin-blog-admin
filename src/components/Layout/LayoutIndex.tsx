@@ -1,24 +1,38 @@
 import { LayoutIndexProps } from "@/types/Layout/LayoutIndex";
 import Sidebar from "../Sidebar/Sidebar";
+import Navbar from "../Navbar/Navbar";
+
+// icon
+import NewsIcon from "@/images/news_icon.svg";
+import PostIcon from "@/images/post_icon.svg";
+import AuthorIcon from "@/images/author_icon.svg";
 
 const LayoutIndex = (props: LayoutIndexProps) => {
 
   const item = [
-    { name: '新聞管理', path: '/NewsManage', icon: '' },
-    { name: '文章管理', path: '/PageManage', icon: '' },
-    { name: '作者管理', path: '/AuthorManage', icon: '' }
+    { name: '新聞管理', path: '/NewsManage', icon: NewsIcon },
+    { name: '文章管理', path: '/PageManage', icon: PostIcon },
+    { name: '作者管理', path: '/AuthorManage', icon: AuthorIcon }
   ];
   return (
-    <>
+    <div className="flex h-screen bg-[#F3F7FA]">
       <Sidebar
         items={item}
       />
-      <div className="p-4 sm:ml-64">
-        <div className="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700">
-          { props.children }
+      <div className="flex flex-col flex-1 overflow-hidden ml-64">
+        <Navbar
+          title={props.title}
+          logo={props.logo}
+          userName={"測試"}
+          className="px-4"
+        />
+        <div className="flex-1 overflow-y-auto p-4">
+          <div className="p-4 border-gray-200 border-dashed rounded-lg bg-white h-full">
+            {props.children}
+          </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 
