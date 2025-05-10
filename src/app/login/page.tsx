@@ -31,7 +31,8 @@ const LoginPage = () => {
   };
   // 處理電子郵件輸入
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // console.log(e.target.value);
+    console.log(e.target.value);
+    console.log(email);
     if (validateEmail(e.target.value)) {
       setEmailError(null);
     } else {
@@ -42,13 +43,13 @@ const LoginPage = () => {
 
   // 處理密碼輸入
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // console.log(password);
+    console.log(password);
     setPassword(e.target.value);
   }
 
   // 處理記住我選項
   const handleRememberMeChange = (checked: boolean) => {
-    // console.log(rememberMe);
+    console.log(rememberMe);
     setRememberMe(checked);
   }
 
