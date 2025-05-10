@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import { PasswordInputProps } from "@/types/Input/PasswordInput";
 import eye_open from "@/images/eye_open.svg";
