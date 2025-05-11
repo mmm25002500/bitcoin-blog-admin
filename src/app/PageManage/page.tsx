@@ -1,5 +1,6 @@
 "use client";
 
+import AddBtn from "@/components/Button/AddBtn";
 import DateSelection from "@/components/Input/DateSelection";
 import DropDown from "@/components/Input/DropDown";
 import Search from "@/components/Input/Search";
@@ -79,22 +80,31 @@ const PageManage = () => {
 
   return (
     <LayoutIndex title="文章管理" logo={PostIcon}>
-      <div className="flex gap-5">
-        <DateSelection
-          selected={undefined}
-          onSelect={handleDateSelect}
-          onCancel={handleDateCancel}
+      <div className="flex">
+        <div className="flex gap-5 grow">
+          <DateSelection
+            selected={undefined}
+            onSelect={handleDateSelect}
+            onCancel={handleDateCancel}
           />
-        <DropDown
-          options={ArticleType}
-          selectedOption={"ss"}
-          onCancel={handleDropDownCancel}
-          onSelect={handleSelect}
-        />
-        <Search
-          onChange={handleSearchChange}
-          onCancel={handleSearchCancel}
+          <DropDown
+            options={ArticleType}
+            selectedOption={"ss"}
+            onCancel={handleDropDownCancel}
+            onSelect={handleSelect}
           />
+          <Search
+            onChange={handleSearchChange}
+            onCancel={handleSearchCancel}
+          />
+        </div>
+        <div>
+          <AddBtn
+            onClick={() => console.log("新增文章")}
+            label={"新增 +"}
+            className=""
+          />
+        </div>
       </div>
     </LayoutIndex>
   );
