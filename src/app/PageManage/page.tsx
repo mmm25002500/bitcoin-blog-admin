@@ -9,7 +9,9 @@ import PostTable from "@/components/Table/PostTable";
 
 // icon
 import PostIcon from "@/images/post_icon.svg";
+
 import { PostData } from "@/types/Table/PostTable";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { DateRange } from "react-day-picker";
 
@@ -29,6 +31,9 @@ const PageManage = () => {
   const [searchValue, setSearchValue] = useState<string>("");
   // 日期選擇的值
   const [date, setDate] = useState<DateRange | undefined>();
+
+  // 處理路由變化
+  const router = useRouter();
 
   const ArticleType = [
     'All',
@@ -117,7 +122,7 @@ const PageManage = () => {
         </div>
         <div>
           <AddBtn
-            onClick={() => console.log("新增文章")}
+            onClick={() => router.push("/CreatePost")}
             label={"新增 +"}
             className=""
           />

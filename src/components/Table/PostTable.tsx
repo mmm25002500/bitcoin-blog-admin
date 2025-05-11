@@ -7,6 +7,13 @@ import Image from "next/image";
 import TrashCanIcon from "@/images/trash_can.svg";
 import PenIcon from "@/images/pen.svg";
 import RedTrashCanIcon from "@/images/red_trash_can.svg";
+import ConfirmModal from "../Modal/ConfirmModal";
+
+// TODO:
+// 1. 發佈日期篩選（後端）
+// 2. 文章類型篩選（後端）
+// 3. 搜尋功能篩選（後端）
+// 4. 刪除文章彈跳視窗
 
 const PostTable = (props: PostTableProps) => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -14,6 +21,7 @@ const PostTable = (props: PostTableProps) => {
   const [sortBy, setSortBy] = useState<keyof PostData>("title");
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
 
   const totalPages = Math.ceil(props.PostData.length / itemsPerPage);
 
@@ -64,8 +72,8 @@ const PostTable = (props: PostTableProps) => {
       return newSet;
     });
   };
-  
-  
+
+
   // 處理全選
   // const isAllCurrentPageSelected = paginatedData.every((item) => selectedIds.has(item.id));
   // const handleSelectAll = () => {
@@ -83,6 +91,7 @@ const PostTable = (props: PostTableProps) => {
   // 處理要刪除的項目
   const handleDeleteSelected = () => {
     const idsToDelete = Array.from(selectedIds);
+    setShowConfirmModal(true);
     console.log("要刪除的 ID：", idsToDelete);
     props.onDelete?.(idsToDelete);
 
@@ -271,6 +280,22 @@ const PostTable = (props: PostTableProps) => {
             {">"}
           </button>
         </div>
+      </div>
+
+      {/* 刪除確認視窗 */}
+      <div className="w-80">
+        <ConfirmModal
+          isOpen={showConfirmModal}
+          title={`確定要刪除這 ${selectedIds.size} 篇文章嗎？`}
+          description={`此操作將永久刪除文章，且無法復原。\n確認是否繼續執行。`}
+          confirmLabel="刪除文章"
+          cancelLabel="取消"
+          onConfirm={() => {
+            handleDeleteSelected();
+            setShowConfirmModal(false);
+          }}
+          onCancel={() => setShowConfirmModal(false)}
+        />
       </div>
     </div>
   );
