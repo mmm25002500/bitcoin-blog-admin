@@ -96,15 +96,19 @@ export default function CustomDatePicker(props: DateSelectionProps) {
         </span>
 
         <div className="pointer-events-none absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center gap-1">
-          <span onClick={handleClear} className="pointer-events-auto cursor-grab">
-            <Image
-              src={Cancel}
-              alt="cancle"
-              width={20}
-              height={20}
-              className=""
-            />
-          </span>
+          {
+            selected && (
+              <span onClick={handleClear} className="pointer-events-auto cursor-grab">
+                <Image
+                  src={Cancel}
+                  alt="cancle"
+                  width={20}
+                  height={20}
+                  className=""
+                />
+              </span>
+            )
+          }
           <CalendarIcon className="pointer-events-none w-5 h-5 text-gray-500" />
         </div>
       </button>

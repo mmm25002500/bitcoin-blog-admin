@@ -40,15 +40,19 @@ const DropDown = (props: DropDownProps) => {
       </select>
 
       <div className="pointer-events-none absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center gap-1">
-        <button onClick={onCancel} className="pointer-events-auto cursor-grab">
-          <Image
-            src={Cancel}
-            alt="cancle"
-            width={20}
-            height={20}
-            className=""
-          />
-        </button>
+        {
+          selectedValue !== 'All' && selectedValue !== '' && (
+            <button onClick={onCancel} className="pointer-events-auto cursor-grab">
+              <Image
+                src={Cancel}
+                alt="cancle"
+                width={20}
+                height={20}
+                className=""
+              />
+            </button>
+          )
+        }
 
         <div className="pointer-events-none">
           <svg
