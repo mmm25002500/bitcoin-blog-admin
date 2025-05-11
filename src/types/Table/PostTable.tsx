@@ -11,5 +11,6 @@ export interface PostTableProps {
   // onPerPageChange?: (perPage: number) => void;
   // currentPage?: number;
   // handlePageChange?: (page: number) => void;
+  onDelete?: (ids: string[]) => void;
   PostData: PostData[];
 };

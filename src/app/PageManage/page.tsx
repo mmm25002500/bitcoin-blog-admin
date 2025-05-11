@@ -89,6 +89,11 @@ const PageManage = () => {
     console.log("日期選擇取消");
   };
 
+  // 處理要刪除的項目
+  const handleDeleteSelected = (id: string[]) => {
+    console.log("要刪除的 ID：", id);
+  };
+
   return (
     <LayoutIndex title="文章管理" logo={PostIcon}>
       {/* nav */}
@@ -122,6 +127,7 @@ const PageManage = () => {
       {/* 文章列表 */}
       <PostTable
         perPage={10}
+        onDelete={handleDeleteSelected}
         PostData={mockData}
       />
     </LayoutIndex>

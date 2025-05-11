@@ -27,7 +27,7 @@ const LayoutIndex = (props: LayoutIndexProps) => {
           className="px-4"
         />
         <div className="flex-1 overflow-y-auto p-4">
-          <div className="p-4 border-gray-200 border-dashed rounded-lg bg-white h-full">
+          <div className="p-4 border-gray-200 border-dashed rounded-lg bg-white min-h-full">
             {props.children}
           </div>
         </div>
