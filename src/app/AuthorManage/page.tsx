@@ -1,4 +1,3 @@
-import DateSelection from "@/components/Input/DateSelection";
 import LayoutIndex from "@/components/Layout/LayoutIndex";
 
 // icon
@@ -8,7 +7,6 @@ const AuthrorManage = () => {
   return (
     <LayoutIndex title="作者管理" logo={AuthorIcon}>
       <></>
-      <DateSelection />
     </LayoutIndex>
   );
 }
