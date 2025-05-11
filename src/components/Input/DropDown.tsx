@@ -10,23 +10,24 @@ import Cancel from "@/images/cancel.svg";
 const DropDown = (props: DropDownProps) => {
   const [selectedValue, setSelectedValue] = useState<string>('');
 
+  // 處理選擇框的變化
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedValue = event.target.value;
     setSelectedValue(selectedValue);
     props.onSelect(selectedValue);
   }
 
+  // 處理取消按鈕的點擊事件
   const onCancel = () => {
     setSelectedValue('All');
     props.onCancel();
   }
 
   return (
-    <div className="relative w-60">
+    <div className="relative w-40">
       <select
         id="dropdown"
-        className={`appearance-none flex items-center justify-between w-full py-2 px-3 pr-10 text-sm font-normal leading-6 h-full border-[1px] rounded-md focus:outline-none focus:border-[#0E0E0E] focus:ring-[1px] focus:ring-[#0E0E0E] ${selectedValue == 'All' ? 'text-[#999999]' : 'text-[#1A1A1A]'}`}
-        defaultValue=""
+        className={`appearance-none flex items-center justify-between w-full py-2 px-3 pr-10 text-sm font-normal leading-6 h-full border-[1px] border-[#D3D3D3] rounded-md focus:outline-none focus:border-[#0E0E0E] focus:ring-[1px] focus:ring-[#0E0E0E] ${selectedValue == 'All' || selectedValue == '' ? 'text-[#999999]' : 'text-[#1A1A1A]'}`}
         onChange={handleChange}
         value={selectedValue}
       >

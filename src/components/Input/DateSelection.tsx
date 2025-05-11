@@ -8,6 +8,7 @@ import { CalendarIcon } from "@heroicons/react/24/outline";
 import "react-day-picker/dist/style.css";
 import Image from "next/image";
 import Cancel from "@/images/cancel.svg";
+import { DateSelectionProps } from "@/types/Input/DateSelection";
 
 // TODO：
 // 1. Props 傳入及傳出 date
@@ -43,7 +44,7 @@ function CustomNavigation() {
   );
 }
 
-export default function CustomDatePicker() {
+export default function CustomDatePicker(props: DateSelectionProps) {
   const [selected, setSelected] = useState<DateRange | undefined>();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -51,6 +52,11 @@ export default function CustomDatePicker() {
 
   // 選擇日期後，關閉日曆
   const handleSelect = (range: DateRange | undefined) => {
+    if (range?.from && range.to) {
+      props.onSelect(range);
+    } else {
+      props.onSelect(undefined);
+    }
     setSelected(range);
     if (range?.from && range?.to) {
       setOpen(false);
@@ -68,11 +74,18 @@ export default function CustomDatePicker() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // 清除選擇的日期
+  const handleClear = () => {
+    props.onSelect(undefined);
+    setSelected(undefined);
+    setOpen(false);
+  };
+
   return (
     <div className="relative w-72" ref={ref}>
       <button
         onClick={() => setOpen(!open)}
-        className="w-full border rounded-md px-3 py-2 flex items-center justify-between focus:outline-none focus:ring-[1px] focus:ring-[#0E0E0E]"
+        className="w-full border-[1px] border-[#D3D3D3] rounded-md px-3 py-2 flex items-center justify-between focus:outline-none focus:ring-[1px] focus:ring-[#0E0E0E]"
       >
         <span className={`text-sm leading-6 font-normal ${selected?.from ? "text-[#1A1A1A]" : "text-[#999999]"}`}>
           {selected?.from
@@ -83,7 +96,7 @@ export default function CustomDatePicker() {
         </span>
 
         <div className="pointer-events-none absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center gap-1">
-          <button className="pointer-events-auto cursor-grab">
+          <span onClick={handleClear} className="pointer-events-auto cursor-grab">
             <Image
               src={Cancel}
               alt="cancle"
@@ -91,7 +104,7 @@ export default function CustomDatePicker() {
               height={20}
               className=""
             />
-          </button>
+          </span>
           <CalendarIcon className="pointer-events-none w-5 h-5 text-gray-500" />
         </div>
       </button>
