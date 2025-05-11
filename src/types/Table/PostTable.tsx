@@ -1,3 +1,5 @@
+import { DateRange } from "react-day-picker";
+
 export interface PostData {
   id: string;
   title: string;
@@ -8,6 +10,9 @@ export interface PostData {
 }
 export interface PostTableProps {
   perPage?: number;
+  searchValue?: string;
+  type?: string;
+  date?: DateRange;
   // onPerPageChange?: (perPage: number) => void;
   // currentPage?: number;
   // handlePageChange?: (page: number) => void;

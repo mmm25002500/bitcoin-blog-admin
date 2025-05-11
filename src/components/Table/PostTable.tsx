@@ -9,12 +9,6 @@ import PenIcon from "@/images/pen.svg";
 import RedTrashCanIcon from "@/images/red_trash_can.svg";
 import ConfirmModal from "../Modal/ConfirmModal";
 
-// TODO:
-// 1. 發佈日期篩選（後端）
-// 2. 文章類型篩選（後端）
-// 3. 搜尋功能篩選（後端）
-// 4. 刪除文章彈跳視窗
-
 const PostTable = (props: PostTableProps) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState<number>(props.perPage || 10);
@@ -35,8 +29,32 @@ const PostTable = (props: PostTableProps) => {
     }
   };
 
+  // 處理搜尋、Type、日期
+  const filteredData = props.PostData.filter((post) => {
+    const keyword = props.searchValue?.toLowerCase() || "";
+    const matchesSearch =
+      post.title.toLowerCase().includes(keyword) ||
+      post.id.toLowerCase().includes(keyword) ||
+      post.author.toLowerCase().includes(keyword);
+
+    const matchesType = !props.type || props.type === "All" || post.type === props.type;
+
+    const postDate = new Date(post.date);
+    const from = props.date?.from;
+    const to = props.date?.to ? new Date(props.date.to.setHours(23, 59, 59, 999)) : undefined;
+
+    const matchesDate =
+      !from && !to ? true :
+        from && to ? postDate >= from && postDate <= to :
+          from ? postDate >= from :
+            to ? postDate <= to : true;
+
+    return matchesSearch && matchesType && matchesDate;
+  });
+
+
   // 處理排序
-  const sortedData = [...props.PostData].sort((a, b) => {
+  const sortedData = [...filteredData].sort((a, b) => {
     const valA = a[sortBy];
     const valB = b[sortBy];
     if (valA < valB) return sortDirection === "asc" ? -1 : 1;
@@ -96,7 +114,7 @@ const PostTable = (props: PostTableProps) => {
     props.onDelete?.(idsToDelete);
 
     // TODO: 串接 API 或透過 props 回傳資料
-    // props.onDelete?.(idsToDelete);
+    // props.onDelete?.(idsToDelete);a
   };
 
   return (

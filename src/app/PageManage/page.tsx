@@ -17,9 +17,9 @@ import { DateRange } from "react-day-picker";
 
 const mockData: PostData[] = Array.from({ length: 100 }, (_, i) => ({
   id: `#1231${i}`,
-  title: `小琉球潛水體驗小琉球潛水體驗小琉球潛水體驗小琉球潛水體驗小琉球潛水體驗小琉球潛水體驗小琉球潛水體驗小琉球潛水體驗小琉球潛水體驗小琉球潛水體驗小琉球潛水體驗小琉球潛水體驗小琉球潛水體驗 ${10 - i}`,
+  title: `小琉球潛水體驗小琉球潛水體驗小琉球 ${10 - i}`,
   author: "王小明",
-  date: `2023/12/1${5 - (i % 3)} 12:2${i}`,
+  date: `2025/05/11 12:2${i}`,
   tag: "標籤內容",
   type: i % 2 === 0 ? "News" : "Post",
 }));
@@ -132,6 +132,9 @@ const PageManage = () => {
       {/* 文章列表 */}
       <PostTable
         perPage={10}
+        type={selectedOption}
+        searchValue={searchValue}
+        date={date}
         onDelete={handleDeleteSelected}
         PostData={mockData}
       />
