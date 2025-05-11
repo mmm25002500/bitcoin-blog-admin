@@ -8,6 +8,7 @@ import TrashCanIcon from "@/images/trash_can.svg";
 import PenIcon from "@/images/pen.svg";
 import RedTrashCanIcon from "@/images/red_trash_can.svg";
 import ConfirmModal from "../Modal/ConfirmModal";
+import NoResultIcon from "@/images/NoResult.svg";
 
 const PostTable = (props: PostTableProps) => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -179,73 +180,92 @@ const PostTable = (props: PostTableProps) => {
               <th className="px-3 py-2 text-left">操作</th>
             </tr>
           </thead>
-          <tbody>
-            {paginatedData.map((post, index) => (
-              <tr
-                key={index}
-                className={`border-b-[1px] border-[#F1F1F1] text-sm leading-6 font-normal text-[#1A1A1A] ${selectedIds.has(post.id) ? "bg-[#F3F6F7] border-[1px] border-[#F1F1F1]" : ""
-                  }`}
-              >
-                <td className="px-3 py-2">
-                  <div className="inline-flex items-center">
-                    <label className="flex items-center cursor-pointer relative">
-                      <input
-                        type="checkbox"
-                        checked={selectedIds.has(post.id)}
-                        onChange={() => handleCheckboxChange(post.id)}
-                        className="peer h-5 w-5 cursor-pointer transition-all appearance-none rounded shadow hover:shadow-md border border-slate-300 checked:bg-slate-800 checked:border-slate-800" id="check" />
-                      <span className="absolute text-white opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor" stroke="currentColor" stroke-width="1">
-                          <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                        </svg>
-                      </span>
-                    </label>
+          {paginatedData.length === 0 ? (
+            <tbody>
+              <tr>
+                <td colSpan={8}>
+                  <div className="flex flex-col items-center justify-center h-[60vh] text-[#A7A7A7] text-sm">
+                    <Image
+                      src={NoResultIcon}
+                      alt="no result"
+                      width={100}
+                      height={100}
+                      className="mb-2"
+                    />
+                    查無搜尋結果
                   </div>
                 </td>
-                <td className="px-3 py-2">{post.id}</td>
-                <td className="px-3 py-2 max-w-[250px]">
-                  <p className="line-clamp-2">{post.title}</p>
-                </td>
-                <td className="px-3 py-2">{post.author}</td>
-                <td className="px-3 py-2">{post.date}</td>
-                <td className="px-3 py-2">
-                  <span className="px-3 py-[2px] bg-[#F1F1F1] text-[#505050] font-normal leading-6 rounded-full text-sm">
-                    {post.tag}
-                  </span>
-                </td>
-                <td className="px-3 py-2">
-                  <span
-                    className={`px-2 py-1 rounded text-sm ${post.type === "News"
-                      ? "bg-[#ECF6FF] text-[#1A72C2]"
-                      : "bg-[#EBFAEB] text-[#3FA02D]"
-                      } rounded-full px-3 py-[2px] font-normal leading-6`}
-                  >
-                    {post.type}
-                  </span>
-                </td>
-                <td className="px-3 py-2">
-                  <button className="mr-2 border-[1px] border-[#E9E9E9] rounded-sm p-2.5 bg-white">
-                    <Image
-                      src={TrashCanIcon}
-                      alt="login"
-                      width={100}
-                      height={100}
-                      className="w-4 h-4"
-                    />
-                  </button>
-                  <button className="border-[1px] border-[#E9E9E9] rounded-sm p-2.5 bg-white">
-                    <Image
-                      src={PenIcon}
-                      alt="login"
-                      width={100}
-                      height={100}
-                      className="w-4 h-4"
-                    />
-                  </button>
-                </td>
               </tr>
-            ))}
-          </tbody>
+            </tbody>
+          ) : (
+            <tbody>
+              {paginatedData.map((post, index) => (
+                <tr
+                  key={index}
+                  className={`border-b-[1px] border-[#F1F1F1] text-sm leading-6 font-normal text-[#1A1A1A] ${selectedIds.has(post.id) ? "bg-[#F3F6F7] border-[1px] border-[#F1F1F1]" : ""
+                    }`}
+                >
+                  <td className="px-3 py-2">
+                    <div className="inline-flex items-center">
+                      <label className="flex items-center cursor-pointer relative">
+                        <input
+                          type="checkbox"
+                          checked={selectedIds.has(post.id)}
+                          onChange={() => handleCheckboxChange(post.id)}
+                          className="peer h-5 w-5 cursor-pointer transition-all appearance-none rounded shadow hover:shadow-md border border-slate-300 checked:bg-slate-800 checked:border-slate-800" id="check" />
+                        <span className="absolute text-white opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" viewBox="0 0 20 20" fill="currentColor" stroke="currentColor" stroke-width="1">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                          </svg>
+                        </span>
+                      </label>
+                    </div>
+                  </td>
+                  <td className="px-3 py-2">{post.id}</td>
+                  <td className="px-3 py-2 max-w-[250px]">
+                    <p className="line-clamp-2">{post.title}</p>
+                  </td>
+                  <td className="px-3 py-2">{post.author}</td>
+                  <td className="px-3 py-2">{post.date}</td>
+                  <td className="px-3 py-2">
+                    <span className="px-3 py-[2px] bg-[#F1F1F1] text-[#505050] font-normal leading-6 rounded-full text-sm">
+                      {post.tag}
+                    </span>
+                  </td>
+                  <td className="px-3 py-2">
+                    <span
+                      className={`px-2 py-1 rounded text-sm ${post.type === "News"
+                        ? "bg-[#ECF6FF] text-[#1A72C2]"
+                        : "bg-[#EBFAEB] text-[#3FA02D]"
+                        } rounded-full px-3 py-[2px] font-normal leading-6`}
+                    >
+                      {post.type}
+                    </span>
+                  </td>
+                  <td className="px-3 py-2">
+                    <button className="mr-2 border-[1px] border-[#E9E9E9] rounded-sm p-2.5 bg-white">
+                      <Image
+                        src={TrashCanIcon}
+                        alt="login"
+                        width={100}
+                        height={100}
+                        className="w-4 h-4"
+                      />
+                    </button>
+                    <button className="border-[1px] border-[#E9E9E9] rounded-sm p-2.5 bg-white">
+                      <Image
+                        src={PenIcon}
+                        alt="login"
+                        width={100}
+                        height={100}
+                        className="w-4 h-4"
+                      />
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          )}
         </table>
       </div>
 
