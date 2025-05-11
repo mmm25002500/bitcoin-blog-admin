@@ -5,11 +5,22 @@ import DateSelection from "@/components/Input/DateSelection";
 import DropDown from "@/components/Input/DropDown";
 import Search from "@/components/Input/Search";
 import LayoutIndex from "@/components/Layout/LayoutIndex";
+import PostTable from "@/components/Table/PostTable";
 
 // icon
 import PostIcon from "@/images/post_icon.svg";
+import { PostData } from "@/types/Table/PostTable";
 import { useEffect, useState } from "react";
 import { DateRange } from "react-day-picker";
+
+const mockData: PostData[] = Array.from({ length: 100 }, (_, i) => ({
+  id: `#1231${i}`,
+  title: `小琉球潛水體驗小琉球潛水體驗小琉球潛水體驗小琉球潛水體驗小琉球潛水體驗小琉球潛水體驗小琉球潛水體驗小琉球潛水體驗小琉球潛水體驗小琉球潛水體驗小琉球潛水體驗小琉球潛水體驗小琉球潛水體驗 ${10 - i}`,
+  author: "王小明",
+  date: `2023/12/1${5 - (i % 3)} 12:2${i}`,
+  tag: "標籤內容",
+  type: i % 2 === 0 ? "News" : "Post",
+}));
 
 const PageManage = () => {
   // 文章類型選單
@@ -80,6 +91,7 @@ const PageManage = () => {
 
   return (
     <LayoutIndex title="文章管理" logo={PostIcon}>
+      {/* nav */}
       <div className="flex">
         <div className="flex gap-5 grow">
           <DateSelection
@@ -104,8 +116,14 @@ const PageManage = () => {
             label={"新增 +"}
             className=""
           />
-        </div>
+        </div> 
       </div>
+
+      {/* 文章列表 */}
+      <PostTable
+        perPage={10}
+        PostData={mockData}
+      />
     </LayoutIndex>
   );
 }
