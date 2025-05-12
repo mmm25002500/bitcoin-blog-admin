@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import { UploadFileProps } from '@/types/Upload/Upload';
 
@@ -8,7 +8,14 @@ import BrowserFileBtn from '../Button/BrowserFileBtn';
 
 const UploadFile = (props: UploadFileProps) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(props.previewUrl || null);
+
+  useEffect(() => {
+    // 外部 props.previewUrl 被清空時，內部 previewUrl 一併清空
+    if (!props.previewUrl) {
+      setPreviewUrl(null);
+    }
+  }, [props.previewUrl]);
 
   // 處理檔案選擇
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {

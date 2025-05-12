@@ -1,6 +1,7 @@
 'use client';
 import AddBtn from "@/components/Button/AddBtn";
 import CancelBtn from "@/components/Button/CancelBtn";
+import ImagePreview from "@/components/Card/ImagePreview";
 import Input from "@/components/Input/Input";
 import Label from "@/components/Label/Label";
 import UploadFile from "@/components/UploadFile/UploadFile";
@@ -107,15 +108,32 @@ const CreatePost = () => {
               onDrop={(file) => setImageFile(file)}
             />
 
-            <span className="text-xs text-[#7C7C7C] mt-2">上傳張數 {imageFile ? 1 : 0}/1</span>
+            {/* 上傳張數 */}
+            {
+              !imageFile && (
+                <span className="text-xs text-[#7C7C7C] mt-2">上傳張數 {imageFile ? 1 : 0}/1</span>
+              )
+            }
+
+            {/* 圖片預覽 */}
+            {
+              imageFile && (
+                <ImagePreview
+                  imageFile={imageFile}
+                  onDelete={() => setImageFile(null)}
+                />
+              )
+            }
           </div>
         </div>
 
         {/* 確定按鈕置底 */}
-        <div className="absolute bottom-0 right-0 bg-white py-4 w-full shadow-[0_-4px_8px_-3px_rgba(0,0,0,0.05)]">
-          <div className="flex justify-end gap-2">
-            <AddBtn label="發佈" onClick={() => console.log("發佈")} />
-            <CancelBtn label="取消" onClick={() => console.log("取消")} />
+        <div className="pt-20">
+          <div className="absolute bottom-0 right-0 bg-white py-4 w-full shadow-[0_-4px_8px_-3px_rgba(0,0,0,0.05)]">
+            <div className="flex justify-end gap-2">
+              <AddBtn label="發佈" onClick={() => console.log("發佈")} />
+              <CancelBtn label="取消" onClick={() => console.log("取消")} />
+            </div>
           </div>
         </div>
       </div>
