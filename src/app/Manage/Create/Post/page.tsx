@@ -11,11 +11,15 @@ import Label from "@/components/Label/Label";
 import UploadFile from "@/components/UploadFile/UploadFile";
 
 import { useEffect, useState } from "react";
+import { useRouter } from 'nextjs-toploader/app';
 
 const CreatePost = () => {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [selectedOption, setSelectedOption] = useState<string>("All");
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
+
+  // 處理路由變化
+  const router = useRouter();
 
   const ArticleType = [
     'News',
@@ -198,8 +202,8 @@ const CreatePost = () => {
         <div className="pt-20">
           <div className="absolute bottom-0 right-0 bg-white py-4 w-full shadow-[0_-4px_8px_-3px_rgba(0,0,0,0.05)]">
             <div className="flex justify-end gap-2 pr-7">
-              <AddBtn label="發佈" onClick={() => console.log("發佈")} />
-              <CancelBtn label="取消" onClick={() => console.log("取消")} />
+              <AddBtn label="發佈" onClick={() => router.push("/Manage/Post")} />
+              <CancelBtn label="取消" onClick={() => router.push("/Manage/Post")} />
             </div>
           </div>
         </div>

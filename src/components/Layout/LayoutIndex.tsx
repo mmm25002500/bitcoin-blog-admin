@@ -11,7 +11,7 @@ const LayoutIndex = (props: LayoutIndexProps) => {
 
   const item = [
     { name: '新聞管理', path: '/Manage/News', icon: NewsIcon },
-    { name: '文章管理', path: '/Manage/Page', icon: PostIcon },
+    { name: '文章管理', path: '/Manage/Post', icon: PostIcon },
     { name: '作者管理', path: '/Manage/Author', icon: AuthorIcon }
   ];
   return (

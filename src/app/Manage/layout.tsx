@@ -11,11 +11,13 @@ import PostIcon from "@/images/post_icon.svg";
 import AuthorIcon from "@/images/author_icon.svg";
 
 const routeInfo = {
-  "/Manage/Page": { title: "文章管理", logo: PostIcon },
+  "/Manage/Post": { title: "文章管理", logo: PostIcon },
   "/Manage/News": { title: "新聞管理", logo: NewsIcon },
   "/Manage/Author": { title: "作者管理", logo: AuthorIcon },
   "/Manage/Create/Post": { title: "文章管理｜新增文章", logo: PostIcon },
   "/Manage/Create/Author": { title: "作者管理｜新增作者", logo: AuthorIcon },
+  "/Manage/Edit/Author": { title: "作者管理｜編輯作者", logo: AuthorIcon },
+  "/Manage/Edit/Post": { title: "作者管理｜編輯文章", logo: PostIcon },
 };
 
 const ManageLayout = ({ children }: { children: ReactNode }) => {
@@ -27,7 +29,7 @@ const ManageLayout = ({ children }: { children: ReactNode }) => {
   )?.[1] || { title: "後台管理", logo: NewsIcon };
 
   const item = [
-    { name: '文章管理', path: '/Manage/Page', icon: PostIcon },
+    { name: '文章管理', path: '/Manage/Post', icon: PostIcon },
     { name: '新聞管理', path: '/Manage/News', icon: NewsIcon },
     { name: '作者管理', path: '/Manage/Author', icon: AuthorIcon }
   ];

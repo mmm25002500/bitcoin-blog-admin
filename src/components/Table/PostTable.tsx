@@ -2,6 +2,7 @@
 import { PostData, PostTableProps } from "@/types/Table/PostTable";
 import { useState } from "react";
 import Image from "next/image";
+import { useRouter } from 'nextjs-toploader/app';
 
 // icon
 import TrashCanIcon from "@/images/trash_can.svg";
@@ -20,6 +21,9 @@ const PostTable = (props: PostTableProps) => {
   const [showDeleteThisConfirmModal, setShowDeleteThisConfirmModal] = useState(false);
 
   const totalPages = Math.ceil(props.PostData.length / itemsPerPage);
+
+  // 處理路由變化
+  const router = useRouter();
 
   // 處理排序
   const handleSort = (field: keyof PostData) => {
@@ -260,7 +264,7 @@ const PostTable = (props: PostTableProps) => {
                         className="w-4 h-4"
                       />
                     </button>
-                    <button className="border-[1px] border-[#E9E9E9] rounded-sm p-2.5 bg-white">
+                    <button onClick={() => router.push("/Manage/Edit/Post")} className="border-[1px] border-[#E9E9E9] rounded-sm p-2.5 bg-white">
                       <Image
                         src={PenIcon}
                         alt="login"

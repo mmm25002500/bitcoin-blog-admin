@@ -8,6 +8,7 @@ import PenIcon from "@/images/pen.svg";
 import RedTrashCanIcon from "@/images/red_trash_can.svg";
 import NoResultIcon from "@/images/NoResult.svg";
 import ConfirmModal from "../Modal/ConfirmModal";
+import { useRouter } from 'nextjs-toploader/app';
 
 const AuthorTable = (props: AuthorTableProps) => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -17,6 +18,9 @@ const AuthorTable = (props: AuthorTableProps) => {
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [showDeleteThisConfirmModal, setShowDeleteThisConfirmModal] = useState(false);
+
+  // 處理路由變化
+  const router = useRouter();
 
   // 處理排序
   const handleSort = (field: keyof AuthorData) => {
@@ -185,7 +189,7 @@ const AuthorTable = (props: AuthorTableProps) => {
                         className="w-4 h-4"
                       />
                     </button>
-                    <button className="border-[1px] border-[#E9E9E9] rounded-sm p-2.5 bg-white">
+                    <button onClick={() => router.push("/Manage/Edit/Author")} className="border-[1px] border-[#E9E9E9] rounded-sm p-2.5 bg-white">
                       <Image
                         src={PenIcon}
                         alt="login"

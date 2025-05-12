@@ -7,6 +7,7 @@ import Input from "@/components/Input/Input";
 import Label from "@/components/Label/Label";
 import UploadFile from "@/components/UploadFile/UploadFile";
 import { useEffect, useState } from "react";
+import { useRouter } from 'nextjs-toploader/app';
 
 const CreateAuthor = () => {
   const [imageFile, setImageFile] = useState<File | null>(null);
@@ -15,6 +16,9 @@ const CreateAuthor = () => {
     console.log("imageFile", imageFile);
   }
     , [imageFile]);
+
+  // 處理路由變化
+  const router = useRouter();
 
   return (
     <>
@@ -69,8 +73,8 @@ const CreateAuthor = () => {
       <div className="pt-20">
         <div className="absolute bottom-0 right-0 bg-white py-4 w-full shadow-[0_-4px_8px_-3px_rgba(0,0,0,0.05)]">
           <div className="flex justify-end gap-2 pr-7">
-            <AddBtn label="確定" onClick={() => console.log("確定")} />
-            <CancelBtn label="取消" onClick={() => console.log("取消")} />
+            <AddBtn label="確定" onClick={() => router.push("/Manage/Author")} />
+            <CancelBtn label="取消" onClick={() => router.push("/Manage/Author")} />
           </div>
         </div>
       </div>
