@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "@/styles/globals.css";
 import NextTopLoader from 'nextjs-toploader';
+import { Toaster } from "react-hot-toast";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -22,6 +23,10 @@ export default function RootLayout({
       >
         <NextTopLoader
           color="#F7931A"
+        />
+        <Toaster
+          position="top-center"
+          reverseOrder={false}
         />
         {children}
       </body>
