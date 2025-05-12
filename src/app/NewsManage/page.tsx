@@ -8,7 +8,7 @@ import LayoutIndex from "@/components/Layout/LayoutIndex";
 import PostTable from "@/components/Table/PostTable";
 
 // icon
-import PostIcon from "@/images/post_icon.svg";
+import NewsIcon from "@/images/news_icon.svg";
 
 import { PostData } from "@/types/Table/PostTable";
 import { useRouter } from "next/navigation";
@@ -100,7 +100,7 @@ const NewsManage = () => {
   };
 
   return (
-    <LayoutIndex title="新聞管理" logo={PostIcon}>
+    <LayoutIndex title="新聞管理" logo={NewsIcon}>
       {/* nav */}
       <div className="flex">
         <div className="flex gap-5 grow">
