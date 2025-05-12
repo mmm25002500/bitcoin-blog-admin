@@ -10,9 +10,9 @@ import AuthorIcon from "@/images/author_icon.svg";
 const LayoutIndex = (props: LayoutIndexProps) => {
 
   const item = [
-    { name: '新聞管理', path: '/NewsManage', icon: NewsIcon },
-    { name: '文章管理', path: '/PageManage', icon: PostIcon },
-    { name: '作者管理', path: '/AuthorManage', icon: AuthorIcon }
+    { name: '新聞管理', path: '/Manage/News', icon: NewsIcon },
+    { name: '文章管理', path: '/Manage/Page', icon: PostIcon },
+    { name: '作者管理', path: '/Manage/Author', icon: AuthorIcon }
   ];
   return (
     <div className="flex min-h-screen h-full bg-[#F3F7FA]">

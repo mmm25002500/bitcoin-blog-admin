@@ -2,11 +2,9 @@
 
 import AddBtn from "@/components/Button/AddBtn";
 import Search from "@/components/Input/Search";
-import LayoutIndex from "@/components/Layout/LayoutIndex";
 import AuthorTable from "@/components/Table/AuthorTable";
 
 // icon
-import AuthorIcon from "@/images/author_icon.svg";
 import { AuthorData } from "@/types/Table/AuthorTable";
 
 import { useRouter } from "next/navigation";
@@ -135,7 +133,7 @@ const NewsManage = () => {
   };
 
   return (
-    <LayoutIndex title="作者管理" logo={AuthorIcon}>
+    <>
       {/* nav */}
       <div className="flex">
         <div className="flex gap-5 grow">
@@ -146,7 +144,7 @@ const NewsManage = () => {
         </div>
         <div>
           <AddBtn
-            onClick={() => router.push("/CreateAuthor")}
+            onClick={() => router.push("/Manage/Create/Author")}
             label={"新增 +"}
             className=""
           />
@@ -160,7 +158,7 @@ const NewsManage = () => {
         onDelete={() => console.log("刪除")}
         AuthorData={data}
       />
-    </LayoutIndex>
+    </>
   );
 }
 

@@ -4,11 +4,8 @@ import AddBtn from "@/components/Button/AddBtn";
 import CancelBtn from "@/components/Button/CancelBtn";
 import Input from "@/components/Input/Input";
 import Label from "@/components/Label/Label";
-import LayoutIndex from "@/components/Layout/LayoutIndex";
 import UploadFile from "@/components/UploadFile/UploadFile";
 
-// icon
-import NewsIcon from "@/images/news_icon.svg";
 import { useEffect, useState } from "react";
 
 const CreateAuthor = () => {
@@ -20,7 +17,7 @@ const CreateAuthor = () => {
     , [imageFile]);
 
   return (
-    <LayoutIndex title="新增作者" logo={NewsIcon}>
+    <>
       <div className="flex flex-col min-h-full gap-5 relative">
         {/* 表單區塊 */}
         <div className="flex-1 flex flex-col gap-5 grow">
@@ -59,7 +56,7 @@ const CreateAuthor = () => {
           <CancelBtn label="取消" onClick={() => console.log("取消")} />
         </div>
       </div>
-    </LayoutIndex>
+    </>
   );
 };
 

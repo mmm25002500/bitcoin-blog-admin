@@ -3,11 +3,8 @@ import AddBtn from "@/components/Button/AddBtn";
 import CancelBtn from "@/components/Button/CancelBtn";
 import Input from "@/components/Input/Input";
 import Label from "@/components/Label/Label";
-import LayoutIndex from "@/components/Layout/LayoutIndex";
 import UploadFile from "@/components/UploadFile/UploadFile";
 
-// icon
-import NewsIcon from "@/images/news_icon.svg";
 import { useEffect, useState } from "react";
 
 const CreatePost = () => {
@@ -19,7 +16,7 @@ const CreatePost = () => {
     , [imageFile]);
 
   return (
-    <LayoutIndex title="新增文章" logo={NewsIcon}>
+    <>
       <div className="flex flex-col h-full gap-5">
         {/* 表單區塊 */}
         <div className="flex-1 flex flex-col gap-5">
@@ -122,7 +119,7 @@ const CreatePost = () => {
           </div>
         </div>
       </div>
-    </LayoutIndex>
+    </>
   );
 }
 

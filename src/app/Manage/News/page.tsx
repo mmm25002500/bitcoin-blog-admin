@@ -4,12 +4,7 @@ import AddBtn from "@/components/Button/AddBtn";
 import DateSelection from "@/components/Input/DateSelection";
 import DropDown from "@/components/Input/DropDown";
 import Search from "@/components/Input/Search";
-import LayoutIndex from "@/components/Layout/LayoutIndex";
 import PostTable from "@/components/Table/PostTable";
-
-// icon
-import PostIcon from "@/images/post_icon.svg";
-
 import { PostData } from "@/types/Table/PostTable";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -24,7 +19,7 @@ const mockData: PostData[] = Array.from({ length: 100 }, (_, i) => ({
   type: i % 2 === 0 ? "News" : "Post",
 }));
 
-const PageManage = () => {
+const NewsManage = () => {
   // 文章類型選單
   const [selectedOption, setSelectedOption] = useState<string>("");
   // 搜尋框的值
@@ -100,7 +95,7 @@ const PageManage = () => {
   };
 
   return (
-    <LayoutIndex title="文章管理" logo={PostIcon}>
+    <>
       {/* nav */}
       <div className="flex">
         <div className="flex gap-5 grow">
@@ -122,7 +117,7 @@ const PageManage = () => {
         </div>
         <div>
           <AddBtn
-            onClick={() => router.push("/CreatePost")}
+            onClick={() => router.push("/Manage/Create/Post")}
             label={"新增 +"}
             className=""
           />
@@ -138,8 +133,8 @@ const PageManage = () => {
         onDelete={handleDeleteSelected}
         PostData={mockData}
       />
-    </LayoutIndex>
+    </>
   );
 }
 
-export default PageManage; 
+export default NewsManage; 

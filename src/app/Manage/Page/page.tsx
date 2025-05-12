@@ -4,11 +4,7 @@ import AddBtn from "@/components/Button/AddBtn";
 import DateSelection from "@/components/Input/DateSelection";
 import DropDown from "@/components/Input/DropDown";
 import Search from "@/components/Input/Search";
-import LayoutIndex from "@/components/Layout/LayoutIndex";
 import PostTable from "@/components/Table/PostTable";
-
-// icon
-import NewsIcon from "@/images/news_icon.svg";
 
 import { PostData } from "@/types/Table/PostTable";
 import { useRouter } from "next/navigation";
@@ -24,7 +20,7 @@ const mockData: PostData[] = Array.from({ length: 100 }, (_, i) => ({
   type: i % 2 === 0 ? "News" : "Post",
 }));
 
-const NewsManage = () => {
+const PageManage = () => {
   // 文章類型選單
   const [selectedOption, setSelectedOption] = useState<string>("");
   // 搜尋框的值
@@ -100,7 +96,7 @@ const NewsManage = () => {
   };
 
   return (
-    <LayoutIndex title="新聞管理" logo={NewsIcon}>
+    <>
       {/* nav */}
       <div className="flex">
         <div className="flex gap-5 grow">
@@ -122,7 +118,7 @@ const NewsManage = () => {
         </div>
         <div>
           <AddBtn
-            onClick={() => router.push("/CreatePost")}
+            onClick={() => router.push("/Manage/Create/Post")}
             label={"新增 +"}
             className=""
           />
@@ -138,8 +134,8 @@ const NewsManage = () => {
         onDelete={handleDeleteSelected}
         PostData={mockData}
       />
-    </LayoutIndex>
+    </>
   );
 }
 
-export default NewsManage; 
+export default PageManage; 
