@@ -31,7 +31,7 @@ const DropDown = (props: DropDownProps) => {
         onChange={handleChange}
         value={selectedValue}
       >
-        <option value="All" disabled hidden>文章類型</option>
+        <option value="" disabled>文章類型</option>
         {props.options.map((option, index) => (
           <option key={index} value={option}>
             {option}

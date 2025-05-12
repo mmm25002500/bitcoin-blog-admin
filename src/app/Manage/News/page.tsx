@@ -1,7 +1,7 @@
 "use client";
 
 import AddBtn from "@/components/Button/AddBtn";
-import DateSelection from "@/components/Input/DateSelection";
+import DateChoose from "@/components/Input/DateChoose";
 import DropDown from "@/components/Input/DropDown";
 import Search from "@/components/Input/Search";
 import PostTable from "@/components/Table/PostTable";
@@ -99,14 +99,14 @@ const NewsManage = () => {
       {/* nav */}
       <div className="flex">
         <div className="flex gap-5 grow">
-          <DateSelection
+          <DateChoose
             selected={undefined}
             onSelect={handleDateSelect}
             onCancel={handleDateCancel}
           />
           <DropDown
             options={ArticleType}
-            selectedOption={"ss"}
+            selectedOption={selectedOption}
             onCancel={handleDropDownCancel}
             onSelect={handleSelect}
           />

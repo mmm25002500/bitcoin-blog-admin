@@ -1,7 +1,10 @@
 'use client';
+
 import AddBtn from "@/components/Button/AddBtn";
 import CancelBtn from "@/components/Button/CancelBtn";
 import ImagePreview from "@/components/Card/ImagePreview";
+import DateSelection from "@/components/Input/DateSelection";
+import DropDown from "@/components/Input/DropDown";
 import Input from "@/components/Input/Input";
 import Label from "@/components/Label/Label";
 import UploadFile from "@/components/UploadFile/UploadFile";
@@ -10,11 +13,49 @@ import { useEffect, useState } from "react";
 
 const CreatePost = () => {
   const [imageFile, setImageFile] = useState<File | null>(null);
+  const [selectedOption, setSelectedOption] = useState<string>("All");
+
+  const ArticleType = [
+    'News',
+    'Post'
+  ];
+
+  // 日期選擇的值
+  const [date, setDate] = useState<Date | undefined>(undefined);
+  console.log("date", date);
 
   useEffect(() => {
     console.log("imageFile", imageFile);
+  }, [imageFile]);
+
+  useEffect(() => {
+    if (selectedOption) {
+      console.log(`真正選到的文章類型: ${selectedOption}`);
+    }
+  }, [selectedOption]);
+
+  // 處理日期選擇的取消按鈕點擊事件
+  const handleDateCancel = () => {
+    setDate(undefined);
+    console.log("日期選擇取消");
+  };
+
+  // 處理日期選擇的變化
+  const handleDateSelect = (selected: Date | undefined) => {
+    setDate(selected);
+    console.log(`選擇的日期: ${selected}`);
+  };
+
+  // 處理下拉選單的選擇
+  const handleSelect = (option: string) => {
+    setSelectedOption(option);
+    console.log(`選擇的文章類型: ${option}`);
+  };
+
+  // 處理取消按鈕的點擊事件
+  const handleDropDownCancel = () => {
+    setSelectedOption("All");
   }
-    , [imageFile]);
 
   return (
     <>
@@ -68,7 +109,7 @@ const CreatePost = () => {
 
           <div className="flex">
             {/* 標籤 */}
-            <div className="flex flex-col gap-2 grow">
+            <div className="flex flex-col gap-2">
               <Label
                 text={"標籤"}
                 htmlFor={"tag"}
@@ -85,6 +126,15 @@ const CreatePost = () => {
                 required={true}
                 className={"mb-2"}
               />
+
+              <div>
+                <DropDown
+                  options={ArticleType}
+                  selectedOption={"All"}
+                  onCancel={handleDropDownCancel}
+                  onSelect={handleSelect}
+                />
+              </div>
             </div>
           </div>
 
@@ -96,6 +146,13 @@ const CreatePost = () => {
               required={true}
               className={"mb-2"}
             />
+            <div>
+              <DateSelection
+                selected={date}
+                onSelect={handleDateSelect}
+                onCancel={handleDateCancel}
+              />
+            </div>
           </div>
 
           {/* 封面圖 */}
@@ -139,6 +196,6 @@ const CreatePost = () => {
       </div>
     </>
   );
-}
+};
 
 export default CreatePost;
