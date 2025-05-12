@@ -6,7 +6,7 @@ import DropDown from "@/components/Input/DropDown";
 import Search from "@/components/Input/Search";
 import PostTable from "@/components/Table/PostTable";
 import { PostData } from "@/types/Table/PostTable";
-import { useRouter } from "next/navigation";
+import { useRouter } from 'nextjs-toploader/app';
 import { useEffect, useState } from "react";
 import { DateRange } from "react-day-picker";
 

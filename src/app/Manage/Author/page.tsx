@@ -7,7 +7,7 @@ import AuthorTable from "@/components/Table/AuthorTable";
 // icon
 import { AuthorData } from "@/types/Table/AuthorTable";
 
-import { useRouter } from "next/navigation";
+import { useRouter } from 'nextjs-toploader/app';
 import { useState } from "react";
 
 const data: AuthorData[] = [

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "@/styles/globals.css";
+import NextTopLoader from 'nextjs-toploader';
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -19,6 +20,9 @@ export default function RootLayout({
       <body
         className={``}
       >
+        <NextTopLoader
+          color="#F7931A"
+        />
         {children}
       </body>
     </html>

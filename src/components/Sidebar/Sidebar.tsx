@@ -1,6 +1,7 @@
 'use client';
 import { SidebarProps } from '@/types/Sidebar/Sidebar';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
+import { useRouter } from 'nextjs-toploader/app';
 import Image from 'next/image';
 import icon from "@/images/icon_dark.svg";
 
