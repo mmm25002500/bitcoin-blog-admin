@@ -16,6 +16,7 @@ const AuthorTable = (props: AuthorTableProps) => {
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [showDeleteThisConfirmModal, setShowDeleteThisConfirmModal] = useState(false);
 
   // 處理排序
   const handleSort = (field: keyof AuthorData) => {
@@ -77,6 +78,13 @@ const AuthorTable = (props: AuthorTableProps) => {
     props.onDelete?.(ids);
     setSelectedIds(new Set());
     setShowConfirmModal(false);
+  };
+
+  // 處理刪除單一項目
+  const handleDeleteCurrent = (id: string) => {
+    setShowDeleteThisConfirmModal(true);
+    props.onDelete?.([id]);
+    console.log("刪除單一項目", id);
   };
 
   return (
@@ -168,7 +176,7 @@ const AuthorTable = (props: AuthorTableProps) => {
                   <td className="px-3 py-2">{author.postQuantity} 則</td>
                   <td className="px-3 py-2 max-w-[250px] line-clamp-2">{author.description}</td>
                   <td className="px-3 py-2">
-                    <button className="mr-2 border-[1px] border-[#E9E9E9] rounded-sm p-2.5 bg-white">
+                    <button onClick={() => handleDeleteCurrent(author.id)} className="mr-2 border-[1px] border-[#E9E9E9] rounded-sm p-2.5 bg-white">
                       <Image
                         src={TrashCanIcon}
                         alt="login"
@@ -249,6 +257,16 @@ const AuthorTable = (props: AuthorTableProps) => {
         cancelLabel="取消"
         onConfirm={handleDeleteSelected}
         onCancel={() => setShowConfirmModal(false)}
+      />
+
+      <ConfirmModal
+        isOpen={showDeleteThisConfirmModal}
+        title={`確定要刪除這位作者嗎？`}
+        description={`此操作將永久刪除作者，且無法復原。請確認是否執行。`}
+        confirmLabel="刪除作者"
+        cancelLabel="取消"
+        onConfirm={() => setShowDeleteThisConfirmModal(false)}
+        onCancel={() => setShowDeleteThisConfirmModal(false)}
       />
     </div>
   );

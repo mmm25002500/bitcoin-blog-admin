@@ -17,6 +17,7 @@ const PostTable = (props: PostTableProps) => {
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [showDeleteThisConfirmModal, setShowDeleteThisConfirmModal] = useState(false);
 
   const totalPages = Math.ceil(props.PostData.length / itemsPerPage);
 
@@ -116,6 +117,13 @@ const PostTable = (props: PostTableProps) => {
 
     // TODO: 串接 API 或透過 props 回傳資料
     // props.onDelete?.(idsToDelete);a
+  };
+
+  // 處理刪除當前項目
+  const handleDeleteCurrent = (id: string) => {
+    setShowDeleteThisConfirmModal(true);
+    console.log("要刪除的 ID：", id);
+    props.onDelete?.([id]);
   };
 
   return (
@@ -243,7 +251,7 @@ const PostTable = (props: PostTableProps) => {
                     </span>
                   </td>
                   <td className="px-3 py-2">
-                    <button className="mr-2 border-[1px] border-[#E9E9E9] rounded-sm p-2.5 bg-white">
+                    <button onClick={() => handleDeleteCurrent(post.id)} className="mr-2 border-[1px] border-[#E9E9E9] rounded-sm p-2.5 bg-white">
                       <Image
                         src={TrashCanIcon}
                         alt="login"
@@ -333,6 +341,20 @@ const PostTable = (props: PostTableProps) => {
             setShowConfirmModal(false);
           }}
           onCancel={() => setShowConfirmModal(false)}
+        />
+      </div>
+
+      <div className="w-80">
+        <ConfirmModal
+          isOpen={showDeleteThisConfirmModal}
+          title={`確定要刪除這篇文章嗎？`}
+          description={`此操作將永久刪除文章，且無法復原。\n確認是否繼續執行。`}
+          confirmLabel="刪除文章"
+          cancelLabel="取消"
+          onConfirm={() => {
+            setShowDeleteThisConfirmModal(false);
+          }}
+          onCancel={() => setShowDeleteThisConfirmModal(false)}
         />
       </div>
     </div>
