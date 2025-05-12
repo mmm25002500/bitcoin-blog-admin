@@ -9,7 +9,6 @@ import { useState } from "react";
 import bg from "@/images/bg.png";
 import icon from "@/images/icon_dark.svg";
 import { useRouter } from 'nextjs-toploader/app';
-import toast from "react-hot-toast";
 
 const LoginPage = () => {
   const [email, setEmail] = useState<string>("");
