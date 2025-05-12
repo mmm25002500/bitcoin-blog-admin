@@ -8,12 +8,17 @@ import Image from "next/image";
 import { useState } from "react";
 import bg from "@/images/bg.png";
 import icon from "@/images/icon_dark.svg";
+import { useRouter } from 'nextjs-toploader/app';
+import toast from "react-hot-toast";
 
 const LoginPage = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [rememberMe, setRememberMe] = useState<boolean>(false);
   const [emailError, setEmailError] = useState<string | null>(null);
+
+  // 處理路由變化
+  const router = useRouter();
 
   // 驗證電子郵件格式
   const validateEmail = (email: string): boolean => {
@@ -28,7 +33,9 @@ const LoginPage = () => {
   // 處理登入按鈕點擊事件
   const handleLoginClick = () => {
     console.log("登入事件");
+    router.push('/Manage/Post');
   };
+
   // 處理電子郵件輸入
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     console.log(e.target.value);

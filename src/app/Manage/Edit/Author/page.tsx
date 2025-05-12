@@ -22,8 +22,7 @@ const EditAuthor = () => {
 
   useEffect(() => {
     console.log("imageFile", imageFile);
-  }
-    , [imageFile]);
+  }, [imageFile]);
 
   return (
     <>
