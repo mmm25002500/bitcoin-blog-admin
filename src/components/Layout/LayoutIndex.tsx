@@ -15,7 +15,7 @@ const LayoutIndex = (props: LayoutIndexProps) => {
     { name: '作者管理', path: '/AuthorManage', icon: AuthorIcon }
   ];
   return (
-    <div className="flex h-screen bg-[#F3F7FA]">
+    <div className="flex min-h-screen h-full bg-[#F3F7FA]">
       <Sidebar
         items={item}
       />
@@ -27,7 +27,7 @@ const LayoutIndex = (props: LayoutIndexProps) => {
           className="px-4"
         />
         <div className="flex-1 overflow-y-auto p-4">
-          <div className="flex flex-col h-full p-4 border-gray-200 border-dashed rounded-lg bg-white">
+          <div className="flex flex-col min-h-full p-4 border-gray-200 border-dashed rounded-lg bg-white relative">
             {props.children}
           </div>
         </div>
