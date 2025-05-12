@@ -5,6 +5,7 @@ import CancelBtn from "@/components/Button/CancelBtn";
 import ImagePreview from "@/components/Card/ImagePreview";
 import DateSelection from "@/components/Input/DateSelection";
 import DropDown from "@/components/Input/DropDown";
+import DropDownTag from "@/components/Input/DropDownTag";
 import Input from "@/components/Input/Input";
 import Label from "@/components/Label/Label";
 import UploadFile from "@/components/UploadFile/UploadFile";
@@ -14,6 +15,7 @@ import { useEffect, useState } from "react";
 const CreatePost = () => {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [selectedOption, setSelectedOption] = useState<string>("All");
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
   const ArticleType = [
     'News',
@@ -107,19 +109,26 @@ const CreatePost = () => {
             />
           </div>
 
-          <div className="flex">
+          <div className="flex gap-5">
             {/* 標籤 */}
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2 w-full">
               <Label
                 text={"標籤"}
                 htmlFor={"tag"}
                 required={true}
                 className={"mb-2"}
               />
+              <div>
+                <DropDownTag
+                  options={["tag1", "tag2", "tag3"]}
+                  selectedOptions={selectedTags}
+                  onChange={setSelectedTags}
+                />
+              </div>
             </div>
 
             {/* 類型 */}
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2 w-full">
               <Label
                 text={"類型"}
                 htmlFor={"type"}
@@ -133,6 +142,7 @@ const CreatePost = () => {
                   selectedOption={"All"}
                   onCancel={handleDropDownCancel}
                   onSelect={handleSelect}
+                  className="border-[#E3E3E3 ]"
                 />
               </div>
             </div>
