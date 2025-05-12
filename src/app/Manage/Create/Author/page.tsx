@@ -68,7 +68,7 @@ const CreateAuthor = () => {
       {/* 按鈕區塊 */}
       <div className="pt-20">
         <div className="absolute bottom-0 right-0 bg-white py-4 w-full shadow-[0_-4px_8px_-3px_rgba(0,0,0,0.05)]">
-          <div className="flex justify-end gap-2">
+          <div className="flex justify-end gap-2 pr-7">
             <AddBtn label="確定" onClick={() => console.log("確定")} />
             <CancelBtn label="取消" onClick={() => console.log("取消")} />
           </div>

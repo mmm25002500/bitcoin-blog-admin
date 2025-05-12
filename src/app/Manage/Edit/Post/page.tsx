@@ -2,17 +2,18 @@
 
 import AddBtn from "@/components/Button/AddBtn";
 import CancelBtn from "@/components/Button/CancelBtn";
+import DeleteBtn from "@/components/Button/DeleteBtn";
 import ImagePreview from "@/components/Card/ImagePreview";
 import DateSelection from "@/components/Input/DateSelection";
 import DropDown from "@/components/Input/DropDown";
-import DropDownTag from "@/components/Input/DropDownTag";
+import SafeDropDownTag from '@/components/Input/SafeDropDownTag';
 import Input from "@/components/Input/Input";
 import Label from "@/components/Label/Label";
 import UploadFile from "@/components/UploadFile/UploadFile";
 
 import { useEffect, useState } from "react";
 
-const CreatePost = () => {
+const EditPost = () => {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [selectedOption, setSelectedOption] = useState<string>("All");
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
@@ -119,7 +120,7 @@ const CreatePost = () => {
                 className={"mb-2"}
               />
               <div>
-                <DropDownTag
+                <SafeDropDownTag
                   options={["tag1", "tag2", "tag3"]}
                   selectedOptions={selectedTags}
                   onChange={setSelectedTags}
@@ -198,8 +199,9 @@ const CreatePost = () => {
         <div className="pt-20">
           <div className="absolute bottom-0 right-0 bg-white py-4 w-full shadow-[0_-4px_8px_-3px_rgba(0,0,0,0.05)]">
             <div className="flex justify-end gap-2 pr-7">
-              <AddBtn label="發佈" onClick={() => console.log("發佈")} />
+              <DeleteBtn label="刪除" onClick={() => console.log("刪除")} />
               <CancelBtn label="取消" onClick={() => console.log("取消")} />
+              <AddBtn label="發佈" onClick={() => console.log("發佈")} />
             </div>
           </div>
         </div>
@@ -208,4 +210,4 @@ const CreatePost = () => {
   );
 };
 
-export default CreatePost;
+export default EditPost;
