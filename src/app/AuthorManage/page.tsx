@@ -146,7 +146,7 @@ const NewsManage = () => {
         </div>
         <div>
           <AddBtn
-            onClick={() => router.push("/CreatePost")}
+            onClick={() => router.push("/CreateAuthor")}
             label={"新增 +"}
             className=""
           />
