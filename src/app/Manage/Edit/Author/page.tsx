@@ -25,9 +25,9 @@ import { DateRange } from "react-day-picker";
 const mockData: PostData[] = Array.from({ length: 100 }, (_, i) => ({
   id: `#1231${i}`,
   title: i % 2 === 0 ? `10萬以內最後的機會 ${i+1}` : `經濟衰退大崩盤 ${i+1}`,
-  author: "王小明",
+  author: i % 2 === 0 ? `Derek ${i+1}` : `中本蔥 ${i+1}`,
   date: `2025/05/11 12:2${i}`,
-  tag: "標籤內容",
+  tag: ["區塊鏈日報", '墨山貓', '良兮'],
   type: i % 2 === 0 ? "走勢分析" : "總體經濟",
 }));
 

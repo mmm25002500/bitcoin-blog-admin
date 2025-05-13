@@ -5,7 +5,7 @@ export interface PostData {
   title: string;
   author: string;
   date: string;
-  tag: string;
+  tag: string[];
   type: string;
 }
 export interface PostTableProps {

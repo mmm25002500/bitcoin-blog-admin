@@ -12,11 +12,11 @@ import { DateRange } from "react-day-picker";
 
 const mockData: PostData[] = Array.from({ length: 100 }, (_, i) => ({
   id: `#1231${i}`,
-  title: `小琉球潛水體驗小琉球潛水體驗小琉球 ${10 - i}`,
-  author: "王小明",
+  title: i % 2 === 0 ? `台灣比特幣儲備 ${i+1}` : `以太坊升級 ${i+1}`,
+  author: i % 2 === 0 ? `Vitalik ${i+1}` : `Michael Saylor ${i+1}`,
   date: `2025/05/11 12:2${i}`,
-  tag: "標籤內容",
-  type: i % 2 === 0 ? "比特幣" : "台灣",
+  tag: ["薩爾瓦多", '挖礦', 'Solidity'],
+  type: i % 2 === 0 ? "比特幣" : "智能合約",
 }));
 
 const NewsManage = () => {
