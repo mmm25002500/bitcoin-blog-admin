@@ -24,11 +24,11 @@ import { DateRange } from "react-day-picker";
 
 const mockData: PostData[] = Array.from({ length: 100 }, (_, i) => ({
   id: `#1231${i}`,
-  title: `小琉球潛水體驗小琉球潛水體驗小琉球 ${10 - i}`,
+  title: i % 2 === 0 ? `10萬以內最後的機會 ${i+1}` : `經濟衰退大崩盤 ${i+1}`,
   author: "王小明",
   date: `2025/05/11 12:2${i}`,
   tag: "標籤內容",
-  type: i % 2 === 0 ? "News" : "Post",
+  type: i % 2 === 0 ? "走勢分析" : "總體經濟",
 }));
 
 const EditAuthor = () => {

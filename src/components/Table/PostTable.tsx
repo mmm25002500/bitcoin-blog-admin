@@ -14,7 +14,7 @@ import NoResultIcon from "@/images/NoResult.svg";
 const PostTable = (props: PostTableProps) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState<number>(props.perPage || 10);
-  const [sortBy, setSortBy] = useState<keyof PostData>("title");
+  const [sortBy, setSortBy] = useState<keyof PostData>("id");
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [showConfirmModal, setShowConfirmModal] = useState(false);
@@ -247,10 +247,7 @@ const PostTable = (props: PostTableProps) => {
                   {/* 這一欄不一定是 News 或是 Post，可能會是比特幣、台灣、國際、技術... */}
                   <td className="px-3 py-2">
                     <span
-                      className={`px-2 py-1 rounded text-sm ${post.type === "News"
-                        ? "bg-[#ECF6FF] text-[#1A72C2]"
-                        : "bg-[#EBFAEB] text-[#3FA02D]"
-                        } rounded-full px-3 py-[2px] font-normal leading-6`}
+                      className={`text-sm bg-gray-100 rounded-full px-3 py-[2px] font-normal leading-6`}
                     >
                       {post.type}
                     </span>

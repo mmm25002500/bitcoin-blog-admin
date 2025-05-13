@@ -6,7 +6,7 @@ export interface PostData {
   author: string;
   date: string;
   tag: string;
-  type: "News" | "Post";
+  type: string;
 }
 export interface PostTableProps {
   perPage?: number;

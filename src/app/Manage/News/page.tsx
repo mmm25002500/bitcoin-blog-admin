@@ -16,7 +16,7 @@ const mockData: PostData[] = Array.from({ length: 100 }, (_, i) => ({
   author: "王小明",
   date: `2025/05/11 12:2${i}`,
   tag: "標籤內容",
-  type: i % 2 === 0 ? "News" : "Post",
+  type: i % 2 === 0 ? "比特幣" : "台灣",
 }));
 
 const NewsManage = () => {
