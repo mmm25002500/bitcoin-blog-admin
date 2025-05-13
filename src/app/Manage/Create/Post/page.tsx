@@ -4,7 +4,7 @@ import AddBtn from "@/components/Button/AddBtn";
 import CancelBtn from "@/components/Button/CancelBtn";
 import ImagePreview from "@/components/Card/ImagePreview";
 import DateSelection from "@/components/Input/DateSelection";
-import DropDown from "@/components/Input/DropDown";
+// import DropDown from "@/components/Input/DropDown";
 import DropDownTag from "@/components/Input/DropDownTag";
 import Input from "@/components/Input/Input";
 import Label from "@/components/Label/Label";
@@ -16,16 +16,17 @@ import MarkdownEditor from "@/components/Markdown/MarkdownEditor";
 
 const CreatePost = () => {
   const [imageFile, setImageFile] = useState<File | null>(null);
-  const [selectedOption, setSelectedOption] = useState<string>("All");
+  // const [selectedOption, setSelectedOption] = useState<string>("All");
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [selectedType, setSelectedType] = useState<string[]>([]);
 
   // 處理路由變化
   const router = useRouter();
 
-  const ArticleType = [
-    'News',
-    'Post'
-  ];
+  // const ArticleType = [
+  //   'News',
+  //   'Post'
+  // ];
 
   // 日期選擇的值
   const [date, setDate] = useState<Date | undefined>(undefined);
@@ -35,11 +36,11 @@ const CreatePost = () => {
     console.log("imageFile", imageFile);
   }, [imageFile]);
 
-  useEffect(() => {
-    if (selectedOption) {
-      console.log(`真正選到的文章類型: ${selectedOption}`);
-    }
-  }, [selectedOption]);
+  // useEffect(() => {
+  //   if (selectedOption) {
+  //     console.log(`真正選到的文章類型: ${selectedOption}`);
+  //   }
+  // }, [selectedOption]);
 
   // 處理日期選擇的取消按鈕點擊事件
   const handleDateCancel = () => {
@@ -54,15 +55,15 @@ const CreatePost = () => {
   };
 
   // 處理下拉選單的選擇
-  const handleSelect = (option: string) => {
-    setSelectedOption(option);
-    console.log(`選擇的文章類型: ${option}`);
-  };
+  // const handleSelect = (option: string) => {
+  //   setSelectedOption(option);
+  //   console.log(`選擇的文章類型: ${option}`);
+  // };
 
-  // 處理取消按鈕的點擊事件
-  const handleDropDownCancel = () => {
-    setSelectedOption("All");
-  }
+  // // 處理取消按鈕的點擊事件
+  // const handleDropDownCancel = () => {
+  //   setSelectedOption("All");
+  // }
 
   return (
     <>
@@ -144,12 +145,10 @@ const CreatePost = () => {
               />
 
               <div>
-                <DropDown
-                  options={ArticleType}
-                  selectedOption={"All"}
-                  onCancel={handleDropDownCancel}
-                  onSelect={handleSelect}
-                  className="border-[#E3E3E3 ]"
+                <DropDownTag
+                  options={["類型1", "類型2", "類型3"]}
+                  selectedOptions={selectedType}
+                  onChange={setSelectedType}
                 />
               </div>
             </div>
