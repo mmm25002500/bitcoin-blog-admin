@@ -6,7 +6,7 @@ import EmailInput from "@/components/Input/Email";
 import PasswordInput from "@/components/Input/Password";
 import Image from "next/image";
 import { useState } from "react";
-import bg from "@/images/bg.png";
+// import bg from "@/images/bg.png";
 import icon from "@/images/icon_dark.svg";
 import { useRouter } from 'nextjs-toploader/app';
 
@@ -61,7 +61,7 @@ const LoginPage = () => {
 
   return (
     <>
-      <div className="bg-white text-black grid grid-cols-2 h-screen">
+      <div className="bg-white text-black grid grid-cols-1 h-screen">
         {/* 左邊 */}
         <div className="flex flex-col justify-between items-center py-8">
           {/* 圖片左上 */}
@@ -120,7 +120,7 @@ const LoginPage = () => {
         </div>
 
         {/* 右邊 */}
-        <div className="relative w-full h-full">
+        {/* <div className="relative w-full h-full">
           <Image
             src={bg}
             alt="login"
@@ -128,7 +128,7 @@ const LoginPage = () => {
             priority
             className="object-cover"
           />
-        </div>
+        </div> */}
       </div>
     </>
   )
