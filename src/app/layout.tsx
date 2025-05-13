@@ -20,7 +20,7 @@ export default function RootLayout({
     <html lang="en">
       
       <body
-        className={`overflow-x-hidden`}
+        className={`overflow-x-auto`}
       >
         <NextTopLoader
           color="#F7931A"
@@ -31,14 +31,7 @@ export default function RootLayout({
         />
 
         <div
-          id="scale-wrapper"
-          className="w-[1280px] mx-auto"
-          style={{
-            transform: 'scale(calc(100vw / 1280))',
-            transformOrigin: 'top left',
-            height: '100vh',
-            overflow: 'hidden',
-          }}
+          id="responsive-wrapper"
         >
           {children}
         </div>
