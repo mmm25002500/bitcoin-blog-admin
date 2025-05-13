@@ -11,8 +11,25 @@ import { useEffect, useState } from "react";
 import { useRouter } from 'nextjs-toploader/app';
 import toast from "react-hot-toast";
 
+import DateChoose from "@/components/Input/DateChoose";
+import DropDown from "@/components/Input/DropDown";
+import Search from "@/components/Input/Search";
+import PostTable from "@/components/Table/PostTable";
+import { PostData } from "@/types/Table/PostTable";
+import { DateRange } from "react-day-picker";
+
+
 // TODO:
 // 1. 新增文章列表
+
+const mockData: PostData[] = Array.from({ length: 100 }, (_, i) => ({
+  id: `#1231${i}`,
+  title: `小琉球潛水體驗小琉球潛水體驗小琉球 ${10 - i}`,
+  author: "王小明",
+  date: `2025/05/11 12:2${i}`,
+  tag: "標籤內容",
+  type: i % 2 === 0 ? "News" : "Post",
+}));
 
 const EditAuthor = () => {
   const [imageFile, setImageFile] = useState<File | null>(null);
@@ -23,6 +40,78 @@ const EditAuthor = () => {
   useEffect(() => {
     console.log("imageFile", imageFile);
   }, [imageFile]);
+
+  // 文章類型選單
+  const [selectedOption, setSelectedOption] = useState<string>("");
+  // 搜尋框的值
+  const [searchValue, setSearchValue] = useState<string>("");
+  // 日期選擇的值
+  const [date, setDate] = useState<DateRange | undefined>();
+
+  const ArticleType = [
+    'All',
+    'News',
+    'Post'
+  ];
+
+  // 處理下拉選單的選擇
+  const handleSelect = (option: string) => {
+    setSelectedOption(option);
+    console.log(`選擇的文章類型: ${option}`);
+  };
+
+  // 處理取消按鈕的點擊事件
+  const handleDropDownCancel = () => {
+    setSelectedOption("All");
+  }
+
+  // 處理搜尋框的變化
+  const handleSearchChange = (value: string) => {
+    setSearchValue(value);
+    console.log(`搜尋的值: ${value}`);
+  };
+
+  // 處理搜尋框的取消按鈕點擊事件
+  const handleSearchCancel = () => {
+    setSearchValue("");
+    console.log("搜尋框取消");
+  };
+
+  useEffect(() => {
+    if (selectedOption) {
+      console.log(`真正選到的文章類型: ${selectedOption}`);
+    }
+  }, [selectedOption]);
+
+  useEffect(() => {
+    if (searchValue) {
+      console.log(`搜尋的值: ${searchValue}`);
+    }
+  }, [searchValue]);
+
+  useEffect(() => {
+    if (date) {
+      console.log(`選擇的日期範圍: ${date}`);
+    }
+  }, [date]);
+
+  // 處理日期選擇的變化
+  const handleDateSelect = (range: DateRange | undefined) => {
+    setDate(range);
+    console.log(`選擇的日期範圍: ${range}`);
+  };
+
+  // 處理日期選擇的取消按鈕點擊事件
+  const handleDateCancel = () => {
+    setDate(undefined);
+    console.log("日期選擇取消");
+  };
+
+  // 處理要刪除的項目
+  const handleDeleteSelected = (id: string[]) => {
+    console.log("要刪除的 ID：", id);
+  };
+
 
   return (
     <>
@@ -69,6 +158,50 @@ const EditAuthor = () => {
               )
             }
           </div>
+
+          <>
+            <div className="px-4 pt-4 border-[1px] border-neutral-200 rounded-xl">
+              <Label text="文章列表" htmlFor="name" className="mb-2" />
+
+              {/* nav */}
+              <div className="flex mt-3">
+                <div className="flex gap-5 grow">
+                  <DateChoose
+                    selected={undefined}
+                    onSelect={handleDateSelect}
+                    onCancel={handleDateCancel}
+                  />
+                  <DropDown
+                    options={ArticleType}
+                    selectedOption={selectedOption}
+                    onCancel={handleDropDownCancel}
+                    onSelect={handleSelect}
+                  />
+                  <Search
+                    onChange={handleSearchChange}
+                    onCancel={handleSearchCancel}
+                  />
+                </div>
+                <div>
+                  <AddBtn
+                    onClick={() => router.push("/Manage/Create/Post")}
+                    label={"新增 +"}
+                    className=""
+                  />
+                </div>
+              </div>
+
+              {/* 文章列表 */}
+              <PostTable
+                perPage={10}
+                type={selectedOption}
+                searchValue={searchValue}
+                date={date}
+                onDelete={handleDeleteSelected}
+                PostData={mockData}
+              />
+            </div>
+          </>
         </div>
 
       </div>
@@ -77,9 +210,9 @@ const EditAuthor = () => {
       <div className="pt-20">
         <div className="absolute bottom-0 right-0 bg-white py-4 w-full shadow-[0_-4px_8px_-3px_rgba(0,0,0,0.05)]">
           <div className="flex justify-end gap-2 pr-7">
-            <DeleteBtn label="刪除" onClick={() => { router.push("/Manage/Author"); toast.success('文章已成功刪除')}} />
-            <CancelBtn label="發佈" onClick={() => { router.push("/Manage/Author"); toast.error('文章刪除失敗')}} />
-            <AddBtn label="儲存" onClick={() => { router.push("/Manage/Author"); toast.success('文章已成功刪除')}} />
+            <DeleteBtn label="刪除" onClick={() => { router.push("/Manage/Author"); toast.success('文章已成功刪除') }} />
+            <CancelBtn label="發佈" onClick={() => { router.push("/Manage/Author"); toast.error('文章刪除失敗') }} />
+            <AddBtn label="儲存" onClick={() => { router.push("/Manage/Author"); toast.success('文章已成功刪除') }} />
           </div>
         </div>
       </div>
