@@ -18,8 +18,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      
       <body
-        className={``}
+        className={`overflow-x-hidden`}
       >
         <NextTopLoader
           color="#F7931A"
@@ -28,7 +29,19 @@ export default function RootLayout({
           position="top-center"
           reverseOrder={false}
         />
-        {children}
+
+        <div
+          id="scale-wrapper"
+          className="w-[1280px] mx-auto"
+          style={{
+            transform: 'scale(calc(100vw / 1280))',
+            transformOrigin: 'top left',
+            height: '100vh',
+            overflow: 'hidden',
+          }}
+        >
+          {children}
+        </div>
       </body>
     </html>
   );
