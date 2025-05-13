@@ -244,6 +244,7 @@ const PostTable = (props: PostTableProps) => {
                       {post.tag}
                     </span>
                   </td>
+                  {/* 這一欄不一定是 News 或是 Post，可能會是比特幣、台灣、國際、技術... */}
                   <td className="px-3 py-2">
                     <span
                       className={`px-2 py-1 rounded text-sm ${post.type === "News"

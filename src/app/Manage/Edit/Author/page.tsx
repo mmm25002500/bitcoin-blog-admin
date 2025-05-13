@@ -78,8 +78,8 @@ const EditAuthor = () => {
         <div className="absolute bottom-0 right-0 bg-white py-4 w-full shadow-[0_-4px_8px_-3px_rgba(0,0,0,0.05)]">
           <div className="flex justify-end gap-2 pr-7">
             <DeleteBtn label="刪除" onClick={() => { router.push("/Manage/Author"); toast.success('文章已成功刪除')}} />
-            <CancelBtn label="取消" onClick={() => { router.push("/Manage/Author"); toast.error('文章刪除失敗')}} />
-            <AddBtn label="確定" onClick={() => { router.push("/Manage/Author"); toast.success('文章已成功刪除')}} />
+            <CancelBtn label="發佈" onClick={() => { router.push("/Manage/Author"); toast.error('文章刪除失敗')}} />
+            <AddBtn label="儲存" onClick={() => { router.push("/Manage/Author"); toast.success('文章已成功刪除')}} />
           </div>
         </div>
       </div>

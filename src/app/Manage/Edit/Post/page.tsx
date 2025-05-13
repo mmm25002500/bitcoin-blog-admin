@@ -13,6 +13,7 @@ import UploadFile from "@/components/UploadFile/UploadFile";
 
 import { useEffect, useState } from "react";
 import { useRouter } from 'nextjs-toploader/app';
+import MarkdownEditor from "@/components/Markdown/MarkdownEditor";
 
 const EditPost = () => {
   const [imageFile, setImageFile] = useState<File | null>(null);
@@ -197,6 +198,18 @@ const EditPost = () => {
               )
             }
           </div>
+
+          <div className="flex flex-col gap-2">
+            <Label
+              text={"文章內容"}
+              htmlFor={"date"}
+              required={false}
+              className={"mb-2"}
+            />
+            <div>
+              <MarkdownEditor />
+            </div>
+          </div>
         </div>
 
         {/* 確定按鈕置底 */}
@@ -204,8 +217,8 @@ const EditPost = () => {
           <div className="absolute bottom-0 right-0 bg-white py-4 w-full shadow-[0_-4px_8px_-3px_rgba(0,0,0,0.05)]">
             <div className="flex justify-end gap-2 pr-7">
               <DeleteBtn label="刪除" onClick={() => router.push("/Manage/Post")} />
-              <CancelBtn label="取消" onClick={() => router.push("/Manage/Post")} />
               <AddBtn label="發佈" onClick={() => router.push("/Manage/Post")} />
+              <CancelBtn label="取消" onClick={() => router.push("/Manage/Post")} />
             </div>
           </div>
         </div>
