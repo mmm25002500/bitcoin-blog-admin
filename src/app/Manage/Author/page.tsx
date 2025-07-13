@@ -14,7 +14,7 @@ const NewsManage = () => {
 	const [authorData, setAuthorData] = useState<AuthorData[]>([]);
 	const router = useRouter();
 
-	// ✅ 抓取資料
+	// fetch authors
 	const fetchAuthors = useCallback(async () => {
 		const supabase = createClient();
 		const { data, error } = await supabase
@@ -27,13 +27,13 @@ const NewsManage = () => {
 		} else {
 			setAuthorData(data);
 		}
-	}, []); // ← 如果 fetchAuthors 不依賴其他變數，可保持空陣列
+	}, []);
 
 	useEffect(() => {
 		fetchAuthors();
-	}, [fetchAuthors]); // ✅ 加入依賴
+	}, [fetchAuthors]);
 
-	// ✅ 刪除作者功能
+	// delete authors
 	const handleDeleteAuthors = async (ids: string[]) => {
 		const supabase = createClient();
 
@@ -43,7 +43,6 @@ const NewsManage = () => {
 			console.error("刪除作者失敗：", error.message);
 			alert("刪除失敗，請稍後再試");
 		} else {
-			// 從 state 中移除
 			setAuthorData((prev) =>
 				prev.filter((author) => !ids.includes(author.id)),
 			);

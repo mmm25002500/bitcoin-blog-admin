@@ -77,16 +77,14 @@ const AuthorTable = (props: AuthorTableProps) => {
 			} else {
 				newSet.add(id);
 			}
+			console.log(newSet);
 			return newSet;
 		});
 	};
 
 	// 處理刪除選取的項目
 	const handleDeleteSelected = () => {
-		const ids = Array.from(selectedIds);
-		props.onDelete?.(ids);
-		setSelectedIds(new Set());
-		setShowConfirmModal(false);
+		setShowConfirmModal(true);
 	};
 
 	// 處理刪除單一項目
@@ -103,7 +101,7 @@ const AuthorTable = (props: AuthorTableProps) => {
 					<span>已選取 {selectedIds.size} 個項目</span>
 					<button
 						type="button"
-						onClick={() => setShowConfirmModal(true)}
+						onClick={handleDeleteSelected}
 						className="text-[#D82027] hover:text-red-800 leading-3.5 flex gap-1 items-center"
 					>
 						<Image
@@ -169,7 +167,7 @@ const AuthorTable = (props: AuthorTableProps) => {
 								<tr
 									key={author.name}
 									className={`border-b-[1px] border-[#F1F1F1] text-sm leading-6 font-normal text-[#1A1A1A] ${
-										selectedIds.has(author.name)
+										selectedIds.has(author.id)
 											? "bg-[#F3F6F7] border-[1px] border-[#F1F1F1]"
 											: ""
 									}`}
@@ -179,8 +177,8 @@ const AuthorTable = (props: AuthorTableProps) => {
 											<label className="flex items-center cursor-pointer relative">
 												<input
 													type="checkbox"
-													checked={selectedIds.has(author.name)}
-													onChange={() => handleCheckboxChange(author.name)}
+													checked={selectedIds.has(author.id)}
+													onChange={() => handleCheckboxChange(author.id)}
 													className="peer h-5 w-5 cursor-pointer transition-all appearance-none rounded shadow hover:shadow-md border border-slate-300 checked:bg-slate-800 checked:border-slate-800"
 													id="check"
 												/>
@@ -317,7 +315,10 @@ const AuthorTable = (props: AuthorTableProps) => {
 				description="此操作將永久刪除作者，且無法復原。請確認是否執行。"
 				confirmLabel="刪除作者"
 				cancelLabel="取消"
-				onConfirm={handleDeleteSelected}
+				onConfirm={() => {
+					setShowConfirmModal(false);
+					props.onDelete?.(Array.from(selectedIds));
+				}}
 				onCancel={() => setShowConfirmModal(false)}
 			/>
 
