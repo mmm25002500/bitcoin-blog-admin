@@ -15,6 +15,7 @@ const routeInfo = {
 	"/Manage/News": { title: "新聞管理", logo: NewsIcon },
 	"/Manage/Author": { title: "作者管理", logo: AuthorIcon },
 	"/Manage/Create/Post": { title: "文章管理｜新增文章", logo: PostIcon },
+	"/Manage/Create/News": { title: "文章管理｜新增新聞", logo: PostIcon },
 	"/Manage/Create/Author": { title: "作者管理｜新增作者", logo: AuthorIcon },
 	"/Manage/Edit/Author": { title: "作者管理｜編輯作者", logo: AuthorIcon },
 	"/Manage/Edit/Post": { title: "作者管理｜編輯文章", logo: PostIcon },

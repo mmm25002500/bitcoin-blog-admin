@@ -3,11 +3,15 @@ import type { DateRange } from "react-day-picker";
 export interface PostData {
 	id: string;
 	title: string;
-	author: string;
-	date: string;
-	tag: string[];
-	type: string;
+	created_at: string;
+	description?: string;
+	tags: string[];
+	type: string[]; // 類似小書櫃
+	img: string;
+	filename: string;
+	author_id: string; //uuid
 }
+
 export interface PostTableProps {
 	perPage?: number;
 	searchValue?: string;

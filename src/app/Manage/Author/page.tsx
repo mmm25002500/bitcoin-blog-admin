@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "nextjs-toploader/app";
 import { createClient } from "@/lib/supabase/client";
-import type { AuthorData } from "@/types/Table/AuthorTable";
+import type { AuthorData } from "@/types/Author/Author";
 
 import AddBtn from "@/components/Button/AddBtn";
 import Search from "@/components/Input/Search";

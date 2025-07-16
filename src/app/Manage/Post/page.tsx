@@ -5,20 +5,12 @@ import DateChoose from "@/components/Input/DateChoose";
 import DropDown from "@/components/Input/DropDown";
 import Search from "@/components/Input/Search";
 import PostTable from "@/components/Table/PostTable";
+import { createClient } from "@/lib/supabase/client";
 
 import type { PostData } from "@/types/Table/PostTable";
 import { useRouter } from "nextjs-toploader/app";
 import { useEffect, useState } from "react";
 import type { DateRange } from "react-day-picker";
-
-const mockData: PostData[] = Array.from({ length: 100 }, (_, i) => ({
-	id: `#1231${i}`,
-	title: i % 2 === 0 ? `台灣比特幣儲備 ${i + 1}` : `以太坊升級 ${i + 1}`,
-	author: i % 2 === 0 ? `川普 ${i + 1}` : `拜登 ${i + 1}`,
-	date: `2025/05/11 12:2${i}`,
-	tag: ["比特幣", "以太坊基金會", "美國戰略儲備"],
-	type: i % 2 === 0 ? "國際" : "以太坊",
-}));
 
 const PageManage = () => {
 	// 文章類型選單
@@ -27,6 +19,28 @@ const PageManage = () => {
 	const [searchValue, setSearchValue] = useState<string>("");
 	// 日期選擇的值
 	const [date, setDate] = useState<DateRange | undefined>();
+	// 文章資料
+	const [postData, setPostData] = useState<PostData[]>([]);
+
+	// 開始時從 Supabase 獲取文章資料
+	useEffect(() => {
+		const fetchPosts = async () => {
+			const supabase = createClient();
+			const { data, error } = await supabase
+				.from("Post")
+				.select("*")
+				.order("created_at", { ascending: false });
+
+			if (error) {
+				console.error("取得文章失敗", error.message);
+			} else {
+				console.log("取得文章成功", data);
+				setPostData(data);
+			}
+		};
+
+		fetchPosts();
+	}, []);
 
 	// 處理路由變化
 	const router = useRouter();
@@ -87,8 +101,25 @@ const PageManage = () => {
 	};
 
 	// 處理要刪除的項目
-	const handleDeleteSelected = (id: string[]) => {
-		console.log("要刪除的 ID：", id);
+	const handleDeleteSelected = async (ids: string[]) => {
+		console.log("要刪除的 ID：", ids);
+		const supabase = createClient();
+
+		const { error } = await supabase
+			.from("Post")
+			.delete()
+			.in(
+				"id",
+				ids.map((id) => Number(id)),
+			);
+
+		if (error) {
+			console.error("刪除失敗：", error.message);
+			alert("刪除失敗，請稍後再試");
+		} else {
+			console.log("刪除成功");
+			setPostData((prev) => prev.filter((post) => !ids.includes(post.id)));
+		}
 	};
 
 	return (
@@ -104,6 +135,7 @@ const PageManage = () => {
 					<DropDown
 						options={ArticleType}
 						selectedOption={"ss"}
+						label_name={"文章類型"}
 						onCancel={handleDropDownCancel}
 						onSelect={handleSelect}
 					/>
@@ -125,7 +157,7 @@ const PageManage = () => {
 				searchValue={searchValue}
 				date={date}
 				onDelete={handleDeleteSelected}
-				PostData={mockData}
+				PostData={postData}
 			/>
 		</>
 	);

@@ -1,6 +1,7 @@
 "use client";
 
-import type { AuthorData, AuthorTableProps } from "@/types/Table/AuthorTable";
+import type { AuthorTableProps } from "@/types/Table/AuthorTable";
+import type { AuthorData } from "@/types/Author/Author";
 import { useMemo, useState } from "react";
 import Image from "next/image";
 import TrashCanIcon from "@/images/trash_can.svg";

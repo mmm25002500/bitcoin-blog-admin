@@ -5,136 +5,162 @@ import DateChoose from "@/components/Input/DateChoose";
 import DropDown from "@/components/Input/DropDown";
 import Search from "@/components/Input/Search";
 import PostTable from "@/components/Table/PostTable";
-import { PostData } from "@/types/Table/PostTable";
-import { useRouter } from 'nextjs-toploader/app';
-import { useEffect, useState } from "react";
-import { DateRange } from "react-day-picker";
+import { createClient } from "@/lib/supabase/client";
 
-const mockData: PostData[] = Array.from({ length: 100 }, (_, i) => ({
-  id: `#1231${i}`,
-  title: i % 2 === 0 ? `台灣比特幣儲備 ${i+1}` : `以太坊升級 ${i+1}`,
-  author: i % 2 === 0 ? `Vitalik ${i+1}` : `Michael Saylor ${i+1}`,
-  date: `2025/05/11 12:2${i}`,
-  tag: ["薩爾瓦多", '挖礦', 'Solidity'],
-  type: i % 2 === 0 ? "比特幣" : "智能合約",
-}));
+import type { PostData } from "@/types/Table/PostTable";
+import { useRouter } from "nextjs-toploader/app";
+import { useEffect, useState } from "react";
+import type { DateRange } from "react-day-picker";
 
 const NewsManage = () => {
-  // 文章類型選單
-  const [selectedOption, setSelectedOption] = useState<string>("");
-  // 搜尋框的值
-  const [searchValue, setSearchValue] = useState<string>("");
-  // 日期選擇的值
-  const [date, setDate] = useState<DateRange | undefined>();
+	// 文章類型選單
+	const [selectedOption, setSelectedOption] = useState<string>("");
+	// 搜尋框的值
+	const [searchValue, setSearchValue] = useState<string>("");
+	// 日期選擇的值
+	const [date, setDate] = useState<DateRange | undefined>();
+	// 文章資料
+	const [postData, setPostData] = useState<PostData[]>([]);
 
-  // 處理路由變化
-  const router = useRouter();
+	// 開始時從 Supabase 獲取文章資料
+	useEffect(() => {
+		const fetchPosts = async () => {
+			const supabase = createClient();
+			const { data, error } = await supabase
+				.from("News")
+				.select("*")
+				.order("created_at", { ascending: false });
 
-  const ArticleType = [
-    'All',
-    'News',
-    'Post'
-  ];
+			if (error) {
+				console.error("取得文章失敗", error.message);
+			} else {
+				console.log("取得文章成功", data);
+				setPostData(data);
+			}
+		};
 
-  // 處理下拉選單的選擇
-  const handleSelect = (option: string) => {
-    setSelectedOption(option);
-    console.log(`選擇的文章類型: ${option}`);
-  };
+		fetchPosts();
+	}, []);
 
-  // 處理取消按鈕的點擊事件
-  const handleDropDownCancel = () => {
-    setSelectedOption("All");
-  }
+	// 處理路由變化
+	const router = useRouter();
 
-  // 處理搜尋框的變化
-  const handleSearchChange = (value: string) => {
-    setSearchValue(value);
-    console.log(`搜尋的值: ${value}`);
-  };
+	const ArticleType = ["All", "News", "Post"];
 
-  // 處理搜尋框的取消按鈕點擊事件
-  const handleSearchCancel = () => {
-    setSearchValue("");
-    console.log("搜尋框取消");
-  };
+	// 處理下拉選單的選擇
+	const handleSelect = (option: string) => {
+		setSelectedOption(option);
+		console.log(`選擇的文章類型: ${option}`);
+	};
 
-  useEffect(() => {
-    if (selectedOption) {
-      console.log(`真正選到的文章類型: ${selectedOption}`);
-    }
-  }, [selectedOption]);
+	// 處理取消按鈕的點擊事件
+	const handleDropDownCancel = () => {
+		setSelectedOption("All");
+	};
 
-  useEffect(() => {
-    if (searchValue) {
-      console.log(`搜尋的值: ${searchValue}`);
-    }
-  }, [searchValue]);
+	// 處理搜尋框的變化
+	const handleSearchChange = (value: string) => {
+		setSearchValue(value);
+		console.log(`搜尋的值: ${value}`);
+	};
 
-  useEffect(() => {
-    if (date) {
-      console.log(`選擇的日期範圍: ${date}`);
-    }
-  }, [date]);
+	// 處理搜尋框的取消按鈕點擊事件
+	const handleSearchCancel = () => {
+		setSearchValue("");
+		console.log("搜尋框取消");
+	};
 
-  // 處理日期選擇的變化
-  const handleDateSelect = (range: DateRange | undefined) => {
-    setDate(range);
-    console.log(`選擇的日期範圍: ${range}`);
-  };
+	useEffect(() => {
+		if (selectedOption) {
+			console.log(`真正選到的文章類型: ${selectedOption}`);
+		}
+	}, [selectedOption]);
 
-  // 處理日期選擇的取消按鈕點擊事件
-  const handleDateCancel = () => {
-    setDate(undefined);
-    console.log("日期選擇取消");
-  };
+	useEffect(() => {
+		if (searchValue) {
+			console.log(`搜尋的值: ${searchValue}`);
+		}
+	}, [searchValue]);
 
-  // 處理要刪除的項目
-  const handleDeleteSelected = (id: string[]) => {
-    console.log("要刪除的 ID：", id);
-  };
+	useEffect(() => {
+		if (date) {
+			console.log(`選擇的日期範圍: ${date}`);
+		}
+	}, [date]);
 
-  return (
-    <>
-      {/* nav */}
-      <div className="flex">
-        <div className="flex gap-5 grow">
-          <DateChoose
-            selected={undefined}
-            onSelect={handleDateSelect}
-            onCancel={handleDateCancel}
-          />
-          <DropDown
-            options={ArticleType}
-            selectedOption={selectedOption}
-            onCancel={handleDropDownCancel}
-            onSelect={handleSelect}
-          />
-          <Search
-            onChange={handleSearchChange}
-            onCancel={handleSearchCancel}
-          />
-        </div>
-        <div>
-          <AddBtn
-            onClick={() => router.push("/Manage/Create/Post")}
-            label={"新增 +"}
-            className=""
-          />
-        </div> 
-      </div>
+	// 處理日期選擇的變化
+	const handleDateSelect = (range: DateRange | undefined) => {
+		setDate(range);
+		console.log(`選擇的日期範圍: ${range}`);
+	};
 
-      {/* 文章列表 */}
-      <PostTable
-        perPage={10}
-        type={selectedOption}
-        searchValue={searchValue}
-        date={date}
-        onDelete={handleDeleteSelected}
-        PostData={mockData}
-      />
-    </>
-  );
-}
+	// 處理日期選擇的取消按鈕點擊事件
+	const handleDateCancel = () => {
+		setDate(undefined);
+		console.log("日期選擇取消");
+	};
 
-export default NewsManage; 
+	// 處理要刪除的項目
+	const handleDeleteSelected = async (ids: string[]) => {
+		console.log("要刪除的 ID：", ids);
+		const supabase = createClient();
+
+		const { error } = await supabase
+			.from("Post")
+			.delete()
+			.in(
+				"id",
+				ids.map((id) => Number(id)),
+			);
+
+		if (error) {
+			console.error("刪除失敗：", error.message);
+			alert("刪除失敗，請稍後再試");
+		} else {
+			console.log("刪除成功");
+			setPostData((prev) => prev.filter((post) => !ids.includes(post.id)));
+		}
+	};
+
+	return (
+		<>
+			{/* nav */}
+			<div className="flex">
+				<div className="flex gap-5 grow">
+					<DateChoose
+						selected={undefined}
+						onSelect={handleDateSelect}
+						onCancel={handleDateCancel}
+					/>
+					<DropDown
+						options={ArticleType}
+						selectedOption={"ss"}
+						label_name={"文章類型"}
+						onCancel={handleDropDownCancel}
+						onSelect={handleSelect}
+					/>
+					<Search onChange={handleSearchChange} onCancel={handleSearchCancel} />
+				</div>
+				<div>
+					<AddBtn
+						onClick={() => router.push("/Manage/Create/News")}
+						label={"新增 +"}
+						className=""
+					/>
+				</div>
+			</div>
+
+			{/* 文章列表 */}
+			<PostTable
+				perPage={10}
+				type={selectedOption}
+				searchValue={searchValue}
+				date={date}
+				onDelete={handleDeleteSelected}
+				PostData={postData}
+			/>
+		</>
+	);
+};
+
+export default NewsManage;
