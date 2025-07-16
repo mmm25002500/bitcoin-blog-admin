@@ -23,12 +23,14 @@ import type { DateRange } from "react-day-picker";
 
 const mockData: PostData[] = Array.from({ length: 100 }, (_, i) => ({
 	id: `#1231${i}`,
-	title:
-		i % 2 === 0 ? `10萬以內最後的機會 ${i + 1}` : `經濟衰退大崩盤 ${i + 1}`,
-	author: i % 2 === 0 ? `Derek ${i + 1}` : `中本蔥 ${i + 1}`,
-	date: `2025/05/11 12:2${i}`,
-	tag: ["區塊鏈日報", "墨山貓", "良兮"],
-	type: i % 2 === 0 ? "走勢分析" : "總體經濟",
+	title: "sdsd",
+	author_id: i % 2 === 0 ? `Derek ${i + 1}` : `中本蔥 ${i + 1}`,
+	created_at: `2025/05/11 12:2${i}`,
+	tags: ["區塊鏈日報", "墨山貓", "良兮"],
+	type: i % 2 === 0 ? ["走勢分析"] : ["總體經濟"],
+	img: i % 2 === 0 ? "/images/author1.png" : "/images/author2.png",
+	description: "sd",
+	filename: "dfdf",
 }));
 
 const EditAuthor = () => {
@@ -163,49 +165,47 @@ const EditAuthor = () => {
 						)}
 					</div>
 
-					<>
-						<div className="px-4 pt-4 border-[1px] border-neutral-200 rounded-xl">
-							<Label text="文章列表" htmlFor="name" className="mb-2" />
+					<div className="px-4 pt-4 border-[1px] border-neutral-200 rounded-xl">
+						<Label text="文章列表" htmlFor="name" className="mb-2" />
 
-							{/* nav */}
-							<div className="flex mt-3">
-								<div className="flex gap-5 grow">
-									<DateChoose
-										selected={undefined}
-										onSelect={handleDateSelect}
-										onCancel={handleDateCancel}
-									/>
-									<DropDown
-										options={ArticleType}
-										selectedOption={selectedOption}
-										onCancel={handleDropDownCancel}
-										onSelect={handleSelect}
-									/>
-									<Search
-										onChange={handleSearchChange}
-										onCancel={handleSearchCancel}
-									/>
-								</div>
-								<div>
-									<AddBtn
-										onClick={() => router.push("/Manage/Create/Post")}
-										label={"新增 +"}
-										className=""
-									/>
-								</div>
+						{/* nav */}
+						<div className="flex mt-3">
+							<div className="flex gap-5 grow">
+								<DateChoose
+									selected={undefined}
+									onSelect={handleDateSelect}
+									onCancel={handleDateCancel}
+								/>
+								<DropDown
+									options={ArticleType}
+									selectedOption={selectedOption}
+									onCancel={handleDropDownCancel}
+									onSelect={handleSelect}
+								/>
+								<Search
+									onChange={handleSearchChange}
+									onCancel={handleSearchCancel}
+								/>
 							</div>
-
-							{/* 文章列表 */}
-							<PostTable
-								perPage={10}
-								type={selectedOption}
-								searchValue={searchValue}
-								date={date}
-								onDelete={handleDeleteSelected}
-								PostData={mockData}
-							/>
+							<div>
+								<AddBtn
+									onClick={() => router.push("/Manage/Create/Post")}
+									label={"新增 +"}
+									className=""
+								/>
+							</div>
 						</div>
-					</>
+
+						{/* 文章列表 */}
+						<PostTable
+							perPage={10}
+							type={selectedOption}
+							searchValue={searchValue}
+							date={date}
+							onDelete={handleDeleteSelected}
+							PostData={mockData}
+						/>
+					</div>
 				</div>
 			</div>
 
