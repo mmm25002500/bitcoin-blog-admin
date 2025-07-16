@@ -23,6 +23,31 @@ const CreateAuthor = () => {
 	// 處理路由變化
 	const router = useRouter();
 
+	// const addAuthor = async () => {
+	// 	const res = await fetch("/api/author/addAuthor", {
+	// 		method: "POST",
+	// 		headers: {
+	// 			"Content-Type": "application/json",
+	// 		},
+	// 		body: JSON.stringify({
+	// 			fullname: "王小明",
+	// 			name: "williams",
+	// 			description: "資深區塊鏈開發者",
+	// 			image: "https://example.com/avatar.jpg",
+	// 		}),
+	// 	});
+
+	// 	const result = await res.json();
+
+	// 	if (result.success) {
+	// 		console.log("新增成功：", result.data);
+	// 	} else {
+	// 		console.error("失敗：", result.error);
+	// 	}
+	// };
+
+	// addAuthor();
+
 	return (
 		<>
 			<div className="flex flex-col min-h-full gap-5 relative">

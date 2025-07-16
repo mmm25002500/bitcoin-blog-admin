@@ -17,8 +17,8 @@ const PostTable = (props: PostTableProps) => {
 	const [sortBy, setSortBy] = useState<keyof PostData>("id");
 	const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
 	const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
-	const [showConfirmModal, setShowConfirmModal] = useState(false);
 	const [deleteID, setDeleteID] = useState<string>("");
+	const [showConfirmModal, setShowConfirmModal] = useState(false);
 	const [showDeleteThisConfirmModal, setShowDeleteThisConfirmModal] =
 		useState(false);
 
@@ -115,20 +115,6 @@ const PostTable = (props: PostTableProps) => {
 			return newSet;
 		});
 	};
-
-	// 處理全選
-	// const isAllCurrentPageSelected = paginatedData.every((item) => selectedIds.has(item.id));
-	// const handleSelectAll = () => {
-	//   setSelectedIds((prev) => {
-	//     const newSet = new Set(prev);
-	//     if (isAllCurrentPageSelected) {
-	//       paginatedData.forEach((item) => newSet.delete(item.id));
-	//     } else {
-	//       paginatedData.forEach((item) => newSet.add(item.id));
-	//     }
-	//     return newSet;
-	//   });
-	// };
 
 	// 處理要刪除的項目
 	const handleDeleteSelected = () => {
@@ -415,6 +401,7 @@ const PostTable = (props: PostTableProps) => {
 					cancelLabel="取消"
 					onConfirm={() => {
 						props.onDelete?.(Array.from(selectedIds));
+						setSelectedIds(new Set());
 						setShowConfirmModal(false);
 					}}
 					onCancel={() => setShowConfirmModal(false)}

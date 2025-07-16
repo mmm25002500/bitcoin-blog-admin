@@ -33,16 +33,18 @@ const NewsManage = () => {
 		fetchAuthors();
 	}, [fetchAuthors]);
 
-	// delete authors
-	const handleDeleteAuthors = async (ids: string[]) => {
+	// 處理要刪除的項目
+	const handleDeleteSelected = async (ids: string[]) => {
+		// console.log("要刪除的 ID：", ids);
 		const supabase = createClient();
 
 		const { error } = await supabase.from("author").delete().in("id", ids);
 
 		if (error) {
 			console.error("刪除作者失敗：", error.message);
-			alert("刪除失敗，請稍後再試");
+			// alert("刪除失敗，請稍後再試");
 		} else {
+			console.log("刪除成功");
 			setAuthorData((prev) =>
 				prev.filter((author) => !ids.includes(author.id)),
 			);
@@ -76,7 +78,7 @@ const NewsManage = () => {
 			<AuthorTable
 				perPage={10}
 				searchValue={searchValue}
-				onDelete={handleDeleteAuthors} // ✅ 傳入刪除功能
+				onDelete={handleDeleteSelected} // ✅ 傳入刪除功能
 				AuthorData={authorData}
 			/>
 		</>

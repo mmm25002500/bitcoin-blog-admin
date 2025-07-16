@@ -83,12 +83,14 @@ const AuthorTable = (props: AuthorTableProps) => {
 		});
 	};
 
-	// 處理刪除選取的項目
+	// 處理要刪除的項目
 	const handleDeleteSelected = () => {
+		const idsToDelete = Array.from(selectedIds);
 		setShowConfirmModal(true);
+		console.log("要刪除的 ID：", idsToDelete);
 	};
 
-	// 處理刪除單一項目
+	// 處理刪除當前項目
 	const handleDeleteCurrent = (id: string) => {
 		setShowDeleteThisConfirmModal(true);
 		setDeleteID(id);
@@ -166,7 +168,7 @@ const AuthorTable = (props: AuthorTableProps) => {
 						<tbody>
 							{paginatedData.map((author) => (
 								<tr
-									key={author.name}
+									key={author.id}
 									className={`border-b-[1px] border-[#F1F1F1] text-sm leading-6 font-normal text-[#1A1A1A] ${
 										selectedIds.has(author.id)
 											? "bg-[#F3F6F7] border-[1px] border-[#F1F1F1]"
@@ -317,8 +319,9 @@ const AuthorTable = (props: AuthorTableProps) => {
 				confirmLabel="刪除作者"
 				cancelLabel="取消"
 				onConfirm={() => {
-					setShowConfirmModal(false);
 					props.onDelete?.(Array.from(selectedIds));
+					setSelectedIds(new Set());
+					setShowConfirmModal(false);
 				}}
 				onCancel={() => setShowConfirmModal(false)}
 			/>
@@ -330,8 +333,8 @@ const AuthorTable = (props: AuthorTableProps) => {
 				confirmLabel="刪除作者"
 				cancelLabel="取消"
 				onConfirm={() => {
-					setShowDeleteThisConfirmModal(false);
 					props.onDelete?.([deleteID]);
+					setShowDeleteThisConfirmModal(false);
 				}}
 				onCancel={() => setShowDeleteThisConfirmModal(false)}
 			/>

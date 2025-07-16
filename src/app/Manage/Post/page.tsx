@@ -115,7 +115,7 @@ const PageManage = () => {
 
 		if (error) {
 			console.error("刪除失敗：", error.message);
-			alert("刪除失敗，請稍後再試");
+			// alert("刪除失敗，請稍後再試");
 		} else {
 			console.log("刪除成功");
 			setPostData((prev) => prev.filter((post) => !ids.includes(post.id)));
