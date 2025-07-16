@@ -39,8 +39,8 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
 					</span>
 					{description && (
 						<p className="text-sm leading-[22px] font-normal text-[#7C7C7C]">
-							{description.split("\n").map((line, index) => (
-								<React.Fragment key={index}>
+							{description.split("\n").map((line) => (
+								<React.Fragment key={line}>
 									{line}
 									<br />
 								</React.Fragment>
