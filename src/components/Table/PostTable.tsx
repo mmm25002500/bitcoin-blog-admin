@@ -295,9 +295,17 @@ const PostTable = (props: PostTableProps) => {
 									</td>
 									{/* 這一欄不一定是 News 或是 Post，可能會是比特幣、台灣、國際、技術... */}
 									<td className="px-3 py-2">
-										<span className="text-sm bg-gray-100 rounded-full px-3 py-[2px] font-normal leading-6">
-											{post.type}
-										</span>
+										{post.type.map(
+											(tag, index) =>
+												index < 2 && (
+													<span
+														key={tag}
+														className="px-3 py-[2px] bg-[#F1F1F1] text-[#505050] font-normal leading-6 rounded-full text-sm mr-2"
+													>
+														{tag}
+													</span>
+												),
+										)}
 									</td>
 									<td className="px-3 py-2">
 										<button

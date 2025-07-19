@@ -2,7 +2,7 @@
 
 import type { DropDownTagProps } from "@/types/Input/DropDownTag";
 import CreatableSelect from "react-select/creatable";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { MultiValue } from "react-select";
 
 interface Option {
@@ -32,6 +32,14 @@ const DropDownTag = ({
 		const newTags = [...selectedOptions, inputValue];
 		onChange(newTags);
 	};
+
+	const [mounted, setMounted] = useState(false);
+
+	useEffect(() => {
+		setMounted(true);
+	}, []);
+
+	if (!mounted) return null;
 
 	return (
 		<CreatableSelect
