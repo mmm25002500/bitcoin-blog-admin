@@ -35,19 +35,28 @@ const NewsManage = () => {
 
 	// 處理要刪除的項目
 	const handleDeleteSelected = async (ids: string[]) => {
-		// console.log("要刪除的 ID：", ids);
-		const supabase = createClient();
+		try {
+			const res = await fetch("/api/author/delAuthor", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify({ ids }),
+				credentials: "include", // 若你使用 cookie 驗證（如 Supabase Auth）
+			});
 
-		const { error } = await supabase.from("author").delete().in("id", ids);
+			const result = await res.json();
 
-		if (error) {
-			console.error("刪除作者失敗：", error.message);
-			// alert("刪除失敗，請稍後再試");
-		} else {
-			console.log("刪除成功");
-			setAuthorData((prev) =>
-				prev.filter((author) => !ids.includes(author.id)),
-			);
+			if (result.success) {
+				console.log("刪除成功");
+				setAuthorData((prev) =>
+					prev.filter((author) => !ids.includes(author.id)),
+				);
+			} else {
+				console.error("刪除失敗：", result.error);
+				// alert("刪除失敗：" + result.error);
+			}
+		} catch (error) {
+			console.error("刪除發生錯誤：", error);
+			alert("刪除時發生錯誤，請稍後再試");
 		}
 	};
 

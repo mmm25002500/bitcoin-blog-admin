@@ -211,7 +211,7 @@ const AuthorTable = (props: AuthorTableProps) => {
 									<td className="px-3 py-2">{author.name}</td>
 									<td className="px-3 py-2">
 										<img
-											src={author.image}
+											src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/author.image/${author.image}`}
 											alt={author.name}
 											className="w-10 h-10 rounded-full object-cover"
 										/>

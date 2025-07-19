@@ -11,42 +11,51 @@ import { useRouter } from "nextjs-toploader/app";
 
 const CreateAuthor = () => {
 	const [imageFile, setImageFile] = useState<File | null>(null); //image
-	const [title, setTitle] = useState<string>(""); // title
+	const [name, setName] = useState<string>(""); // name
 	const [description, setDescription] = useState<string>(""); // description
 
 	useEffect(() => {
 		console.log("imageFile", imageFile);
-		console.log("title:", title);
+		console.log("name:", name);
 		console.log("description:", description);
-	}, [imageFile, title, description]);
+	}, [imageFile, name, description]);
 
 	// 處理路由變化
 	const router = useRouter();
 
-	// const addAuthor = async () => {
-	// 	const res = await fetch("/api/author/addAuthor", {
-	// 		method: "POST",
-	// 		headers: {
-	// 			"Content-Type": "application/json",
-	// 		},
-	// 		body: JSON.stringify({
-	// 			fullname: "王小明",
-	// 			name: "williams",
-	// 			description: "資深區塊鏈開發者",
-	// 			image: "https://example.com/avatar.jpg",
-	// 		}),
-	// 	});
+	// 處理表單提交
+	const handleSubmit = async () => {
+		if (!imageFile || !name || !description) {
+			alert("請填寫所有欄位");
+			return;
+		}
 
-	// 	const result = await res.json();
+		const formData = new FormData();
+		formData.append("fullname", name);
+		formData.append("name", name);
+		formData.append("description", description);
+		formData.append("image", imageFile); // 已確保不為 null
 
-	// 	if (result.success) {
-	// 		console.log("新增成功：", result.data);
-	// 	} else {
-	// 		console.error("失敗：", result.error);
-	// 	}
-	// };
+		try {
+			const res = await fetch("/api/author/addAuthor", {
+				method: "POST",
+				body: formData,
+				credentials: "include",
+			});
 
-	// addAuthor();
+			const result = await res.json();
+			if (result.success) {
+				alert("新增成功");
+				router.push("/Manage/Author");
+			} else {
+				console.error("新增失敗", result.error);
+				// alert("新增失敗：" + result.error);
+			}
+		} catch (error) {
+			console.error("提交表單錯誤：", error);
+			// alert("發生錯誤，請稍後再試");
+		}
+	};
 
 	return (
 		<>
@@ -61,7 +70,7 @@ const CreateAuthor = () => {
 							id="name"
 							placeholder="請輸入標題"
 							onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-								setTitle(e.target.value);
+								setName(e.target.value);
 							}}
 						/>
 					</div>
@@ -121,11 +130,15 @@ const CreateAuthor = () => {
 					<div className="flex justify-end gap-2 pr-7">
 						<CancelBtn
 							label="取消"
-							onClick={() => router.push("/Manage/Author")}
+							onClick={() => {
+								router.push("/Manage/Author");
+							}}
 						/>
 						<AddBtn
 							label="新增"
-							onClick={() => router.push("/Manage/Author")}
+							onClick={async () => {
+								await handleSubmit();
+							}}
 						/>
 					</div>
 				</div>
