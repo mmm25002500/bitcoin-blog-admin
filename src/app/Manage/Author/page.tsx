@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "nextjs-toploader/app";
-import { createClient } from "@/lib/supabase/client";
 import type { AuthorData } from "@/types/Author/Author";
 
 import AddBtn from "@/components/Button/AddBtn";
@@ -16,16 +15,21 @@ const NewsManage = () => {
 
 	// fetch authors
 	const fetchAuthors = useCallback(async () => {
-		const supabase = createClient();
-		const { data, error } = await supabase
-			.from("author")
-			.select("*")
-			.order("created_at", { ascending: false });
+		try {
+			const res = await fetch("/api/author/getAuthor", {
+				method: "GET",
+				credentials: "include", // 如果你有用 cookie 驗證
+			});
+			const result = await res.json();
 
-		if (error) {
-			console.error("取得作者資料錯誤:", error.message);
-		} else {
-			setAuthorData(data);
+			if (result.success) {
+				setAuthorData(result.data); // ✅ 注意：這裡的資料包含 postQuantity
+				console.log("成功取得 enriched 作者資料", result.data);
+			} else {
+				console.error("取得 enriched 作者資料失敗：", result.error);
+			}
+		} catch (err) {
+			console.error("fetch 發生錯誤：", err);
 		}
 	}, []);
 
