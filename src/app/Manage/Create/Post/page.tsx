@@ -19,7 +19,6 @@ import { useCallback } from "react";
 
 // TODO：
 // 1. content to filename.md and set filename to supabase
-// 2. imageFile to filename.jpg/png and set image to supabase
 
 const CreatePost = () => {
 	// const [selectedOption, setSelectedOption] = useState<string>("All");
@@ -99,6 +98,37 @@ const CreatePost = () => {
 	// const handleDropDownCancel = () => {
 	//   setSelectedOption("All");
 	// }
+
+	const handleSubmit = async () => {
+		if (!title || !description || !imageFile || !seletedAuthor) {
+			alert("請填寫完整欄位");
+			return;
+		}
+
+		const formData = new FormData();
+
+		formData.append("title", title);
+		formData.append("description", description);
+		formData.append("tags", JSON.stringify(selectedTags)); // <-- 傳 JSON 字串
+		formData.append("type", JSON.stringify(selectedType)); // <-- 傳 JSON 字串
+		formData.append("image", imageFile);
+		formData.append("filename", imageFile.name); // 原始檔名
+		formData.append("author_id", seletedAuthor.id); // 作者 ID
+
+		const res = await fetch("/api/Post/addPost", {
+			method: "POST",
+			body: formData,
+		});
+
+		const result = await res.json();
+
+		if (result.success) {
+			alert("文章新增成功！");
+			router.push("/Manage/Post");
+		} else {
+			console.log("新增失敗：", result.error);
+		}
+	};
 
 	return (
 		<>
@@ -269,10 +299,7 @@ const CreatePost = () => {
 								label="取消"
 								onClick={() => router.push("/Manage/Post")}
 							/>
-							<AddBtn
-								label="發佈"
-								onClick={() => router.push("/Manage/Post")}
-							/>
+							<AddBtn label="發佈" onClick={handleSubmit} />
 						</div>
 					</div>
 				</div>

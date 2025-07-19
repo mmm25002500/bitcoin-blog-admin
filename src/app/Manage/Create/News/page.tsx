@@ -100,6 +100,37 @@ const CreatePost = () => {
 	//   setSelectedOption("All");
 	// }
 
+	const handleSubmit = async () => {
+		if (!title || !description || !imageFile || !seletedAuthor) {
+			alert("請填寫完整欄位");
+			return;
+		}
+
+		const formData = new FormData();
+
+		formData.append("title", title);
+		formData.append("description", description);
+		formData.append("tags", JSON.stringify(selectedTags)); // <-- 傳 JSON 字串
+		formData.append("type", JSON.stringify(selectedType)); // <-- 傳 JSON 字串
+		formData.append("image", imageFile);
+		formData.append("filename", imageFile.name); // 原始檔名
+		formData.append("author_id", seletedAuthor.id); // 作者 ID
+
+		const res = await fetch("/api/News/addPost", {
+			method: "POST",
+			body: formData,
+		});
+
+		const result = await res.json();
+
+		if (result.success) {
+			alert("文章新增成功！");
+			router.push("/Manage/News");
+		} else {
+			console.log("新增失敗：", result.error);
+		}
+	};
+
 	return (
 		<>
 			<div className="flex flex-col h-full gap-5">
@@ -269,10 +300,7 @@ const CreatePost = () => {
 								label="取消"
 								onClick={() => router.push("/Manage/Post")}
 							/>
-							<AddBtn
-								label="發佈"
-								onClick={() => router.push("/Manage/Post")}
-							/>
+							<AddBtn label="發佈" onClick={handleSubmit} />
 						</div>
 					</div>
 				</div>

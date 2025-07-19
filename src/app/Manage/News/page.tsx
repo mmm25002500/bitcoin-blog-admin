@@ -103,22 +103,21 @@ const NewsManage = () => {
 	// 處理要刪除的項目
 	const handleDeleteSelected = async (ids: string[]) => {
 		console.log("要刪除的 ID：", ids);
-		const supabase = createClient();
 
-		const { error } = await supabase
-			.from("Post")
-			.delete()
-			.in(
-				"id",
-				ids.map((id) => Number(id)),
-			);
+		const res = await fetch("/api/News/delPost", {
+			method: "POST",
+			body: JSON.stringify({ ids }),
+			headers: {
+				"Content-Type": "application/json",
+			},
+		});
 
-		if (error) {
-			console.error("刪除失敗：", error.message);
-			alert("刪除失敗，請稍後再試");
-		} else {
-			console.log("刪除成功");
+		const result = await res.json();
+		if (result.success) {
 			setPostData((prev) => prev.filter((post) => !ids.includes(post.id)));
+			alert("刪除成功！");
+		} else {
+			console.log("刪除失敗：", result.error);
 		}
 	};
 
