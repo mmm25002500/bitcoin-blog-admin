@@ -1,6 +1,6 @@
 "use client";
 import type { PostData, PostTableProps } from "@/types/Table/PostTable";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "nextjs-toploader/app";
 
@@ -22,10 +22,50 @@ const PostTable = (props: PostTableProps) => {
 	const [showDeleteThisConfirmModal, setShowDeleteThisConfirmModal] =
 		useState(false);
 
+	const [authorMap, setAuthorMap] = useState<Record<string, string>>({});
+
 	const totalPages = Math.ceil(props.PostData.length / itemsPerPage);
 
 	// 處理路由變化
 	const router = useRouter();
+
+	useEffect(() => {
+		const fetchAuthors = async () => {
+			const uniqueAuthorIds = Array.from(
+				new Set(props.PostData.map((post) => post.author_id)),
+			);
+
+			const map: Record<string, string> = {};
+
+			await Promise.all(
+				uniqueAuthorIds.map(async (uid) => {
+					try {
+						const res = await fetch("/api/author/getAuthorByUID", {
+							method: "POST",
+							headers: { "Content-Type": "application/json" },
+							body: JSON.stringify({ uid }),
+						});
+						const result = await res.json();
+						if (result.success) {
+							map[uid] = result.data.name; // 或其他你要顯示的欄位
+						} else {
+							console.warn("找不到作者：", uid);
+							map[uid] = "(未知作者)";
+						}
+					} catch (err) {
+						console.error("取得作者時錯誤：", err);
+						map[uid] = "(錯誤)";
+					}
+				}),
+			);
+
+			setAuthorMap(map);
+		};
+
+		if (props.PostData.length > 0) {
+			fetchAuthors();
+		}
+	}, [props.PostData]);
 
 	// 處理排序
 	const handleSort = (field: keyof PostData) => {
@@ -265,7 +305,9 @@ const PostTable = (props: PostTableProps) => {
 									<td className="px-3 py-2 max-w-[250px]">
 										<p className="line-clamp-2">{post.title}</p>
 									</td>
-									<td className="px-3 py-2">{post.author_id}</td>
+									<td className="px-3 py-2">
+										{authorMap[post.author_id] ?? post.author_id}
+									</td>
 
 									<td className="px-3 py-2">
 										{new Date(
