@@ -4,7 +4,7 @@ import AddBtn from "@/components/Button/AddBtn";
 import DateChoose from "@/components/Input/DateChoose";
 import DropDown from "@/components/Input/DropDown";
 import Search from "@/components/Input/Search";
-import PostTable from "@/components/Table/PostTable";
+import NewsTable from "@/components/Table/NewsTable";
 import { createClient } from "@/lib/supabase/client";
 
 import type { PostData } from "@/types/Table/PostTable";
@@ -150,7 +150,7 @@ const NewsManage = () => {
 			</div>
 
 			{/* 文章列表 */}
-			<PostTable
+			<NewsTable
 				perPage={10}
 				type={selectedOption}
 				searchValue={searchValue}

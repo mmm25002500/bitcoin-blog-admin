@@ -1,14 +1,20 @@
 "use client";
 
 import type { DropDownProps } from "@/types/Input/DropDown";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 
 // icon
 import Cancel from "@/images/cancel.svg";
 
 const DropDown = (props: DropDownProps) => {
-	const [selectedValue, setSelectedValue] = useState<string>("");
+	const [selectedValue, setSelectedValue] = useState<string>(
+		props.selectedOption || "",
+	);
+
+	useEffect(() => {
+		setSelectedValue(props.selectedOption || "");
+	}, [props.selectedOption]);
 
 	// 處理選擇框的變化
 	const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {

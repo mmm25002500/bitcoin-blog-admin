@@ -15,6 +15,10 @@ export default function CustomDatePicker(props: DateSelectionProps) {
 	const [open, setOpen] = useState(false);
 	const ref = useRef<HTMLDivElement>(null);
 
+	useEffect(() => {
+		setSelected(props.selected);
+	}, [props.selected]);
+
 	const handleSelect = (date: Date | undefined) => {
 		setSelected(date);
 		props.onSelect(date);

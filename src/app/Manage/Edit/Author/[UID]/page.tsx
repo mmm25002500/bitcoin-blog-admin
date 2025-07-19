@@ -17,6 +17,7 @@ import Search from "@/components/Input/Search";
 import PostTable from "@/components/Table/PostTable";
 import type { PostData } from "@/types/Table/PostTable";
 import type { DateRange } from "react-day-picker";
+import { useParams } from "next/navigation";
 
 // TODO:
 // 1. 新增文章列表
@@ -35,9 +36,47 @@ const mockData: PostData[] = Array.from({ length: 100 }, (_, i) => ({
 
 const EditAuthor = () => {
 	const [imageFile, setImageFile] = useState<File | null>(null);
+	const [name, setName] = useState<string>("");
+	const [description, setDescription] = useState<string>("");
+	// const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
 
 	// 處理路由變化
 	const router = useRouter();
+
+	// get postID
+	const params = useParams();
+	const UID = params?.UID as string;
+
+	useEffect(() => {
+		if (!UID) return;
+
+		const fetchAuthor = async () => {
+			try {
+				const res = await fetch("/api/author/getAuthorByUID", {
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify({ uid: UID }),
+				});
+
+				const result = await res.json();
+
+				if (result.success) {
+					const author = result.data;
+					setName(author.name || "");
+					setDescription(author.description || "");
+					// if (author.image_url) {
+					// 	setImagePreviewUrl(author.image_url);
+					// }
+				} else {
+					console.error("取得作者失敗：", result.error);
+				}
+			} catch (err) {
+				console.error("fetch 失敗：", err);
+			}
+		};
+
+		fetchAuthor();
+	}, [UID]);
 
 	useEffect(() => {
 		console.log("imageFile", imageFile);
@@ -118,7 +157,13 @@ const EditAuthor = () => {
 					{/* 作者名稱 */}
 					<div className="flex flex-col gap-2">
 						<Label text="作者名稱" htmlFor="name" required className="mb-2" />
-						<Input name="name" id="name" placeholder="請輸入標題" />
+						<Input
+							name="name"
+							id="name"
+							placeholder="請輸入名稱"
+							value={name}
+							onChange={(e) => setName(e.target.value)}
+						/>
 					</div>
 
 					{/* 作者簡介 */}
@@ -133,6 +178,8 @@ const EditAuthor = () => {
 							name="description"
 							id="description"
 							placeholder="請輸入作者簡介"
+							value={description}
+							onChange={(e) => setDescription(e.target.value)}
 						/>
 					</div>
 

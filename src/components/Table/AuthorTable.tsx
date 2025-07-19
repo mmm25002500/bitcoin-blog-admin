@@ -236,7 +236,9 @@ const AuthorTable = (props: AuthorTableProps) => {
 										</button>
 										<button
 											type="button"
-											onClick={() => router.push("/Manage/Edit/Author")}
+											onClick={() =>
+												router.push(`/Manage/Edit/Author/${author.id}`)
+											}
 											className="border-[1px] border-[#E9E9E9] rounded-sm p-2.5 bg-white"
 										>
 											<Image

@@ -11,7 +11,7 @@ import RedTrashCanIcon from "@/images/red_trash_can.svg";
 import ConfirmModal from "../Modal/ConfirmModal";
 import NoResultIcon from "@/images/NoResult.svg";
 
-const PostTable = (props: PostTableProps) => {
+const NewsTable = (props: PostTableProps) => {
 	const [currentPage, setCurrentPage] = useState(1);
 	const [itemsPerPage, setItemsPerPage] = useState<number>(props.perPage || 10);
 	const [sortBy, setSortBy] = useState<keyof PostData>("id");
@@ -366,7 +366,7 @@ const PostTable = (props: PostTableProps) => {
 										<button
 											type="button"
 											onClick={() =>
-												router.push(`/Manage/Edit/Post/${post.id}`)
+												router.push(`/Manage/Edit/News/${post.id}`)
 											}
 											className="border-[1px] border-[#E9E9E9] rounded-sm p-2.5 bg-white"
 										>
@@ -478,4 +478,4 @@ const PostTable = (props: PostTableProps) => {
 	);
 };
 
-export default PostTable;
+export default NewsTable;
