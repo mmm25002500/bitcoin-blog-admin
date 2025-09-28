@@ -288,21 +288,6 @@ const EditAuthor = () => {
               onChange={(file) => setImageFile(file)}
               onDrop={(file) => setImageFile(file)}
             />
-
-            {/* 上傳張數 */}
-            {!imageFile && (
-              <span className="text-xs text-[#7C7C7C] mt-2">
-                上傳張數 {imageFile ? 1 : 0}/1
-              </span>
-            )}
-
-            {/* 圖片預覽 */}
-            {imageFile && (
-              <ImagePreview
-                imageFile={imageFile}
-                onDelete={() => setImageFile(null)}
-              />
-            )}
           </div>
 
           <div className="px-4 pt-4 border-[1px] border-neutral-200 rounded-xl">

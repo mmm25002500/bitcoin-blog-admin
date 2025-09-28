@@ -5,12 +5,14 @@ import type { UploadFileProps } from "@/types/Upload/Upload";
 // icon
 import UploadIcon from "@/images/upload.svg";
 import BrowserFileBtn from "../Button/BrowserFileBtn";
+import ImagePreview from "../Card/ImagePreview";
 
 const UploadFile = (props: UploadFileProps) => {
 	const fileInputRef = useRef<HTMLInputElement>(null);
 	const [previewUrl, setPreviewUrl] = useState<string | null>(
 		props.previewUrl || null,
 	);
+	const [imageFile, setImageFile] = useState<File | null>(null);
 
 	useEffect(() => {
 		// 外部 props.previewUrl 被清空時，內部 previewUrl 一併清空
@@ -27,6 +29,7 @@ const UploadFile = (props: UploadFileProps) => {
 			reader.onload = () => {
 				setPreviewUrl(reader.result as string);
 				props.onChange?.(file);
+				setImageFile(file);
 			};
 			reader.readAsDataURL(file);
 		}
@@ -41,6 +44,7 @@ const UploadFile = (props: UploadFileProps) => {
 			reader.onload = () => {
 				setPreviewUrl(reader.result as string);
 				props.onDrop?.(file);
+				setImageFile(file);
 			};
 			reader.readAsDataURL(file);
 		}
@@ -53,46 +57,66 @@ const UploadFile = (props: UploadFileProps) => {
 	};
 
 	return (
-		<div
-			className={`outline-dashed outline-[#575757] outline-[1px] rounded-md text-center cursor-pointer ${previewUrl ? "" : "p-10"}`}
-			onDrop={handleDrop}
-			onDragOver={(e) => e.preventDefault()}
-		>
-			{previewUrl ? (
-				<Image
-					src={previewUrl}
-					alt="預覽圖"
-					width={120}
-					height={120}
-					className="mx-auto object-cover w-full h-full"
-				/>
-			) : (
-				<div>
+		<div>
+			<div
+				className={`outline-dashed outline-[#575757] outline-[1px] rounded-md text-center cursor-pointer ${previewUrl ? "" : "p-10"}`}
+				onDrop={handleDrop}
+				onDragOver={(e) => e.preventDefault()}
+			>
+				{previewUrl ? (
 					<Image
-						src={UploadIcon}
-						alt="上傳圖示"
-						width={42}
-						height={42}
-						className="mx-auto w-11 h-11 mb-2"
+						src={previewUrl}
+						alt="預覽圖"
+						width={120}
+						height={120}
+						className="mx-auto object-cover w-full h-full"
 					/>
-					<span className="text-[#0B0B0B] text-sm font-normal leading-[22px]">
-						拖曳你的檔案開始上傳
-					</span>
-					<div className="flex items-center my-6">
-						<div className="flex-grow h-px bg-neutral-300" />
-						<span className="mx-4 text-sm text-neutral-500">OR</span>
-						<div className="flex-grow h-px bg-neutral-300" />
+				) : (
+					<div>
+						<Image
+							src={UploadIcon}
+							alt="上傳圖示"
+							width={42}
+							height={42}
+							className="mx-auto w-11 h-11 mb-2"
+						/>
+						<span className="text-[#0B0B0B] text-sm font-normal leading-[22px]">
+							拖曳你的檔案開始上傳
+						</span>
+						<div className="flex items-center my-6">
+							<div className="flex-grow h-px bg-neutral-300" />
+							<span className="mx-4 text-sm text-neutral-500">OR</span>
+							<div className="flex-grow h-px bg-neutral-300" />
+						</div>
+						<BrowserFileBtn onClick={handleClick} label="選擇檔案" className="" />
 					</div>
-					<BrowserFileBtn onClick={handleClick} label="選擇檔案" className="" />
-				</div>
+				)}
+				<input
+					ref={fileInputRef}
+					type="file"
+					accept="image/*"
+					hidden
+					onChange={handleFileChange}
+				/>
+			</div>
+
+			{/* 上傳張數 */}
+			{!imageFile && (
+				<span className="text-xs text-[#7C7C7C] mt-2">
+					上傳張數 {imageFile ? 1 : 0}/1
+				</span>
 			)}
-			<input
-				ref={fileInputRef}
-				type="file"
-				accept="image/*"
-				hidden
-				onChange={handleFileChange}
-			/>
+
+			{/* 圖片預覽 */}
+			{imageFile && (
+				<ImagePreview
+					imageFile={imageFile}
+					onDelete={() => {
+						setImageFile(null);
+						setPreviewUrl(null);
+					}}
+				/>
+			)}
 		</div>
 	);
 };
