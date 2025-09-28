@@ -22,270 +22,307 @@ import { useParams } from "next/navigation";
 // TODO:
 // 1. 新增文章列表
 
-const mockData: PostData[] = Array.from({ length: 100 }, (_, i) => ({
-	id: `#1231${i}`,
-	title: "sdsd",
-	author_id: i % 2 === 0 ? `Derek ${i + 1}` : `中本蔥 ${i + 1}`,
-	created_at: `2025/05/11 12:2${i}`,
-	tags: ["區塊鏈日報", "墨山貓", "良兮"],
-	type: i % 2 === 0 ? ["走勢分析"] : ["總體經濟"],
-	img: i % 2 === 0 ? "/images/author1.png" : "/images/author2.png",
-	description: "sd",
-	filename: "dfdf",
-}));
+// const mockData: PostData[] = Array.from({ length: 100 }, (_, i) => ({
+//   id: `#1231${i}`,
+//   title: "sdsd",
+//   author_id: i % 2 === 0 ? `Derek ${i + 1}` : `中本蔥 ${i + 1}`,
+//   created_at: `2025/05/11 12:2${i}`,
+//   tags: ["區塊鏈日報", "墨山貓", "良兮"],
+//   type: i % 2 === 0 ? ["走勢分析"] : ["總體經濟"],
+//   img: i % 2 === 0 ? "/images/author1.png" : "/images/author2.png",
+//   description: "sd",
+//   filename: "dfdf",
+// }));
 
 const EditAuthor = () => {
-	const [imageFile, setImageFile] = useState<File | null>(null);
-	const [name, setName] = useState<string>("");
-	const [description, setDescription] = useState<string>("");
-	// const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [name, setName] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
+  const [posts, setPosts] = useState<PostData[]>([]);
 
-	// 處理路由變化
-	const router = useRouter();
+  // const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
 
-	// get postID
-	const params = useParams();
-	const UID = params?.UID as string;
+  // 處理路由變化
+  const router = useRouter();
 
-	useEffect(() => {
-		if (!UID) return;
+  // get postID
+  const params = useParams();
+  const UID = params?.UID as string;
 
-		const fetchAuthor = async () => {
-			try {
-				const res = await fetch("/api/author/getAuthorByUID", {
-					method: "POST",
-					headers: { "Content-Type": "application/json" },
-					body: JSON.stringify({ uid: UID }),
-				});
+  useEffect(() => {
+    if (!UID) return;
 
-				const result = await res.json();
+    const fetchAuthor = async () => {
+      try {
+        const res = await fetch("/api/author/getAuthorByUID", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ uid: UID }),
+        });
 
-				if (result.success) {
-					const author = result.data;
-					setName(author.name || "");
-					setDescription(author.description || "");
-					// if (author.image_url) {
-					// 	setImagePreviewUrl(author.image_url);
-					// }
-				} else {
-					console.error("取得作者失敗：", result.error);
-				}
-			} catch (err) {
-				console.error("fetch 失敗：", err);
-			}
-		};
+        const result = await res.json();
 
-		fetchAuthor();
-	}, [UID]);
+        if (result.success) {
+          const author = result.data;
+          setName(author.name || "");
+          setDescription(author.description || "");
+          // if (author.image_url) {
+          // 	setImagePreviewUrl(author.image_url);
+          // }
+        } else {
+          console.error("取得作者失敗：", result.error);
+        }
+      } catch (err) {
+        console.error("fetch 失敗：", err);
+      }
+    };
 
-	useEffect(() => {
-		console.log("imageFile", imageFile);
-	}, [imageFile]);
+    fetchAuthor();
+  }, [UID]);
 
-	// 文章類型選單
-	const [selectedOption, setSelectedOption] = useState<string>("");
-	// 搜尋框的值
-	const [searchValue, setSearchValue] = useState<string>("");
-	// 日期選擇的值
-	const [date, setDate] = useState<DateRange | undefined>();
+  useEffect(() => {
+    console.log("imageFile", imageFile);
+  }, [imageFile]);
 
-	const ArticleType = ["All", "News", "Post"];
+  // 文章類型選單
+  const [selectedOption, setSelectedOption] = useState<string>("");
+  // 搜尋框的值
+  const [searchValue, setSearchValue] = useState<string>("");
+  // 日期選擇的值
+  const [date, setDate] = useState<DateRange | undefined>();
 
-	// 處理下拉選單的選擇
-	const handleSelect = (option: string) => {
-		setSelectedOption(option);
-		console.log(`選擇的文章類型: ${option}`);
-	};
+  const ArticleType = ["All", "News", "Post"];
 
-	// 處理取消按鈕的點擊事件
-	const handleDropDownCancel = () => {
-		setSelectedOption("All");
-	};
+  // 處理下拉選單的選擇
+  const handleSelect = (option: string) => {
+    setSelectedOption(option);
+    console.log(`選擇的文章類型: ${option}`);
+  };
 
-	// 處理搜尋框的變化
-	const handleSearchChange = (value: string) => {
-		setSearchValue(value);
-		console.log(`搜尋的值: ${value}`);
-	};
+  // 處理取消按鈕的點擊事件
+  const handleDropDownCancel = () => {
+    setSelectedOption("All");
+  };
 
-	// 處理搜尋框的取消按鈕點擊事件
-	const handleSearchCancel = () => {
-		setSearchValue("");
-		console.log("搜尋框取消");
-	};
+  // 處理搜尋框的變化
+  const handleSearchChange = (value: string) => {
+    setSearchValue(value);
+    console.log(`搜尋的值: ${value}`);
+  };
 
-	useEffect(() => {
-		if (selectedOption) {
-			console.log(`真正選到的文章類型: ${selectedOption}`);
-		}
-	}, [selectedOption]);
+  // 處理搜尋框的取消按鈕點擊事件
+  const handleSearchCancel = () => {
+    setSearchValue("");
+    console.log("搜尋框取消");
+  };
 
-	useEffect(() => {
-		if (searchValue) {
-			console.log(`搜尋的值: ${searchValue}`);
-		}
-	}, [searchValue]);
+  useEffect(() => {
+    if (selectedOption) {
+      console.log(`真正選到的文章類型: ${selectedOption}`);
+    }
+  }, [selectedOption]);
 
-	useEffect(() => {
-		if (date) {
-			console.log(`選擇的日期範圍: ${date}`);
-		}
-	}, [date]);
+  useEffect(() => {
+    if (searchValue) {
+      console.log(`搜尋的值: ${searchValue}`);
+    }
+  }, [searchValue]);
 
-	// 處理日期選擇的變化
-	const handleDateSelect = (range: DateRange | undefined) => {
-		setDate(range);
-		console.log(`選擇的日期範圍: ${range}`);
-	};
+  useEffect(() => {
+    if (date) {
+      console.log(`選擇的日期範圍: ${date}`);
+    }
+  }, [date]);
 
-	// 處理日期選擇的取消按鈕點擊事件
-	const handleDateCancel = () => {
-		setDate(undefined);
-		console.log("日期選擇取消");
-	};
+  // 處理日期選擇的變化
+  const handleDateSelect = (range: DateRange | undefined) => {
+    setDate(range);
+    console.log(`選擇的日期範圍: ${range}`);
+  };
 
-	// 處理要刪除的項目
-	const handleDeleteSelected = (id: string[]) => {
-		console.log("要刪除的 ID：", id);
-	};
+  // 處理日期選擇的取消按鈕點擊事件
+  const handleDateCancel = () => {
+    setDate(undefined);
+    console.log("日期選擇取消");
+  };
 
-	return (
-		<>
-			<div className="flex flex-col min-h-full gap-5 relative">
-				{/* 表單區塊 */}
-				<div className="flex-1 flex flex-col gap-5 grow">
-					{/* 作者名稱 */}
-					<div className="flex flex-col gap-2">
-						<Label text="作者名稱" htmlFor="name" required className="mb-2" />
-						<Input
-							name="name"
-							id="name"
-							placeholder="請輸入名稱"
-							value={name}
-							onChange={(e) => setName(e.target.value)}
-						/>
-					</div>
+  // 處理要刪除的項目
+  const handleDeleteSelected = (id: string[]) => {
+    console.log("要刪除的 ID：", id);
+  };
 
-					{/* 作者簡介 */}
-					<div className="flex flex-col gap-2">
-						<Label
-							text="作者簡介"
-							htmlFor="description"
-							required
-							className="mb-2"
-						/>
-						<Input
-							name="description"
-							id="description"
-							placeholder="請輸入作者簡介"
-							value={description}
-							onChange={(e) => setDescription(e.target.value)}
-						/>
-					</div>
+  // 取得文章列表
+  useEffect(() => {
+    if (!UID) return;
 
-					{/* 作者頭貼 */}
-					<div className="flex flex-col gap-0 grow w-[502px]">
-						<Label text="作者頭貼" htmlFor="image" required />
-						<span className="text-xs text-[#7C7C7C] mb-2">
-							僅限上傳 .jpg、.png 檔案，比例為 1:1
-						</span>
+    const fetchData = async () => {
+      try {
+        const [postRes, newsRes] = await Promise.all([
+          fetch("/api/Post/getPostsByUID", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ uid: UID }),
+          }),
+          fetch("/api/News/getPostsByUID", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ uid: UID }),
+          }),
+        ]);
 
-						<UploadFile
-							previewUrl={imageFile ? URL.createObjectURL(imageFile) : ""}
-							onChange={(file) => setImageFile(file)}
-							onDrop={(file) => setImageFile(file)}
-						/>
+        const postResult = await postRes.json();
+        const newsResult = await newsRes.json();
 
-						{/* 上傳張數 */}
-						{!imageFile && (
-							<span className="text-xs text-[#7C7C7C] mt-2">
-								上傳張數 {imageFile ? 1 : 0}/1
-							</span>
-						)}
+        const postData = postResult.success ? postResult.data : [];
+        const newsData = newsResult.success ? newsResult.data : [];
 
-						{/* 圖片預覽 */}
-						{imageFile && (
-							<ImagePreview
-								imageFile={imageFile}
-								onDelete={() => setImageFile(null)}
-							/>
-						)}
-					</div>
+        setPosts([...postData, ...newsData]);
+      } catch (err) {
+        console.error("伺服器錯誤", err);
+      }
+    };
 
-					<div className="px-4 pt-4 border-[1px] border-neutral-200 rounded-xl">
-						<Label text="文章列表" htmlFor="name" className="mb-2" />
+    fetchData();
+  }, [UID]);
 
-						{/* nav */}
-						<div className="flex mt-3">
-							<div className="flex gap-5 grow">
-								<DateChoose
-									selected={undefined}
-									onSelect={handleDateSelect}
-									onCancel={handleDateCancel}
-								/>
-								<DropDown
-									options={ArticleType}
-									selectedOption={selectedOption}
-									onCancel={handleDropDownCancel}
-									onSelect={handleSelect}
-								/>
-								<Search
-									onChange={handleSearchChange}
-									onCancel={handleSearchCancel}
-								/>
-							</div>
-							<div>
-								<AddBtn
-									onClick={() => router.push("/Manage/Create/Post")}
-									label={"新增 +"}
-									className=""
-								/>
-							</div>
-						</div>
 
-						{/* 文章列表 */}
-						<PostTable
-							perPage={10}
-							type={selectedOption}
-							searchValue={searchValue}
-							date={date}
-							onDelete={handleDeleteSelected}
-							PostData={mockData}
-						/>
-					</div>
-				</div>
-			</div>
+  return (
+    <>
+      <div className="flex flex-col min-h-full gap-5 relative">
+        {/* 表單區塊 */}
+        <div className="flex-1 flex flex-col gap-5 grow">
+          {/* 作者名稱 */}
+          <div className="flex flex-col gap-2">
+            <Label text="作者名稱" htmlFor="name" required className="mb-2" />
+            <Input
+              name="name"
+              id="name"
+              placeholder="請輸入名稱"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </div>
 
-			{/* 按鈕區塊 */}
-			<div className="pt-20">
-				<div className="absolute bottom-0 right-0 bg-white py-4 w-full shadow-[0_-4px_8px_-3px_rgba(0,0,0,0.05)]">
-					<div className="flex justify-end gap-2 pr-7">
-						<DeleteBtn
-							label="刪除"
-							onClick={() => {
-								router.push("/Manage/Author");
-								toast.success("文章已成功刪除");
-							}}
-						/>
-						<CancelBtn
-							label="發佈"
-							onClick={() => {
-								router.push("/Manage/Author");
-								toast.error("文章刪除失敗");
-							}}
-						/>
-						<AddBtn
-							label="儲存"
-							onClick={() => {
-								router.push("/Manage/Author");
-								toast.success("文章已成功刪除");
-							}}
-						/>
-					</div>
-				</div>
-			</div>
-		</>
-	);
+          {/* 作者簡介 */}
+          <div className="flex flex-col gap-2">
+            <Label
+              text="作者簡介"
+              htmlFor="description"
+              required
+              className="mb-2"
+            />
+            <Input
+              name="description"
+              id="description"
+              placeholder="請輸入作者簡介"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+          </div>
+
+          {/* 作者頭貼 */}
+          <div className="flex flex-col gap-0 grow w-[502px]">
+            <Label text="作者頭貼" htmlFor="image" required />
+            <span className="text-xs text-[#7C7C7C] mb-2">
+              僅限上傳 .jpg、.png 檔案，比例為 1:1
+            </span>
+
+            <UploadFile
+              previewUrl={imageFile ? URL.createObjectURL(imageFile) : ""}
+              onChange={(file) => setImageFile(file)}
+              onDrop={(file) => setImageFile(file)}
+            />
+
+            {/* 上傳張數 */}
+            {!imageFile && (
+              <span className="text-xs text-[#7C7C7C] mt-2">
+                上傳張數 {imageFile ? 1 : 0}/1
+              </span>
+            )}
+
+            {/* 圖片預覽 */}
+            {imageFile && (
+              <ImagePreview
+                imageFile={imageFile}
+                onDelete={() => setImageFile(null)}
+              />
+            )}
+          </div>
+
+          <div className="px-4 pt-4 border-[1px] border-neutral-200 rounded-xl">
+            <Label text="文章列表" htmlFor="name" className="mb-2" />
+
+            {/* nav */}
+            <div className="flex mt-3">
+              <div className="flex gap-5 grow">
+                <DateChoose
+                  selected={undefined}
+                  onSelect={handleDateSelect}
+                  onCancel={handleDateCancel}
+                />
+                <DropDown
+                  options={ArticleType}
+                  selectedOption={selectedOption}
+                  onCancel={handleDropDownCancel}
+                  onSelect={handleSelect}
+                />
+                <Search
+                  onChange={handleSearchChange}
+                  onCancel={handleSearchCancel}
+                />
+              </div>
+              <div>
+                <AddBtn
+                  onClick={() => router.push("/Manage/Create/Post")}
+                  label={"新增 +"}
+                  className=""
+                />
+              </div>
+            </div>
+
+            {/* 文章列表 */}
+            <PostTable
+              perPage={10}
+              type={selectedOption}
+              searchValue={searchValue}
+              date={date}
+              onDelete={handleDeleteSelected}
+              PostData={posts}
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* 按鈕區塊 */}
+      <div className="pt-20">
+        <div className="absolute bottom-0 right-0 bg-white py-4 w-full shadow-[0_-4px_8px_-3px_rgba(0,0,0,0.05)]">
+          <div className="flex justify-end gap-2 pr-7">
+            <DeleteBtn
+              label="刪除"
+              onClick={() => {
+                router.push("/Manage/Author");
+                toast.success("文章已成功刪除");
+              }}
+            />
+            <CancelBtn
+              label="發佈"
+              onClick={() => {
+                router.push("/Manage/Author");
+                toast.error("文章刪除失敗");
+              }}
+            />
+            <AddBtn
+              label="儲存"
+              onClick={() => {
+                router.push("/Manage/Author");
+                toast.success("文章已成功刪除");
+              }}
+            />
+          </div>
+        </div>
+      </div>
+    </>
+  );
 };
 
 export default EditAuthor;
