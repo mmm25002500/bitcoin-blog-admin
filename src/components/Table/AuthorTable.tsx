@@ -169,11 +169,10 @@ const AuthorTable = (props: AuthorTableProps) => {
 							{paginatedData.map((author) => (
 								<tr
 									key={author.id}
-									className={`border-b-[1px] border-[#F1F1F1] text-sm leading-6 font-normal text-[#1A1A1A] ${
-										selectedIds.has(author.id)
+									className={`border-b-[1px] border-[#F1F1F1] text-sm leading-6 font-normal text-[#1A1A1A] ${selectedIds.has(author.id)
 											? "bg-[#F3F6F7] border-[1px] border-[#F1F1F1]"
 											: ""
-									}`}
+										}`}
 								>
 									<td className="px-3 py-2">
 										<div className="inline-flex items-center">

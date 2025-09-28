@@ -29,6 +29,8 @@ const EditPost = () => {
 	const [author, setAuthor] = useState<AuthorData>();
 	const [markdown, setMarkdown] = useState("");
 	const [authorOption, setAuthorOption] = useState<AuthorData[]>([]);
+	const [tagOptions, setTagOptions] = useState<string[]>([]);	// all tags
+	const [typeOptions, setTypeOptions] = useState<string[]>([]);	// all types
 
 	console.log(markdown);
 
@@ -160,6 +162,46 @@ const EditPost = () => {
 	//   setSelectedOption("All");
 	// }
 
+	// 標籤資料擷取
+	useEffect(() => {
+		const fetchTags = async () => {
+			try {
+				const res = await fetch("/api/tags/Posts/getTags");
+				const result = await res.json();
+
+				if (result.success) {
+					setTagOptions(result.tags); // 設定下拉選單
+				} else {
+					console.error("取得標籤失敗：", result.error);
+				}
+			} catch (err) {
+				console.error("標籤 API 錯誤：", err);
+			}
+		};
+
+		fetchTags();
+	}, []);
+
+	// 類型資料擷取
+	useEffect(() => {
+		const fetchTypes = async () => {
+			try {
+				const res = await fetch("/api/types/Posts/getTypes");
+				const result = await res.json();
+
+				if (result.success) {
+					setTypeOptions(result.types); // 設定下拉選單
+				} else {
+					console.error("取得類型失敗：", result.error);
+				}
+			} catch (err) {
+				console.error("類型 API 錯誤：", err);
+			}
+		};
+
+		fetchTypes();
+	}, []);
+
 	return (
 		<>
 			<div className="flex flex-col h-full gap-5">
@@ -214,7 +256,7 @@ const EditPost = () => {
 							onSelect={(option: string) =>
 								setAuthor(authorOption.find((author) => author.name === option))
 							}
-							onCancel={() => {}}
+							onCancel={() => { }}
 						/>
 					</div>
 
@@ -229,7 +271,7 @@ const EditPost = () => {
 							/>
 							<div>
 								<SafeDropDownTag
-									options={["tag1", "tag2", "tag3"]}
+									options={tagOptions}
 									selectedOptions={selectedTags}
 									onChange={setSelectedTags}
 								/>
@@ -247,7 +289,7 @@ const EditPost = () => {
 
 							<div>
 								<DropDownTag
-									options={["類型1", "類型2", "類型3"]}
+									options={typeOptions}
 									selectedOptions={selectedType}
 									onChange={setSelectedType}
 								/>

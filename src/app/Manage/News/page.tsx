@@ -13,8 +13,10 @@ import { useEffect, useState } from "react";
 import type { DateRange } from "react-day-picker";
 
 const NewsManage = () => {
+	// 文章類型選單選項
+	const [typeOptions, setTypeOptions] = useState<string[]>([]);
 	// 文章類型選單
-	const [selectedOption, setSelectedOption] = useState<string>("");
+	const [selectedOption, setSelectedOption] = useState<string>("All");
 	// 搜尋框的值
 	const [searchValue, setSearchValue] = useState<string>("");
 	// 日期選擇的值
@@ -44,8 +46,6 @@ const NewsManage = () => {
 
 	// 處理路由變化
 	const router = useRouter();
-
-	const ArticleType = ["All", "News", "Post"];
 
 	// 處理下拉選單的選擇
 	const handleSelect = (option: string) => {
@@ -121,6 +121,62 @@ const NewsManage = () => {
 		}
 	};
 
+	// 一開始載入時取得文章類型選單的選項
+	useEffect(() => {
+		const fetchTypes = async () => {
+			try {
+				const res = await fetch("/api/types/News/getTypes");
+				const result = await res.json();
+
+				if (result.success) {
+					setTypeOptions(["All", ...result.types]); // 預設 All
+				} else {
+					console.error("取得 types 失敗：", result.error);
+				}
+			} catch (err) {
+				console.error("types API 錯誤：", err);
+			}
+		};
+
+		fetchTypes();
+	}, []);
+
+	// 篩選文章資料
+	const filteredData = postData.filter((post) => {
+		// 搜尋關鍵字
+		const keyword = searchValue.toLowerCase();
+		const matchesSearch =
+			post.title.toLowerCase().includes(keyword) ||
+			post.description?.toLowerCase().includes(keyword);
+
+		// 篩選文章類型
+		const matchesType =
+			selectedOption === "All" ? true : post.type?.includes(selectedOption);
+
+		// 篩選日期
+		let matchesDate = true;
+		if (date?.from || date?.to) {
+			const postDate = new Date(post.created_at);
+			const from = date.from;
+			const to = date.to
+				? new Date(
+					date.to.getFullYear(),
+					date.to.getMonth(),
+					date.to.getDate(),
+					23,
+					59,
+					59,
+					999
+				)
+				: undefined;
+
+			matchesDate =
+				(!from || postDate >= from) && (!to || postDate <= to);
+		}
+
+		return matchesSearch && matchesType && matchesDate;
+	});
+
 	return (
 		<>
 			{/* nav */}
@@ -132,8 +188,8 @@ const NewsManage = () => {
 						onCancel={handleDateCancel}
 					/>
 					<DropDown
-						options={ArticleType}
-						selectedOption={"ss"}
+						options={typeOptions}
+						selectedOption={selectedOption}
 						label_name={"文章類型"}
 						onCancel={handleDropDownCancel}
 						onSelect={handleSelect}
@@ -156,7 +212,7 @@ const NewsManage = () => {
 				searchValue={searchValue}
 				date={date}
 				onDelete={handleDeleteSelected}
-				PostData={postData}
+				PostData={filteredData}
 			/>
 		</>
 	);

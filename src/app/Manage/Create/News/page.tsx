@@ -33,6 +33,8 @@ const CreatePost = () => {
 	const [seletedAuthor, setSelectedAuthor] = useState<AuthorData>(); // author
 	const [imageFile, setImageFile] = useState<File | null>(null); // image
 	const [date, setDate] = useState<Date | undefined>(undefined); // date
+	const [tagOptions, setTagOptions] = useState<string[]>([]);	// all tags
+	const [typeOptions, setTypeOptions] = useState<string[]>([]);	// all types
 
 	useEffect(() => {
 		console.log("title:", title);
@@ -131,6 +133,46 @@ const CreatePost = () => {
 		}
 	};
 
+	// 標籤資料擷取
+	useEffect(() => {
+		const fetchTags = async () => {
+			try {
+				const res = await fetch("/api/tags/News/getTags");
+				const result = await res.json();
+
+				if (result.success) {
+					setTagOptions(result.tags); // 設定下拉選單
+				} else {
+					console.error("取得標籤失敗：", result.error);
+				}
+			} catch (err) {
+				console.error("標籤 API 錯誤：", err);
+			}
+		};
+
+		fetchTags();
+	}, []);
+
+	// 標籤資料擷取
+	useEffect(() => {
+		const fetchTypes = async () => {
+			try {
+				const res = await fetch("/api/types/News/getTypes");
+				const result = await res.json();
+
+				if (result.success) {
+					setTypeOptions(result.types); // 設定下拉選單
+				} else {
+					console.error("取得類型失敗：", result.error);
+				}
+			} catch (err) {
+				console.error("類型 API 錯誤：", err);
+			}
+		};
+
+		fetchTypes();
+	}, []);
+
 	return (
 		<>
 			<div className="flex flex-col h-full gap-5">
@@ -210,7 +252,7 @@ const CreatePost = () => {
 								{/* 這一個可能是「國際、台灣、比特幣、技術...」，非 Post、News 系統 */}
 								{/* 因此改為像是Tag一樣 */}
 								<DropDownTag
-									options={["tag1", "tag2", "tag3"]}
+									options={tagOptions}
 									selectedOptions={selectedTags}
 									onChange={setSelectedTags}
 								/>
@@ -228,7 +270,7 @@ const CreatePost = () => {
 
 							<div>
 								<DropDownTag
-									options={["類型1", "類型2", "類型3"]}
+									options={typeOptions}
 									selectedOptions={selectedType}
 									onChange={setSelectedType}
 								/>
