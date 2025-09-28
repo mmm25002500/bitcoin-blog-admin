@@ -16,6 +16,7 @@ import MarkdownEditor from "@/components/Markdown/MarkdownEditor";
 import DropDown from "@/components/Input/DropDown";
 import type { AuthorData } from "@/types/Author/Author";
 import { useCallback } from "react";
+import { useSearchParams } from "next/navigation";
 
 // TODO：
 // 1. content to filename.md and set filename to supabase
@@ -23,6 +24,9 @@ import { useCallback } from "react";
 const CreatePost = () => {
   // const [selectedOption, setSelectedOption] = useState<string>("All");
   const [authorOption, setAuthorOption] = useState<AuthorData[]>([]);
+
+  const searchParams = useSearchParams();
+  const author_id = searchParams.get("author_id");
 
   // 使用者輸入
   const [title, setTitle] = useState<string>(""); // title
@@ -67,12 +71,19 @@ const CreatePost = () => {
     const result = await res.json();
 
     if (result.success) {
-      // console.log("作者資料：", result.data);
       setAuthorOption(result.data);
+
+      // 如果有帶 author_id，直接找出該作者
+      if (author_id) {
+        const matched = result.data.find((author: AuthorData) => author.id === author_id);
+        if (matched) {
+          setSelectedAuthor(matched);
+        }
+      }
     } else {
       console.error("取得失敗：", result.error);
     }
-  }, []); // 無依賴
+  }, [author_id]);
 
   useEffect(() => {
     fetchAuthors();
@@ -226,14 +237,12 @@ const CreatePost = () => {
 
             <DropDown
               options={authorOption.map((author) => author.name)}
-              selectedOption={""}
+              selectedOption={seletedAuthor?.name || ""}
               label_name={"請選擇作者"}
               onSelect={(option: string) =>
-                setSelectedAuthor(
-                  authorOption.find((author) => author.name === option),
-                )
+                setSelectedAuthor(authorOption.find((author) => author.name === option))
               }
-              onCancel={() => { }}
+              onCancel={() => setSelectedAuthor(undefined)}
             />
             {/* <Input name={"author"} id={"author"} placeholder={"請輸入作者"} /> */}
           </div>

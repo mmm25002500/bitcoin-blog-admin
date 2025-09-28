@@ -241,6 +241,7 @@ const EditAuthor = () => {
     return matchesSearch && matchesType && matchesDate;
   });
 
+  console.log("filteredData", filteredData);
   return (
     <>
       <div className="flex flex-col min-h-full gap-5 relative">
@@ -329,7 +330,7 @@ const EditAuthor = () => {
               </div>
               <div>
                 <AddBtn
-                  onClick={() => router.push("/Manage/Create/Post")}
+                  onClick={() => router.push(`/Manage/Create/Post/?author_id=${UID}`)}
                   label={"新增 +"}
                   className=""
                 />
