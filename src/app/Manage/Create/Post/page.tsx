@@ -147,6 +147,7 @@ const CreatePost = () => {
 							name={"title"}
 							id={"title"}
 							placeholder={"請輸入標題"}
+							value={title}
 							onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
 								setTitle(e.target.value);
 							}}
@@ -165,6 +166,7 @@ const CreatePost = () => {
 							name={"description"}
 							id={"description"}
 							placeholder={"請輸入文章描述"}
+							value={description}
 							onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
 								setDescription(e.target.value);
 							}}
@@ -189,7 +191,7 @@ const CreatePost = () => {
 									authorOption.find((author) => author.name === option),
 								)
 							}
-							onCancel={() => {}}
+							onCancel={() => { }}
 						/>
 						{/* <Input name={"author"} id={"author"} placeholder={"請輸入作者"} /> */}
 					</div>

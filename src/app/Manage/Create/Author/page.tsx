@@ -72,6 +72,7 @@ const CreateAuthor = () => {
 							onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
 								setName(e.target.value);
 							}}
+							value={name}
 						/>
 					</div>
 
@@ -87,6 +88,7 @@ const CreateAuthor = () => {
 							name="description"
 							id="description"
 							placeholder="請輸入作者簡介"
+							value={description}
 							onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
 								setDescription(e.target.value);
 							}}
