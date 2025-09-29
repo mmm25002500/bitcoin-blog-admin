@@ -15,18 +15,23 @@ import MarkdownEditor from "@/components/Markdown/MarkdownEditor";
 import DropDown from "@/components/Input/DropDown";
 import type { AuthorData } from "@/types/Author/Author";
 import { useCallback } from "react";
-import { useSearchParams } from "next/navigation";
 
 // TODO：
 // 1. content to filename.md and set filename to supabase
 // 2. imageFile to filename.jpg/png and set image to supabase
 
-const CreatePost = () => {
+export default function Page({
+	searchParams,
+}: {
+	searchParams: { [key: string]: string | string[] | undefined };
+}) {
+	const author_id = searchParams.author_id as string | undefined;
+	return <CreatePost author_id={author_id} />;
+}
+
+const CreatePost = ({ author_id }: { author_id?: string }) => {
 	// const [selectedOption, setSelectedOption] = useState<string>("All");
 	const [authorOption, setAuthorOption] = useState<AuthorData[]>([]);
-
-	const searchParams = useSearchParams();
-	const author_id = searchParams.get("author_id");
 
 	// 使用者輸入
 	const [title, setTitle] = useState<string>(""); // title
@@ -345,5 +350,3 @@ const CreatePost = () => {
 		</>
 	);
 };
-
-export default CreatePost;
