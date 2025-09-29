@@ -18,6 +18,11 @@ import { useParams } from "next/navigation";
 import DropDown from "@/components/Input/DropDown";
 import type { AuthorData } from "@/types/Author/Author";
 
+// TODO:
+// 1. 新增 markdown 功能
+// 2. 更改 Markdown 功能
+// 3. 刪除文章功能
+
 const EditPost = () => {
   const [imageFile, setImageFile] = useState<File | null>(null);
   // const [selectedOption, setSelectedOption] = useState<string>("All");
@@ -26,13 +31,14 @@ const EditPost = () => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [author, setAuthor] = useState<AuthorData>();
-  const [markdown, setMarkdown] = useState("");
+  // const [markdown, setMarkdown] = useState("");
   const [authorOption, setAuthorOption] = useState<AuthorData[]>([]);
   const [tagOptions, setTagOptions] = useState<string[]>([]);	// all tags
   const [typeOptions, setTypeOptions] = useState<string[]>([]);	// all types
   const [previewUrl, setPreviewUrl] = useState<string>(""); // 顯示舊圖或新圖
+  const [filename, setFilename] = useState<string>(""); // 儲存初始的檔案名稱
 
-  console.log(markdown);
+  // console.log(markdown);
 
   // 處理路由變化
   const router = useRouter();
@@ -92,7 +98,7 @@ const EditPost = () => {
           setSelectedTags(post.tags || []);
           setSelectedType(post.type || []);
           setDate(new Date(post.created_at));
-          setMarkdown(post.content || "");
+          setFilename(post.filename || "");
 
           // 作者
           const authorData = await fetchAuthorByUID(post.author_id);
@@ -102,10 +108,7 @@ const EditPost = () => {
 
           // 如果有 image，你可以處理預覽（如用 URL blob）
           if (post.img) {
-            console.log("post.image", post.img);
-            setPreviewUrl(
-              `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/post.image/${post.img}`
-            );
+            setPreviewUrl(post.img);
           }
           console.log("讀取成功", post);
         } else {
@@ -222,11 +225,15 @@ const EditPost = () => {
     formData.append("tags", JSON.stringify(selectedTags));
     formData.append("type", JSON.stringify(selectedType));
     formData.append("author_id", author.id);
+    formData.append("filename", filename);
 
     // 如果有新圖片才 append
     if (imageFile) {
       formData.append("image", imageFile);
+      formData.append("img", previewUrl);
       formData.append("filename", imageFile.name);
+    } else {
+      formData.append("img", previewUrl);
     }
 
     const res = await fetch("/api/Post/editPost", {
@@ -242,7 +249,6 @@ const EditPost = () => {
       console.error("更新失敗：", result.error);
     }
   };
-
 
   return (
     <>
@@ -363,15 +369,19 @@ const EditPost = () => {
               僅限上傳 .jpg、.png 檔案
             </span>
 
-            <UploadFile
-              previewUrl={
-                imageFile
-                  ? URL.createObjectURL(imageFile)  // 如果使用者選了新圖，顯示新圖
-                  : previewUrl                      // 否則顯示舊圖
-              }
-              onChange={(file) => setImageFile(file)}
-              onDrop={(file) => setImageFile(file)}
-            />
+            {
+              previewUrl && (
+                <UploadFile
+                  previewUrl={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/post.image/${previewUrl}`}
+                  onChange={(file) => {
+                    setImageFile(file);
+                  }}
+                  onDrop={(file) => {
+                    setImageFile(file);
+                    setPreviewUrl("");
+                  }}
+                />
+              )}
           </div>
 
           <div className="flex flex-col gap-2">

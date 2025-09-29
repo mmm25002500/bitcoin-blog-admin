@@ -62,7 +62,7 @@ export async function GET() {
 		postQuantity: countsMap.get(author.id) ?? 0,
 	}));
 
-	console.log("[INFO] 成功取得作者清單與文章數量", enrichedAuthors);
+	// console.log("[INFO] 成功取得作者清單與文章數量", enrichedAuthors);
 
 	return NextResponse.json(
 		{ success: true, data: enrichedAuthors },

@@ -19,7 +19,10 @@ import type { DateRange } from "react-day-picker";
 import { useParams } from "next/navigation";
 
 // TODO:
-// 1. 新增文章列表
+// 1. 更改圖片和名稱描述功能
+// 2. 新增完文章後跳轉回來本頁面
+// 3. 更改完文章後跳轉回來本頁面
+// 4. 刪除作者功能
 
 // const mockData: PostData[] = Array.from({ length: 100 }, (_, i) => ({
 //   id: `#1231${i}`,
@@ -39,6 +42,7 @@ const EditAuthor = () => {
   const [description, setDescription] = useState<string>("");
   const [posts, setPosts] = useState<PostData[]>([]);
   const [previewUrl, setPreviewUrl] = useState<string>(""); // 顯示舊圖或新圖
+  const [initPreviewUrl, setInitPreviewUrl] = useState<string>(""); // 儲存初始的預覽圖 URL
 
   // const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
 
@@ -288,13 +292,14 @@ const EditAuthor = () => {
             </span>
 
             <UploadFile
-              previewUrl={
-                imageFile
-                  ? URL.createObjectURL(imageFile)  // 如果使用者選了新圖，顯示新圖
-                  : previewUrl                      // 否則顯示舊圖
-              }
-              onChange={(file) => setImageFile(file)}
-              onDrop={(file) => setImageFile(file)}
+              previewUrl={previewUrl}
+              onChange={(file) => {
+                setImageFile(file);
+              }}
+              onDrop={(file) => {
+                setImageFile(file);
+                setPreviewUrl('');
+              }}
             />
           </div>
 

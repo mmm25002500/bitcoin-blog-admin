@@ -1,4 +1,4 @@
-// app/api/Post/editPost/route.ts
+// app/api/News/editPost/route.ts
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 
@@ -42,7 +42,7 @@ export async function POST(req: Request) {
 
 		// 查舊資料
 		const { data: oldData, error: fetchError } = await supabase
-			.from("Post")
+			.from("News")
 			.select("img, filename")
 			.eq("id", id)
 			.single();
@@ -60,7 +60,7 @@ export async function POST(req: Request) {
 		if (image) {
 			if (oldData.img) {
 				const { error: removeError } = await supabase.storage
-					.from("post.image")
+					.from("news.image")
 					.remove([oldData.img]);
 
 				if (removeError) {
@@ -74,7 +74,7 @@ export async function POST(req: Request) {
 
 			finalImg = `${Date.now()}-${image.name}`;
 			const { error: uploadError } = await supabase.storage
-				.from("post.image")
+				.from("news.image")
 				.upload(finalImg, image, {
 					contentType: image.type,
 					upsert: false,
@@ -91,7 +91,7 @@ export async function POST(req: Request) {
 
 		// 更新 Post（filename 永遠照樣更新，不管圖片有沒有換）
 		const { error: updateError } = await supabase
-			.from("Post")
+			.from("News")
 			.update({
 				title,
 				description,
