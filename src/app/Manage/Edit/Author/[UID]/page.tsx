@@ -3,7 +3,6 @@
 import AddBtn from "@/components/Button/AddBtn";
 import CancelBtn from "@/components/Button/CancelBtn";
 import DeleteBtn from "@/components/Button/DeleteBtn";
-import ImagePreview from "@/components/Card/ImagePreview";
 import Input from "@/components/Input/Input";
 import Label from "@/components/Label/Label";
 import UploadFile from "@/components/UploadFile/UploadFile";

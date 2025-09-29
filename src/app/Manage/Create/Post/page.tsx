@@ -2,7 +2,6 @@
 
 import AddBtn from "@/components/Button/AddBtn";
 import CancelBtn from "@/components/Button/CancelBtn";
-import ImagePreview from "@/components/Card/ImagePreview";
 import DateSelection from "@/components/Input/DateSelection";
 // import DropDown from "@/components/Input/DropDown";
 import DropDownTag from "@/components/Input/DropDownTag";
