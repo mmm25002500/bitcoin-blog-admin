@@ -20,14 +20,18 @@ import { useCallback } from "react";
 // 1. content to filename.md and set filename to supabase
 // 2. imageFile to filename.jpg/png and set image to supabase
 
-export default function Page({
+export default async function Page({
 	searchParams,
 }: {
-	searchParams: { [key: string]: string | string[] | undefined };
+	searchParams: Promise<Record<string, string | string[] | undefined>>;
 }) {
-	const author_id = searchParams.author_id as string | undefined;
+	// 先 await
+	const params = await searchParams;
+	const author_id = params.author_id as string | undefined;
+
 	return <CreatePost author_id={author_id} />;
 }
+
 
 const CreatePost = ({ author_id }: { author_id?: string }) => {
 	// const [selectedOption, setSelectedOption] = useState<string>("All");
