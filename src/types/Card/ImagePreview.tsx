@@ -1,5 +1,5 @@
 export interface ImagePreviewProps {
-  imageFile: File;
+  imageFile: File | string;
   onDelete: () => void;
   className?: string;
 }

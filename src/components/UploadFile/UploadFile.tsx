@@ -15,10 +15,7 @@ const UploadFile = (props: UploadFileProps) => {
 	const [imageFile, setImageFile] = useState<File | null>(null);
 
 	useEffect(() => {
-		// 外部 props.previewUrl 被清空時，內部 previewUrl 一併清空
-		if (!props.previewUrl) {
-			setPreviewUrl(null);
-		}
+		setPreviewUrl(props.previewUrl || null);
 	}, [props.previewUrl]);
 
 	// 處理檔案選擇
@@ -101,22 +98,22 @@ const UploadFile = (props: UploadFileProps) => {
 			</div>
 
 			{/* 上傳張數 */}
-			{!imageFile && (
-				<span className="text-xs text-[#7C7C7C] mt-2">
-					上傳張數 {imageFile ? 1 : 0}/1
-				</span>
-			)}
+			<span className="text-xs text-[#7C7C7C] mt-2">
+				上傳張數 {imageFile || previewUrl ? 1 : 0}/1
+			</span>
 
 			{/* 圖片預覽 */}
-			{imageFile && (
+			{(imageFile || previewUrl) && (
 				<ImagePreview
-					imageFile={imageFile}
+					// biome-ignore lint/style/noNonNullAssertion: <explanation>
+					imageFile={imageFile ?? previewUrl!} // 可以是 File 或 URL
 					onDelete={() => {
 						setImageFile(null);
 						setPreviewUrl(null);
 					}}
 				/>
 			)}
+
 		</div>
 	);
 };

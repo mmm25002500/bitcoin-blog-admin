@@ -6,13 +6,20 @@ import DeleteIcon from "@/images/x.svg";
 // import ReflashIcon from "@/images/refrash.svg";
 
 const ImagePreview = (props: ImagePreviewProps) => {
-	// 檔案名稱與大小
-	const fileName = props.imageFile.name;
-	const fileSizeMB = (props.imageFile.size / (1024 * 1024)).toFixed(2); // MB 格式
+	let fileName = "";
+	let fileSizeMB = "";
+	let previewSrc = "";
 
-	const handleDelete = () => {
-		props.onDelete();
-	};
+	if (props.imageFile instanceof File) {
+		fileName = props.imageFile.name;
+		fileSizeMB = `${(props.imageFile.size / (1024 * 1024)).toFixed(2)} MB`;
+		previewSrc = URL.createObjectURL(props.imageFile);
+	} else {
+		// 字串 URL
+		fileName = props.imageFile.split("/").pop() || "image";
+		fileSizeMB = ""; // URL 沒辦法直接知道大小，必要的話要再 fetch
+		previewSrc = props.imageFile;
+	}
 
 	return (
 		<div className="mt-2 w-full border-[1px] border-[#E7E7E7] rounded-md flex items-center p-4">
@@ -21,7 +28,7 @@ const ImagePreview = (props: ImagePreviewProps) => {
 				{/* 圖片 */}
 				<div>
 					<Image
-						src={URL.createObjectURL(props.imageFile)}
+						src={previewSrc}
 						alt="preview"
 						width={100}
 						height={100}
@@ -34,25 +41,15 @@ const ImagePreview = (props: ImagePreviewProps) => {
 					<span className="text-base font-semibold text-[#0B0B0B]">
 						{fileName}
 					</span>
-					<span className="text-base text-[#6D6D6D]">{fileSizeMB} MB</span>
+					{fileSizeMB && (
+						<span className="text-base text-[#6D6D6D]">{fileSizeMB}</span>
+					)}
 				</div>
 			</div>
 
-			{/* 右邊：可加入刪除按鈕等 */}
+			{/* 右邊：刪除 */}
 			<div className="flex gap-4">
-				{/* Reflash */}
-				{/* <button className="">
-          <Image
-            src={ReflashIcon}
-            alt="Reflash"
-            width={100}
-            height={100}
-            className="w-6 h-6 object-cover rounded-sm"
-          />
-        </button> */}
-
-				{/* Delete */}
-				<button type="button" onClick={handleDelete}>
+				<button type="button" onClick={props.onDelete}>
 					<Image
 						src={DeleteIcon}
 						alt="Delete"
@@ -65,5 +62,6 @@ const ImagePreview = (props: ImagePreviewProps) => {
 		</div>
 	);
 };
+
 
 export default ImagePreview;

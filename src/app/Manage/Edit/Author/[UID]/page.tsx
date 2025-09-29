@@ -39,6 +39,7 @@ const EditAuthor = () => {
   const [name, setName] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [posts, setPosts] = useState<PostData[]>([]);
+  const [previewUrl, setPreviewUrl] = useState<string>(""); // 顯示舊圖或新圖
 
   // const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
 
@@ -66,9 +67,13 @@ const EditAuthor = () => {
           const author = result.data;
           setName(author.name || "");
           setDescription(author.description || "");
-          // if (author.image_url) {
-          // 	setImagePreviewUrl(author.image_url);
-          // }
+
+          if (author.image) {
+            setPreviewUrl(
+              `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/author.image/${author.image}`
+            );
+          }
+
         } else {
           console.error("取得作者失敗：", result.error);
         }
@@ -284,7 +289,11 @@ const EditAuthor = () => {
             </span>
 
             <UploadFile
-              previewUrl={imageFile ? URL.createObjectURL(imageFile) : ""}
+              previewUrl={
+                imageFile
+                  ? URL.createObjectURL(imageFile)  // 如果使用者選了新圖，顯示新圖
+                  : previewUrl                      // 否則顯示舊圖
+              }
               onChange={(file) => setImageFile(file)}
               onDrop={(file) => setImageFile(file)}
             />
