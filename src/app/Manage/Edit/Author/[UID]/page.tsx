@@ -42,7 +42,7 @@ const EditAuthor = () => {
   const [description, setDescription] = useState<string>("");
   const [posts, setPosts] = useState<PostData[]>([]);
   const [previewUrl, setPreviewUrl] = useState<string>(""); // 顯示舊圖或新圖
-  const [initPreviewUrl, setInitPreviewUrl] = useState<string>(""); // 儲存初始的預覽圖 URL
+  // const [initPreviewUrl, setInitPreviewUrl] = useState<string>(""); // 儲存初始的預覽圖 URL
 
   // const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
 
