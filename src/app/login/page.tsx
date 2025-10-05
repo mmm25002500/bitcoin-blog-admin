@@ -43,6 +43,11 @@ const LoginPage = () => {
 		setError(null);
 
 		try {
+			// 根據「記住我」選項設定 session 持久化方式
+			await supabase.auth.setPersistence({
+				persistence: rememberMe ? "local" : "session",
+			});
+
 			const { error } = await supabase.auth.signInWithPassword({
 				email,
 				password,
