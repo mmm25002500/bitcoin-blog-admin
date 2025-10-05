@@ -17,6 +17,7 @@ import PostTable from "@/components/Table/PostTable";
 import type { PostData } from "@/types/Table/PostTable";
 import type { DateRange } from "react-day-picker";
 import { useParams } from "next/navigation";
+import { fullscreen } from "@uiw/react-md-editor";
 
 // TODO:
 // 1. 更改圖片和名稱描述功能
@@ -250,6 +251,41 @@ const EditAuthor = () => {
   });
 
   console.log("filteredData", filteredData);
+
+  // 提交編輯
+  const handleSubmit = async () => {
+    if (!name || !description) {
+      alert("請填寫完整欄位");
+      return;
+    }
+
+    const formData = new FormData();
+
+    formData.append("id", UID); // 更新必填
+    formData.append("name", name);
+    formData.append("description", description);
+
+    // 如果有新圖片才 append
+    if (imageFile) {
+      formData.append("image", imageFile);
+    } else {
+      formData.append("img", previewUrl);
+    }
+
+    const res = await fetch("/api/author/editAuthor", {
+      method: "POST",
+      body: formData,
+    });
+
+    const result = await res.json();
+    if (result.success) {
+      console.log("作者更新成功！");
+      router.push("/Manage/Author");
+    } else {
+      console.error("更新失敗：", result.error);
+    }
+  };
+
   return (
     <>
       <div className="flex flex-col min-h-full gap-5 relative">
@@ -361,18 +397,15 @@ const EditAuthor = () => {
             />
             <CancelBtn
               label="發佈"
-              onClick={() => {
-                router.push("/Manage/Author");
-                toast.error("文章刪除失敗");
-              }}
+              onClick={handleSubmit}
             />
-            <AddBtn
+            {/* <AddBtn
               label="儲存"
               onClick={() => {
                 router.push("/Manage/Author");
                 toast.success("文章已成功刪除");
               }}
-            />
+            /> */}
           </div>
         </div>
       </div>
