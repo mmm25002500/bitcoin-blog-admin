@@ -19,8 +19,6 @@ import type { DateRange } from "react-day-picker";
 import { useParams } from "next/navigation";
 // import { fullscreen } from "@uiw/react-md-editor";
 
-// TODO:
-// 1. 刪除作者功能
 
 const EditAuthor = () => {
   const [imageFile, setImageFile] = useState<File | null>(null);
@@ -271,6 +269,29 @@ const EditAuthor = () => {
     }
   };
 
+  // 刪除作者
+  const handleDelete = async () => {
+    if (!confirm("確定要刪除此作者嗎？")) {
+      return;
+    }
+
+    const res = await fetch("/api/author/delAuthor", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ids: [UID] }),
+    });
+
+    const result = await res.json();
+    if (result.success) {
+      toast.success("作者刪除成功！");
+      router.push("/Manage/Author");
+      router.refresh();
+    } else {
+      console.error("刪除失敗：", result.error);
+      toast.error(`刪除失敗：${result.error}`);
+    }
+  };
+
   return (
     <>
       <div className="flex flex-col min-h-full gap-5 relative">
@@ -375,22 +396,12 @@ const EditAuthor = () => {
           <div className="flex justify-end gap-2 pr-7">
             <DeleteBtn
               label="刪除"
-              onClick={() => {
-                router.push("/Manage/Author");
-                toast.success("文章已成功刪除");
-              }}
+              onClick={handleDelete}
             />
             <CancelBtn
               label="發佈"
               onClick={handleSubmit}
             />
-            {/* <AddBtn
-              label="儲存"
-              onClick={() => {
-                router.push("/Manage/Author");
-                toast.success("文章已成功刪除");
-              }}
-            /> */}
           </div>
         </div>
       </div>

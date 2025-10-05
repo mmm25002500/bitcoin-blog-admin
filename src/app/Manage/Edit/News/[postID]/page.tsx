@@ -19,8 +19,6 @@ import DropDown from "@/components/Input/DropDown";
 import type { AuthorData } from "@/types/Author/Author";
 import { createClient } from "@/lib/supabase/client";
 
-// TODO:
-// 1. 刪除文章功能
 
 const EditNews = () => {
   const [imageFile, setImageFile] = useState<File | null>(null);
@@ -279,6 +277,29 @@ const EditNews = () => {
     }
   };
 
+  // 刪除文章
+  const handleDelete = async () => {
+    if (!confirm("確定要刪除此文章嗎？")) {
+      return;
+    }
+
+    const res = await fetch("/api/News/delPost", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ids: [postID] }),
+    });
+
+    const result = await res.json();
+    if (result.success) {
+      alert("文章刪除成功！");
+      router.push("/Manage/News");
+      router.refresh();
+    } else {
+      console.error("刪除失敗：", result.error);
+      alert(`刪除失敗：${result.error}`);
+    }
+  };
+
   return (
     <>
       <div className="flex flex-col h-full gap-5">
@@ -435,7 +456,7 @@ const EditNews = () => {
             <div className="flex justify-end gap-2 pr-7">
               <DeleteBtn
                 label="刪除"
-                onClick={() => router.push("/Manage/News")}
+                onClick={handleDelete}
               />
               <AddBtn
                 label="發佈"
