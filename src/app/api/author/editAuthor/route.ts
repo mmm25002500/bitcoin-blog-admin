@@ -19,13 +19,13 @@ export async function POST(req: Request) {
 		const image = formData.get("image") as File | null; // 新上傳的檔案
 		// const img = formData.get("img") as string | null; // 舊的圖片檔名（storage key）
 
-		console.log("[Server] Data: ", {
-			id,
-			// fullname,
-			name,
-			description,
-			image,
-		});
+		// console.log("[Server] Data: ", {
+		// 	id,
+		// 	// fullname,
+		// 	name,
+		// 	description,
+		// 	image,
+		// });
 
 		if (!name || !description) {
 			return NextResponse.json(

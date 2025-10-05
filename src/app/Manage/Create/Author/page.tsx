@@ -13,11 +13,11 @@ const CreateAuthor = () => {
 	const [name, setName] = useState<string>(""); // name
 	const [description, setDescription] = useState<string>(""); // description
 
-	useEffect(() => {
-		console.log("imageFile", imageFile);
-		console.log("name:", name);
-		console.log("description:", description);
-	}, [imageFile, name, description]);
+	// useEffect(() => {
+	// 	console.log("imageFile", imageFile);
+	// 	console.log("name:", name);
+	// 	console.log("description:", description);
+	// }, [imageFile, name, description]);
 
 	// 處理路由變化
 	const router = useRouter();

@@ -24,9 +24,12 @@ export async function POST(req: Request) {
 
 		// 生成檔名
 		const timestamp = Date.now();
-		const sanitizedTitle = title
-			.replace(/[^a-zA-Z0-9\u4e00-\u9fa5]/g, "-")
-			.substring(0, 50);
+		const sanitizedTitle =
+			title
+				.replace(/[^a-zA-Z0-9]/g, "-") // 只保留英文、數字
+				.replace(/-+/g, "-") // 合併多個連字號
+				.replace(/^-|-$/g, "") // 移除開頭和結尾的連字號
+				.substring(0, 50) || "untitled"; // 如果完全沒有英數字，用 untitled
 		const imageFilename = `${timestamp}-${image.name}`;
 		const mdFilename = `${timestamp}-${sanitizedTitle}.md`;
 
@@ -77,15 +80,15 @@ export async function POST(req: Request) {
 			filename: mdFilename,
 			author_id,
 		});
-		console.log("插入 post 資料：", {
-			title,
-			description,
-			tags: `"${tags}"`,
-			type: `"${type}"`,
-			img: imageFilename,
-			filename: mdFilename,
-			author_id,
-		});
+		// console.log("插入 post 資料：", {
+		// 	title,
+		// 	description,
+		// 	tags: `"${tags}"`,
+		// 	type: `"${type}"`,
+		// 	img: imageFilename,
+		// 	filename: mdFilename,
+		// 	author_id,
+		// });
 
 		if (insertError) {
 			console.error("[ERR] 插入 post 失敗：", insertError.message);

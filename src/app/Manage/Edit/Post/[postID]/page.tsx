@@ -129,7 +129,7 @@ const EditPost = () => {
               if (response.ok) {
                 const text = await response.text();
                 setMarkdownContent(text);
-                console.log("下載的 Markdown 內容：", text);
+                // console.log("下載的 Markdown 內容：", text);
               } else {
                 console.error("下載 Markdown 失敗：HTTP", response.status);
               }
@@ -138,7 +138,7 @@ const EditPost = () => {
             }
           }
 
-          console.log("讀取成功", post);
+          // console.log("讀取成功", post);
         } else {
           console.error("讀取失敗", result.error);
         }
@@ -165,9 +165,9 @@ const EditPost = () => {
   const [date, setDate] = useState<Date | undefined>(undefined);
   // console.log("date", date);
 
-  useEffect(() => {
-    console.log("imageFile", imageFile);
-  }, [imageFile]);
+  // useEffect(() => {
+  //   console.log("imageFile", imageFile);
+  // }, [imageFile]);
 
   // useEffect(() => {
   //   if (selectedOption) {
@@ -178,13 +178,13 @@ const EditPost = () => {
   // 處理日期選擇的取消按鈕點擊事件
   const handleDateCancel = () => {
     setDate(undefined);
-    console.log("日期選擇取消");
+    // console.log("日期選擇取消");
   };
 
   // 處理日期選擇的變化
   const handleDateSelect = (selected: Date | undefined) => {
     setDate(selected);
-    console.log(`選擇的日期: ${selected}`);
+    // console.log(`選擇的日期: ${selected}`);
   };
 
   // // 處理下拉選單的選擇
@@ -271,7 +271,7 @@ const EditPost = () => {
 
     const result = await res.json();
     if (result.success) {
-      console.log("文章更新成功！");
+      // console.log("文章更新成功！");
       router.push("/Manage/Post");
       router.refresh(); // 強制刷新頁面資料
     } else {

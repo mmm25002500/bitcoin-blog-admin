@@ -45,23 +45,23 @@ const CreatePost = ({ author_id }: { author_id?: string }) => {
 	const [typeOptions, setTypeOptions] = useState<string[]>([]);	// all types
 	const [markdownContent, setMarkdownContent] = useState<string>(""); // markdown content
 
-	useEffect(() => {
-		console.log("title:", title);
-		console.log("description:", description);
-		console.log("selectedTags:", selectedTags);
-		console.log("selectedType:", selectedType);
-		console.log("selectedAuthor:", seletedAuthor);
-		console.log("imageFile:", imageFile);
-		console.log("date:", date);
-	}, [
-		title,
-		description,
-		selectedTags,
-		selectedType,
-		seletedAuthor,
-		imageFile,
-		date,
-	]);
+	// useEffect(() => {
+	// 	console.log("title:", title);
+	// 	console.log("description:", description);
+	// 	console.log("selectedTags:", selectedTags);
+	// 	console.log("selectedType:", selectedType);
+	// 	console.log("selectedAuthor:", seletedAuthor);
+	// 	console.log("imageFile:", imageFile);
+	// 	console.log("date:", date);
+	// }, [
+	// 	title,
+	// 	description,
+	// 	selectedTags,
+	// 	selectedType,
+	// 	seletedAuthor,
+	// 	imageFile,
+	// 	date,
+	// ]);
 
 	// 處理路由變化
 	const router = useRouter();

@@ -90,14 +90,14 @@ const NewsTable = (props: PostTableProps) => {
 		const from = props.date?.from ?? undefined;
 		const to = props.date?.to
 			? new Date(
-					props.date.to.getFullYear(),
-					props.date.to.getMonth(),
-					props.date.to.getDate(),
-					23,
-					59,
-					59,
-					999,
-				)
+				props.date.to.getFullYear(),
+				props.date.to.getMonth(),
+				props.date.to.getDate(),
+				23,
+				59,
+				59,
+				999,
+			)
 			: undefined;
 
 		const matchesDate =
@@ -160,7 +160,7 @@ const NewsTable = (props: PostTableProps) => {
 	const handleDeleteSelected = () => {
 		const idsToDelete = Array.from(selectedIds);
 		setShowConfirmModal(true);
-		console.log("要刪除的 ID：", idsToDelete);
+		// console.log("要刪除的 ID：", idsToDelete);
 
 		// TODO: 串接 API 或透過 props 回傳資料
 		// props.onDelete?.(idsToDelete);a
@@ -170,7 +170,7 @@ const NewsTable = (props: PostTableProps) => {
 	const handleDeleteCurrent = (id: string) => {
 		setShowDeleteThisConfirmModal(true);
 		setDeleteID(id);
-		console.log("要刪除的 ID：", id);
+		// console.log("要刪除的 ID：", id);
 	};
 
 	return (
@@ -262,11 +262,10 @@ const NewsTable = (props: PostTableProps) => {
 							{paginatedData.map((post) => (
 								<tr
 									key={post.id}
-									className={`border-b-[1px] border-[#F1F1F1] text-sm leading-6 font-normal text-[#1A1A1A] ${
-										selectedIds.has(post.id)
+									className={`border-b-[1px] border-[#F1F1F1] text-sm leading-6 font-normal text-[#1A1A1A] ${selectedIds.has(post.id)
 											? "bg-[#F3F6F7] border-[1px] border-[#F1F1F1]"
 											: ""
-									}`}
+										}`}
 								>
 									<td className="px-3 py-2">
 										<div className="inline-flex items-center">

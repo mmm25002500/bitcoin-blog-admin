@@ -5,11 +5,10 @@ import DateChoose from "@/components/Input/DateChoose";
 import DropDown from "@/components/Input/DropDown";
 import Search from "@/components/Input/Search";
 import PostTable from "@/components/Table/PostTable";
-import { createClient } from "@/lib/supabase/client";
 
 import type { PostData } from "@/types/Table/PostTable";
 import { useRouter } from "nextjs-toploader/app";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import type { DateRange } from "react-day-picker";
 
 const PageManage = () => {
@@ -24,25 +23,29 @@ const PageManage = () => {
 	// 文章資料
 	const [postData, setPostData] = useState<PostData[]>([]);
 
-	// 開始時從 Supabase 獲取文章資料
-	useEffect(() => {
-		const fetchPosts = async () => {
-			const supabase = createClient();
-			const { data, error } = await supabase
-				.from("Post")
-				.select("*")
-				.order("created_at", { ascending: false });
+	// fetch posts
+	const fetchPosts = useCallback(async () => {
+		try {
+			const res = await fetch("/api/Post/getPosts", {
+				method: "GET",
+				credentials: "include",
+			});
+			const result = await res.json();
 
-			if (error) {
-				console.error("取得文章失敗", error.message);
+			if (result.success) {
+				setPostData(result.data);
+				// console.log("成功取得文章資料", result.data);
 			} else {
-				console.log("取得文章成功", data);
-				setPostData(data);
+				console.error("取得文章資料失敗：", result.error);
 			}
-		};
-
-		fetchPosts();
+		} catch (err) {
+			console.error("fetch 發生錯誤：", err);
+		}
 	}, []);
+
+	useEffect(() => {
+		fetchPosts();
+	}, [fetchPosts]);
 
 	// 處理路由變化
 	const router = useRouter();
@@ -50,7 +53,7 @@ const PageManage = () => {
 	// 處理下拉選單的選擇
 	const handleSelect = (option: string) => {
 		setSelectedOption(option);
-		console.log(`選擇的文章類型: ${option}`);
+		// console.log(`選擇的文章類型: ${option}`);
 	};
 
 	// 處理取消按鈕的點擊事件
@@ -61,13 +64,13 @@ const PageManage = () => {
 	// 處理搜尋框的變化
 	const handleSearchChange = (value: string) => {
 		setSearchValue(value);
-		console.log(`搜尋的值: ${value}`);
+		// console.log(`搜尋的值: ${value}`);
 	};
 
 	// 處理搜尋框的取消按鈕點擊事件
 	const handleSearchCancel = () => {
 		setSearchValue("");
-		console.log("搜尋框取消");
+		// console.log("搜尋框取消");
 	};
 
 	useEffect(() => {
@@ -91,18 +94,18 @@ const PageManage = () => {
 	// 處理日期選擇的變化
 	const handleDateSelect = (range: DateRange | undefined) => {
 		setDate(range);
-		console.log(`選擇的日期範圍: ${range}`);
+		// console.log(`選擇的日期範圍: ${range}`);
 	};
 
 	// 處理日期選擇的取消按鈕點擊事件
 	const handleDateCancel = () => {
 		setDate(undefined);
-		console.log("日期選擇取消");
+		// console.log("日期選擇取消");
 	};
 
 	// 處理要刪除的項目
 	const handleDeleteSelected = async (ids: string[]) => {
-		console.log("要刪除的 ID：", ids);
+		// console.log("要刪除的 ID：", ids);
 		const res = await fetch("/api/Post/delPost", {
 			method: "POST",
 			body: JSON.stringify({ ids }),

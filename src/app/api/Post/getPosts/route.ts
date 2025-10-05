@@ -2,31 +2,14 @@
 import { createClient } from "@/lib/supabase/server";
 import { NextResponse } from "next/server";
 
-export async function POST(req: Request) {
+export async function GET() {
 	const supabase = await createClient();
 
 	try {
-		const body = await req.json();
-		const { type, searchValue, date } = body;
-
-		let query = supabase
+		const { data, error } = await supabase
 			.from("Post")
 			.select("*")
 			.order("created_at", { ascending: false });
-
-		if (type && type !== "All") {
-			query = query.contains("type", [type]);
-		}
-
-		if (searchValue) {
-			query = query.ilike("title", `%${searchValue}%`);
-		}
-
-		if (date?.from && date?.to) {
-			query = query.gte("created_at", date.from).lte("created_at", date.to);
-		}
-
-		const { data, error } = await query;
 
 		if (error) {
 			console.error("[ERR] 查詢文章列表失敗：", error.message);

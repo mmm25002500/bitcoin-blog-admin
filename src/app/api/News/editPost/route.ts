@@ -105,8 +105,10 @@ export async function POST(req: Request) {
 				// 沒檔名：生成新檔名並上傳
 				const timestamp = Date.now();
 				const sanitizedTitle = title
-					.replace(/[^a-zA-Z0-9\u4e00-\u9fa5]/g, "-")
-					.substring(0, 50);
+					.replace(/[^a-zA-Z0-9]/g, "-")  // 只保留英文、數字
+					.replace(/-+/g, "-")            // 合併多個連字號
+					.replace(/^-|-$/g, "")          // 移除開頭和結尾的連字號
+					.substring(0, 50) || "untitled"; // 如果完全沒有英數字，用 untitled
 				finalMdFilename = `${timestamp}-${sanitizedTitle}.md`;
 
 				const { error: mdUploadError } = await supabase.storage

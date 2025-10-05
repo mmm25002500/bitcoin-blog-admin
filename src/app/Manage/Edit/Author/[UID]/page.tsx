@@ -74,9 +74,9 @@ const EditAuthor = () => {
     fetchAuthor();
   }, [UID]);
 
-  useEffect(() => {
-    console.log("imageFile", imageFile);
-  }, [imageFile]);
+  // useEffect(() => {
+  //   console.log("imageFile", imageFile);
+  // }, [imageFile]);
 
   // 文章類型選單選項
   const [typeOptions, setTypeOptions] = useState<string[]>([]);
@@ -90,7 +90,7 @@ const EditAuthor = () => {
   // 處理下拉選單的選擇
   const handleSelect = (option: string) => {
     setSelectedOption(option);
-    console.log(`選擇的文章類型: ${option}`);
+    // console.log(`選擇的文章類型: ${option}`);
   };
 
   // 處理取消按鈕的點擊事件
@@ -101,18 +101,18 @@ const EditAuthor = () => {
   // 處理搜尋框的變化
   const handleSearchChange = (value: string) => {
     setSearchValue(value);
-    console.log(`搜尋的值: ${value}`);
+    // console.log(`搜尋的值: ${value}`);
   };
 
   // 處理搜尋框的取消按鈕點擊事件
   const handleSearchCancel = () => {
     setSearchValue("");
-    console.log("搜尋框取消");
+    // console.log("搜尋框取消");
   };
 
   useEffect(() => {
     if (selectedOption) {
-      console.log(`真正選到的文章類型: ${selectedOption}`);
+      // console.log(`真正選到的文章類型: ${selectedOption}`);
     }
   }, [selectedOption]);
 
@@ -131,13 +131,13 @@ const EditAuthor = () => {
   // 處理日期選擇的變化
   const handleDateSelect = (range: DateRange | undefined) => {
     setDate(range);
-    console.log(`選擇的日期範圍: ${range}`);
+    // console.log(`選擇的日期範圍: ${range}`);
   };
 
   // 處理日期選擇的取消按鈕點擊事件
   const handleDateCancel = () => {
     setDate(undefined);
-    console.log("日期選擇取消");
+    // console.log("日期選擇取消");
   };
 
   // 處理要刪除的項目
@@ -235,7 +235,7 @@ const EditAuthor = () => {
     return matchesSearch && matchesType && matchesDate;
   });
 
-  console.log("filteredData", filteredData);
+  // console.log("filteredData", filteredData);
 
   // 提交編輯
   const handleSubmit = async () => {
@@ -264,7 +264,7 @@ const EditAuthor = () => {
 
     const result = await res.json();
     if (result.success) {
-      console.log("作者更新成功！");
+      // console.log("作者更新成功！");
       router.push("/Manage/Author");
     } else {
       console.error("更新失敗：", result.error);

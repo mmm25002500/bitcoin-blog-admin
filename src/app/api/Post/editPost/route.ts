@@ -81,21 +81,21 @@ export async function POST(req: Request) {
 		let finalMdFilename = oldData.filename;
 
 		if (markdownContent) {
-			console.log("Markdown 內容開始變更");
+			// console.log("Markdown 內容開始變更");
 			const mdBlob = new Blob([markdownContent], { type: "text/markdown" });
-			console.log("markdownContent:", markdownContent);
+			// console.log("markdownContent:", markdownContent);
 
 			if (filename) {
 				// 有檔名：直接覆寫現有檔案
-				console.log(`覆寫 Markdown 檔案：${filename}`);
+				// console.log(`覆寫 Markdown 檔案：${filename}`);
 				const { error: mdUploadError } = await supabase.storage
 					.from("post.article")
 					.upload(filename, mdBlob, {
 						contentType: "text/markdown",
 						upsert: true, // 覆寫現有檔案
 					});
-				console.log("上傳結果錯誤：", mdUploadError);
-				console.log("mdBlob：", mdBlob);
+				// console.log("上傳結果錯誤：", mdUploadError);
+				// console.log("mdBlob：", mdBlob);
 
 				if (mdUploadError) {
 					console.error("[ERR] Markdown 更新失敗：", mdUploadError.message);
@@ -108,11 +108,14 @@ export async function POST(req: Request) {
 				finalMdFilename = filename; // 保持原檔名
 			} else {
 				// 沒檔名：生成新檔名並上傳
-				console.log("上傳新的 Markdown 檔案");
+				// console.log("上傳新的 Markdown 檔案");
 				const timestamp = Date.now();
-				const sanitizedTitle = title
-					.replace(/[^a-zA-Z0-9\u4e00-\u9fa5]/g, "-")
-					.substring(0, 50);
+				const sanitizedTitle =
+					title
+						.replace(/[^a-zA-Z0-9]/g, "-") // 只保留英文、數字
+						.replace(/-+/g, "-") // 合併多個連字號
+						.replace(/^-|-$/g, "") // 移除開頭和結尾的連字號
+						.substring(0, 50) || "untitled"; // 如果完全沒有英數字，用 untitled
 				finalMdFilename = `${timestamp}-${sanitizedTitle}.md`;
 
 				const { error: mdUploadError } = await supabase.storage

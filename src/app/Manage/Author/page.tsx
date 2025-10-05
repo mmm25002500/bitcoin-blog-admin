@@ -24,7 +24,7 @@ const NewsManage = () => {
 
 			if (result.success) {
 				setAuthorData(result.data); // 注意：這裡的資料包含 postQuantity
-				console.log("成功取得 enriched 作者資料", result.data);
+				// console.log("成功取得 enriched 作者資料", result.data);
 			} else {
 				console.error("取得 enriched 作者資料失敗：", result.error);
 			}
@@ -50,7 +50,7 @@ const NewsManage = () => {
 			const result = await res.json();
 
 			if (result.success) {
-				console.log("刪除成功");
+				// console.log("刪除成功");
 				setAuthorData((prev) =>
 					prev.filter((author) => !ids.includes(author.id)),
 				);

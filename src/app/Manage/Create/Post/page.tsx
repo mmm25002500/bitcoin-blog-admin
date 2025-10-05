@@ -45,23 +45,23 @@ const CreatePost = ({ author_id }: { author_id?: string }) => {
   const [typeOptions, setTypeOptions] = useState<string[]>([]);	// all types
   const [markdownContent, setMarkdownContent] = useState<string>(""); // markdown content
 
-  useEffect(() => {
-    console.log("title:", title);
-    console.log("description:", description);
-    console.log("selectedTags:", selectedTags);
-    console.log("selectedType:", selectedType);
-    console.log("selectedAuthor:", seletedAuthor);
-    console.log("imageFile:", imageFile);
-    console.log("date:", date);
-  }, [
-    title,
-    description,
-    selectedTags,
-    selectedType,
-    seletedAuthor,
-    imageFile,
-    date,
-  ]);
+  // useEffect(() => {
+  //   console.log("title:", title);
+  //   console.log("description:", description);
+  //   console.log("selectedTags:", selectedTags);
+  //   console.log("selectedType:", selectedType);
+  //   console.log("selectedAuthor:", seletedAuthor);
+  //   console.log("imageFile:", imageFile);
+  //   console.log("date:", date);
+  // }, [
+  //   title,
+  //   description,
+  //   selectedTags,
+  //   selectedType,
+  //   seletedAuthor,
+  //   imageFile,
+  //   date,
+  // ]);
 
   // 處理路由變化
   const router = useRouter();
@@ -98,7 +98,7 @@ const CreatePost = ({ author_id }: { author_id?: string }) => {
   // 處理日期選擇的取消按鈕點擊事件
   const handleDateCancel = () => {
     setDate(undefined);
-    console.log("日期選擇取消");
+    // console.log("日期選擇取消");
   };
 
   // 處理日期選擇的變化

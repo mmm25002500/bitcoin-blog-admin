@@ -20,7 +20,7 @@ const LoginPage = () => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 
-	console.log(isLoading, rememberMe);
+	// console.log(isLoading, rememberMe);
 
 	// 處理路由變化
 	const router = useRouter();
