@@ -4,6 +4,21 @@ import { createClient } from "@/lib/supabase/server";
 
 export async function POST(req: Request) {
 	try {
+		const supabase = await createClient();
+
+		// 驗證使用者身份
+		const {
+			data: { user },
+			error: authError,
+		} = await supabase.auth.getUser();
+
+		if (authError || !user) {
+			return NextResponse.json(
+				{ success: false, error: "未授權訪問" },
+				{ status: 401 },
+			);
+		}
+
 		const formData = await req.formData();
 
 		// 必填欄位
@@ -25,8 +40,6 @@ export async function POST(req: Request) {
 				{ status: 400 },
 			);
 		}
-
-		const supabase = await createClient();
 
 		// 查舊資料
 		const { data: oldData, error: fetchError } = await supabase

@@ -3,6 +3,21 @@ import { createClient } from "@/lib/supabase/server";
 
 export async function POST(req: Request) {
 	try {
+		const supabase = await createClient();
+
+		// 驗證使用者身份
+		const {
+			data: { user },
+			error: authError,
+		} = await supabase.auth.getUser();
+
+		if (authError || !user) {
+			return NextResponse.json(
+				{ success: false, error: "未授權訪問" },
+				{ status: 401 },
+			);
+		}
+
 		const { ids } = await req.json();
 		if (!ids || !Array.isArray(ids)) {
 			return NextResponse.json(
@@ -10,8 +25,6 @@ export async function POST(req: Request) {
 				{ status: 400 },
 			);
 		}
-
-		const supabase = await createClient();
 
 		// 取得對應 post 的圖片檔名和 Markdown 檔名
 		const { data: posts, error: fetchError } = await supabase

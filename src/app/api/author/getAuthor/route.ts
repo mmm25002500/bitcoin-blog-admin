@@ -4,6 +4,19 @@ import { NextResponse } from "next/server";
 export async function GET() {
 	const supabase = await createClient();
 
+	// 驗證使用者身份
+	// const {
+	// 	data: { user },
+	// 	error: authError,
+	// } = await supabase.auth.getUser();
+
+	// if (authError || !user) {
+	// 	return NextResponse.json(
+	// 		{ success: false, error: "未授權訪問" },
+	// 		{ status: 401 },
+	// 	);
+	// }
+
 	// 1. 撈出作者清單
 	const { data: authors, error: authorError } = await supabase
 		.from("author")

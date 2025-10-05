@@ -19,6 +19,19 @@ export async function POST(req: Request) {
 
 		const supabase = createClient();
 
+		// 驗證使用者身份
+		const {
+			data: { user },
+			error: authError,
+		} = await (await supabase).auth.getUser();
+
+		if (authError || !user) {
+			return NextResponse.json(
+				{ success: false, error: "未授權訪問" },
+				{ status: 401 },
+			);
+		}
+
 		// 上傳圖片到 Supabase Storage
 		const filename = `${Date.now()}-${image.name}`;
 		const { error: uploadError } = await (await supabase).storage

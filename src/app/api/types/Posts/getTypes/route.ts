@@ -10,6 +10,19 @@ function getErrorMessage(err: unknown): string {
 export async function GET(req: NextRequest) {
 	const supabase = await createClient();
 
+	// 驗證使用者身份
+	// const {
+	// 	data: { user },
+	// 	error: authError,
+	// } = await supabase.auth.getUser();
+
+	// if (authError || !user) {
+	// 	return NextResponse.json(
+	// 		{ success: false, error: "未授權訪問" },
+	// 		{ status: 401 },
+	// 	);
+	// }
+
 	try {
 		const { searchParams } = new URL(req.url);
 		const deduplicate = searchParams.get("deduplicate") !== "false";

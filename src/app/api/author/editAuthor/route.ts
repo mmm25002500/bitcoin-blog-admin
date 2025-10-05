@@ -36,6 +36,19 @@ export async function POST(req: Request) {
 
 		const supabase = await createClient();
 
+		// 驗證使用者身份
+		const {
+			data: { user },
+			error: authError,
+		} = await supabase.auth.getUser();
+
+		if (authError || !user) {
+			return NextResponse.json(
+				{ success: false, error: "未授權訪問" },
+				{ status: 401 },
+			);
+		}
+
 		// 查舊資料
 		const { data: oldData, error: fetchError } = await supabase
 			.from("author")
