@@ -20,22 +20,7 @@ import { useParams } from "next/navigation";
 import { fullscreen } from "@uiw/react-md-editor";
 
 // TODO:
-// 1. 更改圖片和名稱描述功能
-// 2. 新增完文章後跳轉回來本頁面
-// 3. 更改完文章後跳轉回來本頁面
-// 4. 刪除作者功能
-
-// const mockData: PostData[] = Array.from({ length: 100 }, (_, i) => ({
-//   id: `#1231${i}`,
-//   title: "sdsd",
-//   author_id: i % 2 === 0 ? `Derek ${i + 1}` : `中本蔥 ${i + 1}`,
-//   created_at: `2025/05/11 12:2${i}`,
-//   tags: ["區塊鏈日報", "墨山貓", "良兮"],
-//   type: i % 2 === 0 ? ["走勢分析"] : ["總體經濟"],
-//   img: i % 2 === 0 ? "/images/author1.png" : "/images/author2.png",
-//   description: "sd",
-//   filename: "dfdf",
-// }));
+// 1. 刪除作者功能
 
 const EditAuthor = () => {
   const [imageFile, setImageFile] = useState<File | null>(null);

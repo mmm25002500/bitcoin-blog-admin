@@ -16,10 +16,6 @@ import DropDown from "@/components/Input/DropDown";
 import type { AuthorData } from "@/types/Author/Author";
 import { useCallback } from "react";
 
-// TODO：
-// 1. content to filename.md and set filename to supabase
-// 2. imageFile to filename.jpg/png and set image to supabase
-
 export default async function Page({
   searchParams,
 }: {
@@ -47,6 +43,7 @@ const CreatePost = ({ author_id }: { author_id?: string }) => {
   const [date, setDate] = useState<Date | undefined>(undefined); // date
   const [tagOptions, setTagOptions] = useState<string[]>([]);	// all tags
   const [typeOptions, setTypeOptions] = useState<string[]>([]);	// all types
+  const [markdownContent, setMarkdownContent] = useState<string>(""); // markdown content
 
   useEffect(() => {
     console.log("title:", title);
@@ -134,8 +131,8 @@ const CreatePost = ({ author_id }: { author_id?: string }) => {
     formData.append("tags", JSON.stringify(selectedTags)); // <-- 傳 JSON 字串
     formData.append("type", JSON.stringify(selectedType)); // <-- 傳 JSON 字串
     formData.append("image", imageFile);
-    formData.append("filename", imageFile.name); // 原始檔名
     formData.append("author_id", seletedAuthor.id); // 作者 ID
+    formData.append("markdownContent", markdownContent); // Markdown 內容
 
     const res = await fetch("/api/Post/addPost", {
       method: "POST",
@@ -147,6 +144,7 @@ const CreatePost = ({ author_id }: { author_id?: string }) => {
     if (result.success) {
       alert("文章新增成功！");
       router.push("/Manage/Post");
+      router.refresh(); // 強制刷新頁面資料
     } else {
       console.log("新增失敗：", result.error);
     }
@@ -333,7 +331,10 @@ const CreatePost = ({ author_id }: { author_id?: string }) => {
               className={"mb-2"}
             />
             <div>
-              <MarkdownEditor />
+              <MarkdownEditor
+                value={markdownContent}
+                onChange={(value) => setMarkdownContent(value || "")}
+              />
             </div>
           </div>
         </div>

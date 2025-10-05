@@ -1,7 +1,6 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import { useState } from 'react';
 import '@uiw/react-md-editor/markdown-editor.css';
 import '@uiw/react-markdown-preview/markdown.css';
 
@@ -15,12 +14,15 @@ type TextApi = {
   replaceSelection: (text: string) => void;
 };
 
+interface MarkdownEditorProps {
+  value?: string;
+  onChange?: (value: string | undefined) => void;
+}
+
 // SSR 禁用
 const MDEditor = dynamic(() => import('@uiw/react-md-editor'), { ssr: false });
 
-export default function MarkdownEditor() {
-  const [value, setValue] = useState<string | undefined>("");
-
+export default function MarkdownEditor({ value, onChange }: MarkdownEditorProps) {
   const customCommands = [
     {
       name: 'title1',
@@ -67,7 +69,7 @@ export default function MarkdownEditor() {
     <div data-color-mode="light">
       <MDEditor
         value={value}
-        onChange={setValue}
+        onChange={onChange}
         height={500}
         preview="edit"
         commands={customCommands}

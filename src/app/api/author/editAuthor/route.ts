@@ -3,13 +3,7 @@ import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 
 // TODO:
-// 1. Edit: 作者名稱
-// 2. Edit: 作者簡介
-// 3. Edit: 作者圖片（刪舊上新）
-// 4. 儲存功能（optional）
-
-// 前端如果沒有上傳圖片(image)，那該值就會為 null，則資料庫沿用舊檔名
-// 前端如果有上傳圖片(image)，那就刪除舊檔名，並上傳新檔名，資料庫更新為新檔名
+// 1. 儲存功能（optional）
 
 export async function POST(req: Request) {
 	try {

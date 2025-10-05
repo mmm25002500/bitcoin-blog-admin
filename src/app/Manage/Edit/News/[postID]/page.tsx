@@ -17,11 +17,10 @@ import DropDownTag from "@/components/Input/DropDownTag";
 import { useParams } from "next/navigation";
 import DropDown from "@/components/Input/DropDown";
 import type { AuthorData } from "@/types/Author/Author";
+import { createClient } from "@/lib/supabase/client";
 
 // TODO:
-// 1. 新增 markdown 功能
-// 2. 更改 Markdown 功能
-// 3. 刪除文章功能
+// 1. 刪除文章功能
 
 const EditNews = () => {
   const [imageFile, setImageFile] = useState<File | null>(null);
@@ -37,6 +36,7 @@ const EditNews = () => {
   const [typeOptions, setTypeOptions] = useState<string[]>([]);	// all types
   const [previewUrl, setPreviewUrl] = useState<string>(""); // 顯示舊圖或新圖
   const [filename, setFilename] = useState<string>(""); // 儲存初始的檔案名稱
+  const [markdownContent, setMarkdownContent] = useState<string>(""); // markdown content
 
   // console.log(markdown);
 
@@ -110,6 +110,34 @@ const EditNews = () => {
           if (post.img) {
             setPreviewUrl(post.img);
           }
+
+          // 下載 Markdown 內容
+          if (post.filename) {
+            const supabase = createClient();
+            // 使用 getPublicUrl 加上 timestamp 避免快取
+            const { data: publicUrlData } = supabase.storage
+              .from("news.article")
+              .getPublicUrl(post.filename, {
+                download: true,
+              });
+
+            // 加上 timestamp 破壞快取
+            const urlWithCacheBusting = `${publicUrlData.publicUrl}?t=${Date.now()}`;
+
+            try {
+              const response = await fetch(urlWithCacheBusting);
+              if (response.ok) {
+                const text = await response.text();
+                setMarkdownContent(text);
+                console.log("下載的 Markdown 內容：", text);
+              } else {
+                console.error("下載 Markdown 失敗：HTTP", response.status);
+              }
+            } catch (error) {
+              console.error("下載 Markdown 失敗：", error);
+            }
+          }
+
           console.log("讀取成功", post);
         } else {
           console.error("讀取失敗", result.error);
@@ -225,12 +253,13 @@ const EditNews = () => {
     formData.append("tags", JSON.stringify(selectedTags));
     formData.append("type", JSON.stringify(selectedType));
     formData.append("author_id", author.id);
-    formData.append("filename", filename);
+    formData.append("filename", filename); // 現有的 markdown 檔名
+    formData.append("markdownContent", markdownContent); // Markdown 內容
 
     // 如果有新圖片才 append
     if (imageFile) {
       formData.append("image", imageFile);
-      formData.append("filename", imageFile.name);
+      formData.append("img", previewUrl);
     } else {
       formData.append("img", previewUrl);
     }
@@ -243,7 +272,8 @@ const EditNews = () => {
     const result = await res.json();
     if (result.success) {
       console.log("文章更新成功！");
-      router.push("/Manage/Post");
+      router.push("/Manage/News");
+      router.refresh(); // 強制刷新頁面資料
     } else {
       console.error("更新失敗：", result.error);
     }
@@ -391,7 +421,10 @@ const EditNews = () => {
               className={"mb-2"}
             />
             <div>
-              <MarkdownEditor />
+              <MarkdownEditor
+                value={markdownContent}
+                onChange={(value) => setMarkdownContent(value || "")}
+              />
             </div>
           </div>
         </div>

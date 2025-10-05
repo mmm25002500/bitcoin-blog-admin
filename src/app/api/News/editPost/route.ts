@@ -2,10 +2,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 
-// TODO:
-// 1. 新增 markdown 上傳功能（判斷式）
-// 2. 更改 markdown 功能（判斷式）
-
 export async function POST(req: Request) {
 	try {
 		const formData = await req.formData();
@@ -18,20 +14,12 @@ export async function POST(req: Request) {
 		const type = JSON.parse(formData.get("type") as string);
 		const author_id = formData.get("author_id") as string;
 
-		// 舊的與新的圖片資訊
-		const image = formData.get("image") as File | null; // 新上傳的檔案
-		// const img = formData.get("img") as string | null; // 舊的圖片檔名（storage key）
-		const filename = formData.get("filename") as string | null; // md 檔案名稱
+		// 舊的與新的檔案資訊
+		const image = formData.get("image") as File | null; // 新上傳的圖片
+		const filename = formData.get("filename") as string | null; // 現有的 markdown 檔名
+		const markdownContent = formData.get("markdownContent") as string;
 
-		if (
-			!id ||
-			!title ||
-			!description ||
-			!tags ||
-			!type ||
-			!author_id ||
-			!filename
-		) {
+		if (!id || !title || !description || !tags || !type || !author_id) {
 			return NextResponse.json(
 				{ success: false, error: "[ERR] 表單資料不完整" },
 				{ status: 400 },
@@ -89,7 +77,56 @@ export async function POST(req: Request) {
 			}
 		}
 
-		// 更新 Post（filename 永遠照樣更新，不管圖片有沒有換）
+		// 處理 Markdown 檔案更新
+		let finalMdFilename = oldData.filename;
+
+		if (markdownContent) {
+			const mdBlob = new Blob([markdownContent], { type: "text/markdown" });
+
+			if (filename) {
+				// 有檔名：直接覆寫現有檔案
+				const { error: mdUploadError } = await supabase.storage
+					.from("news.article")
+					.upload(filename, mdBlob, {
+						contentType: "text/markdown",
+						upsert: true, // 覆寫現有檔案
+					});
+
+				if (mdUploadError) {
+					console.error("[ERR] Markdown 更新失敗：", mdUploadError.message);
+					return NextResponse.json(
+						{ success: false, error: mdUploadError.message },
+						{ status: 500 },
+					);
+				}
+
+				finalMdFilename = filename; // 保持原檔名
+			} else {
+				// 沒檔名：生成新檔名並上傳
+				const timestamp = Date.now();
+				const sanitizedTitle = title
+					.replace(/[^a-zA-Z0-9\u4e00-\u9fa5]/g, "-")
+					.substring(0, 50);
+				finalMdFilename = `${timestamp}-${sanitizedTitle}.md`;
+
+				const { error: mdUploadError } = await supabase.storage
+					.from("news.article")
+					.upload(finalMdFilename, mdBlob, {
+						contentType: "text/markdown",
+						upsert: false,
+					});
+
+				if (mdUploadError) {
+					console.error("[ERR] Markdown 上傳失敗：", mdUploadError.message);
+					return NextResponse.json(
+						{ success: false, error: mdUploadError.message },
+						{ status: 500 },
+					);
+				}
+			}
+		}
+
+		// 更新 News
 		const { error: updateError } = await supabase
 			.from("News")
 			.update({
@@ -98,7 +135,7 @@ export async function POST(req: Request) {
 				tags,
 				type,
 				img: finalImg,
-				filename, // ← md 檔名永遠更新
+				filename: finalMdFilename,
 				author_id,
 			})
 			.eq("id", id);
