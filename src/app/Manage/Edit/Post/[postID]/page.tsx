@@ -19,7 +19,6 @@ import DropDown from "@/components/Input/DropDown";
 import type { AuthorData } from "@/types/Author/Author";
 import { createClient } from "@/lib/supabase/client";
 
-
 const EditPost = () => {
   const [imageFile, setImageFile] = useState<File | null>(null);
   // const [selectedOption, setSelectedOption] = useState<string>("All");

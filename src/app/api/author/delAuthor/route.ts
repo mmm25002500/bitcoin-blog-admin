@@ -34,7 +34,7 @@ export async function POST(req: Request) {
 			const { data: removedData, error: deleteImageError } =
 				await supabase.storage.from("author.image").remove(filenames);
 
-			// console.log("圖片刪除回應 data:", removedData);
+			console.log("圖片刪除回應 data:", removedData);
 
 			if (deleteImageError) {
 				console.error("圖片刪除失敗：", deleteImageError.message);

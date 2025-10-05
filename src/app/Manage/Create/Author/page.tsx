@@ -5,7 +5,7 @@ import CancelBtn from "@/components/Button/CancelBtn";
 import Input from "@/components/Input/Input";
 import Label from "@/components/Label/Label";
 import UploadFile from "@/components/UploadFile/UploadFile";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "nextjs-toploader/app";
 
 const CreateAuthor = () => {

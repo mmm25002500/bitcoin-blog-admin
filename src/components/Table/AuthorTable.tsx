@@ -87,7 +87,7 @@ const AuthorTable = (props: AuthorTableProps) => {
 	const handleDeleteSelected = () => {
 		const idsToDelete = Array.from(selectedIds);
 		setShowConfirmModal(true);
-		// console.log("要刪除的 ID：", idsToDelete);
+		console.log("要刪除的 ID：", idsToDelete);
 	};
 
 	// 處理刪除當前項目

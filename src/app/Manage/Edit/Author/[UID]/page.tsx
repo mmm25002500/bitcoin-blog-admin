@@ -19,7 +19,6 @@ import type { DateRange } from "react-day-picker";
 import { useParams } from "next/navigation";
 // import { fullscreen } from "@uiw/react-md-editor";
 
-
 const EditAuthor = () => {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [name, setName] = useState<string>("");

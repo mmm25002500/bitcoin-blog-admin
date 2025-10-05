@@ -160,10 +160,10 @@ const PostTable = (props: PostTableProps) => {
 	const handleDeleteSelected = () => {
 		const idsToDelete = Array.from(selectedIds);
 		setShowConfirmModal(true);
-		// console.log("要刪除的 ID：", idsToDelete);
+		console.log("要刪除的 ID：", idsToDelete);
 
 		// TODO: 串接 API 或透過 props 回傳資料
-		// props.onDelete?.(idsToDelete);a
+		// props.onDelete?.(idsToDelete);
 	};
 
 	// 處理刪除當前項目
@@ -263,8 +263,8 @@ const PostTable = (props: PostTableProps) => {
 								<tr
 									key={post.id}
 									className={`border-b-[1px] border-[#F1F1F1] text-sm leading-6 font-normal text-[#1A1A1A] ${selectedIds.has(post.id)
-											? "bg-[#F3F6F7] border-[1px] border-[#F1F1F1]"
-											: ""
+										? "bg-[#F3F6F7] border-[1px] border-[#F1F1F1]"
+										: ""
 										}`}
 								>
 									<td className="px-3 py-2">
