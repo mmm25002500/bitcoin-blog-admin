@@ -17,7 +17,7 @@ import PostTable from "@/components/Table/PostTable";
 import type { PostData } from "@/types/Table/PostTable";
 import type { DateRange } from "react-day-picker";
 import { useParams } from "next/navigation";
-import { fullscreen } from "@uiw/react-md-editor";
+// import { fullscreen } from "@uiw/react-md-editor";
 
 // TODO:
 // 1. 刪除作者功能
