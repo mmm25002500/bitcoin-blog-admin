@@ -30,10 +30,10 @@ const DropDown = (props: DropDownProps) => {
 	};
 
 	return (
-		<div className="relative">
+		<div className="relative inline-block min-w-[200px] max-w-full">
 			<select
 				id="dropdown"
-				className={`appearance-none flex items-center justify-between w-full py-2 px-3 pr-10 text-sm font-normal leading-6 h-full border-[1px] border-[#D3D3D3] rounded-md focus:outline-none focus:border-[#0E0E0E] focus:ring-[1px] focus:ring-[#0E0E0E] ${props.className} ${selectedValue === "All" || selectedValue === "" ? "text-[#999999]" : "text-[#1A1A1A]"}`}
+				className={`appearance-none flex items-center justify-between w-full py-2 pl-3 pr-16 text-sm font-normal leading-6 h-full border-[1px] border-[#D3D3D3] rounded-md focus:outline-none focus:border-[#0E0E0E] focus:ring-[1px] focus:ring-[#0E0E0E] ${props.className} ${selectedValue === "All" || selectedValue === "" ? "text-[#999999]" : "text-[#1A1A1A]"}`}
 				onChange={handleChange}
 				value={selectedValue}
 			>

@@ -99,7 +99,7 @@ export default function CustomDatePicker(props: DateChooseProps) {
 
 				<div className="pointer-events-none absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center gap-1">
 					{selected && (
-						<span className="pointer-events-auto cursor-grab">
+						<span className="pointer-events-auto cursor-grab flex items-center">
 							<button type="button" onClick={handleClear}>
 								<Image
 									src={Cancel}
