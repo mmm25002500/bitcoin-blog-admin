@@ -2,7 +2,7 @@
 import type { PostData, PostTableProps } from "@/types/Table/PostTable";
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { useRouter } from "nextjs-toploader/app";
+import Link from "next/link";
 
 // icon
 import TrashCanIcon from "@/images/trash_can.svg";
@@ -25,9 +25,6 @@ const NewsTable = (props: PostTableProps) => {
 	const [authorMap, setAuthorMap] = useState<Record<string, string>>({});
 
 	const totalPages = Math.ceil(props.PostData.length / itemsPerPage);
-
-	// 處理路由變化
-	const router = useRouter();
 
 	useEffect(() => {
 		const fetchAuthors = async () => {
@@ -349,34 +346,33 @@ const NewsTable = (props: PostTableProps) => {
 										)}
 									</td>
 									<td className="px-3 py-2">
-										<button
-											type="button"
-											onClick={() => handleDeleteCurrent(post.id)}
-											className="mr-2 border-[1px] border-[#E9E9E9] rounded-sm p-2.5 bg-white"
-										>
-											<Image
-												src={TrashCanIcon}
-												alt="login"
-												width={100}
-												height={100}
-												className="w-4 h-4"
-											/>
-										</button>
-										<button
-											type="button"
-											onClick={() =>
-												router.push(`/Manage/Edit/News/${post.id}`)
-											}
-											className="border-[1px] border-[#E9E9E9] rounded-sm p-2.5 bg-white"
-										>
-											<Image
-												src={PenIcon}
-												alt="login"
-												width={100}
-												height={100}
-												className="w-4 h-4"
-											/>
-										</button>
+										<div className="flex items-center gap-2">
+											<button
+												type="button"
+												onClick={() => handleDeleteCurrent(post.id)}
+												className="border-[1px] border-[#E9E9E9] rounded-sm p-2.5 bg-white inline-flex items-center justify-center"
+											>
+												<Image
+													src={TrashCanIcon}
+													alt="login"
+													width={100}
+													height={100}
+													className="w-4 h-4"
+												/>
+											</button>
+											<Link
+												href={`/Manage/Edit/News/${post.id}`}
+												className="border-[1px] border-[#E9E9E9] rounded-sm p-2.5 bg-white inline-flex items-center justify-center"
+											>
+												<Image
+													src={PenIcon}
+													alt="login"
+													width={100}
+													height={100}
+													className="w-4 h-4"
+												/>
+											</Link>
+										</div>
 									</td>
 								</tr>
 							))}

@@ -1,12 +1,12 @@
 "use client";
 
 import AddBtn from "@/components/Button/AddBtn";
-import CancelBtn from "@/components/Button/CancelBtn";
 import Input from "@/components/Input/Input";
 import Label from "@/components/Label/Label";
 import UploadFile from "@/components/UploadFile/UploadFile";
 import { useState } from "react";
 import { useRouter } from "nextjs-toploader/app";
+import Link from "next/link";
 
 const CreateAuthor = () => {
 	const [imageFile, setImageFile] = useState<File | null>(null); //image
@@ -19,7 +19,6 @@ const CreateAuthor = () => {
 	// 	console.log("description:", description);
 	// }, [imageFile, name, description]);
 
-	// 處理路由變化
 	const router = useRouter();
 
 	// 處理表單提交
@@ -114,12 +113,12 @@ const CreateAuthor = () => {
 			<div className="pt-20">
 				<div className="absolute bottom-0 right-0 bg-white py-4 w-full shadow-[0_-4px_8px_-3px_rgba(0,0,0,0.05)]">
 					<div className="flex justify-end gap-2 pr-7">
-						<CancelBtn
-							label="取消"
-							onClick={() => {
-								router.push("/Manage/Author");
-							}}
-						/>
+						<Link
+							href="/Manage/Author"
+							className="border-[1px] border-[#D3D3D3] cursor-grab hover:bg-gray-50 bg-white py-[9px] px-6 rounded-lg text-base font-medium leading-6 text-[#7C7C7C]"
+						>
+							取消
+						</Link>
 						<AddBtn
 							label="新增"
 							onClick={async () => {

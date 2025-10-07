@@ -1,17 +1,15 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { useRouter } from "nextjs-toploader/app";
 import type { AuthorData } from "@/types/Author/Author";
 
-import AddBtn from "@/components/Button/AddBtn";
 import Search from "@/components/Input/Search";
 import AuthorTable from "@/components/Table/AuthorTable";
+import Link from "next/link";
 
 const NewsManage = () => {
 	const [searchValue, setSearchValue] = useState<string>("");
 	const [authorData, setAuthorData] = useState<AuthorData[]>([]);
-	const router = useRouter();
 
 	// fetch authors
 	const fetchAuthors = useCallback(async () => {
@@ -80,10 +78,12 @@ const NewsManage = () => {
 					<Search onChange={handleSearchChange} onCancel={handleSearchCancel} />
 				</div>
 				<div>
-					<AddBtn
-						onClick={() => router.push("/Manage/Create/Author")}
-						label={"新增 +"}
-					/>
+					<Link
+						href="/Manage/Create/Author"
+						className="border-[1px] border-black rounded-lg py-[9px] px-4 text-white font-medium text-base leading-6 bg-black cursor-grab hover:bg-neutral-800"
+					>
+						新增 +
+					</Link>
 				</div>
 			</div>
 

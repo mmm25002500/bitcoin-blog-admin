@@ -1,13 +1,12 @@
 "use client";
 import type { SidebarProps } from "@/types/Sidebar/Sidebar";
 import { usePathname } from "next/navigation";
-import { useRouter } from "nextjs-toploader/app";
 import Image from "next/image";
+import Link from "next/link";
 import icon from "@/images/icon_dark.svg";
 
 const Sidebar = (props: SidebarProps) => {
 	const pathname = usePathname();
-	const router = useRouter();
 
 	return (
 		<div className="fixed top-0 left-0 z-40 w-64 h-screen transition-transform translate-x-0">
@@ -27,9 +26,8 @@ const Sidebar = (props: SidebarProps) => {
 						const isActive = item.path === pathname;
 						return (
 							<li key={item.name}>
-								<button
-									type="button"
-									onClick={() => router.push(item.path)}
+								<Link
+									href={item.path}
 									className={`flex items-center p-2 rounded-lg group w-full ${
 										isActive ? "bg-black/5" : "text-gray-900 hover:bg-black/10"
 									}`}
@@ -46,7 +44,7 @@ const Sidebar = (props: SidebarProps) => {
 									<span className="ms-3 font-medium text-base leading-6 text-[#3C3C3C]">
 										{item.name}
 									</span>
-								</button>
+								</Link>
 							</li>
 						);
 					})}

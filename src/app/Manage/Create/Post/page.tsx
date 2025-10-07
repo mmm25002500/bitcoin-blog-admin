@@ -1,7 +1,6 @@
 "use client";
 
 import AddBtn from "@/components/Button/AddBtn";
-import CancelBtn from "@/components/Button/CancelBtn";
 import DateSelection from "@/components/Input/DateSelection";
 // import DropDown from "@/components/Input/DropDown";
 import DropDownTag from "@/components/Input/DropDownTag";
@@ -15,6 +14,7 @@ import MarkdownEditor from "@/components/Markdown/MarkdownEditor";
 import DropDown from "@/components/Input/DropDown";
 import type { AuthorData } from "@/types/Author/Author";
 import { useCallback } from "react";
+import Link from "next/link";
 
 export default async function Page({
   searchParams,
@@ -343,10 +343,12 @@ const CreatePost = ({ author_id }: { author_id?: string }) => {
         <div className="pt-20">
           <div className="absolute bottom-0 right-0 bg-white py-4 w-full shadow-[0_-4px_8px_-3px_rgba(0,0,0,0.05)]">
             <div className="flex justify-end gap-2 pr-7">
-              <CancelBtn
-                label="取消"
-                onClick={() => router.push("/Manage/Post")}
-              />
+              <Link
+                href="/Manage/Post"
+                className="border-[1px] border-[#D3D3D3] cursor-grab hover:bg-gray-50 bg-white py-[9px] px-6 rounded-lg text-base font-medium leading-6 text-[#7C7C7C]"
+              >
+                取消
+              </Link>
               <AddBtn label="發佈" onClick={handleSubmit} />
             </div>
           </div>

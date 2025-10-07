@@ -1,7 +1,6 @@
 "use client";
 
 import AddBtn from "@/components/Button/AddBtn";
-import CancelBtn from "@/components/Button/CancelBtn";
 import DeleteBtn from "@/components/Button/DeleteBtn";
 import DateSelection from "@/components/Input/DateSelection";
 // import DropDown from "@/components/Input/DropDown";
@@ -18,6 +17,7 @@ import { useParams } from "next/navigation";
 import DropDown from "@/components/Input/DropDown";
 import type { AuthorData } from "@/types/Author/Author";
 import { createClient } from "@/lib/supabase/client";
+import Link from "next/link";
 
 const EditNews = () => {
   const [imageFile, setImageFile] = useState<File | null>(null);
@@ -461,10 +461,12 @@ const EditNews = () => {
                 label="發佈"
                 onClick={handleSubmit}
               />
-              <CancelBtn
-                label="取消"
-                onClick={() => router.push("/Manage/News")}
-              />
+              <Link
+                href="/Manage/News"
+                className="border-[1px] border-[#D3D3D3] cursor-grab hover:bg-gray-50 bg-white py-[9px] px-6 rounded-lg text-base font-medium leading-6 text-[#7C7C7C]"
+              >
+                取消
+              </Link>
             </div>
           </div>
         </div>

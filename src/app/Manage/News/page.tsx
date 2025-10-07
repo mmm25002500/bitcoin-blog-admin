@@ -1,15 +1,14 @@
 "use client";
 
-import AddBtn from "@/components/Button/AddBtn";
 import DateChoose from "@/components/Input/DateChoose";
 import DropDown from "@/components/Input/DropDown";
 import Search from "@/components/Input/Search";
 import NewsTable from "@/components/Table/NewsTable";
 
 import type { PostData } from "@/types/Table/PostTable";
-import { useRouter } from "nextjs-toploader/app";
 import { useCallback, useEffect, useState } from "react";
 import type { DateRange } from "react-day-picker";
+import Link from "next/link";
 
 const NewsManage = () => {
 	// 文章類型選單選項
@@ -46,9 +45,6 @@ const NewsManage = () => {
 	useEffect(() => {
 		fetchPosts();
 	}, [fetchPosts]);
-
-	// 處理路由變化
-	const router = useRouter();
 
 	// 處理下拉選單的選擇
 	const handleSelect = (option: string) => {
@@ -200,11 +196,12 @@ const NewsManage = () => {
 					<Search onChange={handleSearchChange} onCancel={handleSearchCancel} />
 				</div>
 				<div>
-					<AddBtn
-						onClick={() => router.push("/Manage/Create/News")}
-						label={"新增 +"}
-						className=""
-					/>
+					<Link
+						href="/Manage/Create/News"
+						className="border-[1px] border-black rounded-lg py-[9px] px-4 text-white font-medium text-base leading-6 bg-black cursor-grab hover:bg-neutral-800"
+					>
+						新增 +
+					</Link>
 				</div>
 			</div>
 

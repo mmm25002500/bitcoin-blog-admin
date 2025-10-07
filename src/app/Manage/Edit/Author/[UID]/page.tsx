@@ -1,7 +1,6 @@
 "use client";
 
 import AddBtn from "@/components/Button/AddBtn";
-import CancelBtn from "@/components/Button/CancelBtn";
 import DeleteBtn from "@/components/Button/DeleteBtn";
 import Input from "@/components/Input/Input";
 import Label from "@/components/Label/Label";
@@ -17,6 +16,7 @@ import PostTable from "@/components/Table/PostTable";
 import type { PostData } from "@/types/Table/PostTable";
 import type { DateRange } from "react-day-picker";
 import { useParams } from "next/navigation";
+import Link from "next/link";
 // import { fullscreen } from "@uiw/react-md-editor";
 
 const EditAuthor = () => {
@@ -29,7 +29,6 @@ const EditAuthor = () => {
 
   // const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
 
-  // 處理路由變化
   const router = useRouter();
 
   // get postID
@@ -368,11 +367,12 @@ const EditAuthor = () => {
                 />
               </div>
               <div>
-                <AddBtn
-                  onClick={() => router.push(`/Manage/Create/Post/?author_id=${UID}`)}
-                  label={"新增 +"}
-                  className=""
-                />
+                <Link
+                  href={`/Manage/Create/Post/?author_id=${UID}`}
+                  className="border-[1px] border-black rounded-lg py-[9px] px-4 text-white font-medium text-base leading-6 bg-black cursor-grab hover:bg-neutral-800"
+                >
+                  新增 +
+                </Link>
               </div>
             </div>
 
@@ -397,10 +397,16 @@ const EditAuthor = () => {
               label="刪除"
               onClick={handleDelete}
             />
-            <CancelBtn
+            <AddBtn
               label="發佈"
               onClick={handleSubmit}
             />
+            <Link
+              href="/Manage/Author"
+              className="border-[1px] border-[#D3D3D3] cursor-grab hover:bg-gray-50 bg-white py-[9px] px-6 rounded-lg text-base font-medium leading-6 text-[#7C7C7C]"
+            >
+              取消
+            </Link>
           </div>
         </div>
       </div>
