@@ -1,6 +1,10 @@
 // app/api/Post/editPost/route.ts
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import {
+	parseArticleButtons,
+	removeOrphanButtonLogos,
+} from "@/lib/articleButtons";
 
 export async function POST(req: Request) {
 	try {
@@ -44,7 +48,7 @@ export async function POST(req: Request) {
 		// 查舊資料
 		const { data: oldData, error: fetchError } = await supabase
 			.from("Post")
-			.select("img, filename")
+			.select("img, filename, buttons")
 			.eq("id", id)
 			.single();
 
@@ -149,6 +153,23 @@ export async function POST(req: Request) {
 			}
 		}
 
+		// 文章底部按鈕（含 logo 上傳）
+		const { buttons, error: buttonsError } = await parseArticleButtons(
+			supabase,
+			formData,
+			"post.image",
+		);
+
+		if (buttonsError) {
+			return NextResponse.json(
+				{ success: false, error: buttonsError },
+				{ status: 400 },
+			);
+		}
+
+		// 清掉已經沒在用的舊 logo
+		await removeOrphanButtonLogos(supabase, oldData.buttons, buttons, "post.image");
+
 		// 更新 Post
 		const { error: updateError } = await supabase
 			.from("Post")
@@ -160,6 +181,7 @@ export async function POST(req: Request) {
 				img: finalImg,
 				filename: finalMdFilename,
 				author_id,
+				buttons,
 			})
 			.eq("id", id);
 

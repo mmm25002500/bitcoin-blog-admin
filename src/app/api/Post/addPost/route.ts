@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { parseArticleButtons } from "@/lib/articleButtons";
 
 export async function POST(req: Request) {
 	try {
@@ -84,6 +85,20 @@ export async function POST(req: Request) {
 		}
 
 		// 插入 post 資料
+		// 文章底部按鈕（含 logo 上傳）
+		const { buttons, error: buttonsError } = await parseArticleButtons(
+			supabase,
+			formData,
+			"post.image",
+		);
+
+		if (buttonsError) {
+			return NextResponse.json(
+				{ success: false, error: buttonsError },
+				{ status: 400 },
+			);
+		}
+
 		const { error: insertError } = await (await supabase).from("Post").insert({
 			title,
 			description,
@@ -92,6 +107,7 @@ export async function POST(req: Request) {
 			img: imageFilename,
 			filename: mdFilename,
 			author_id,
+			buttons,
 		});
 		// console.log("插入 post 資料：", {
 		// 	title,

@@ -11,6 +11,12 @@ import UploadFile from "@/components/UploadFile/UploadFile";
 import { useEffect, useState } from "react";
 import { useRouter } from "nextjs-toploader/app";
 import MarkdownEditor from "@/components/Markdown/MarkdownEditor";
+import ButtonsEditor from "@/components/Input/ButtonsEditor";
+import type { ArticleButtonInput } from "@/types/Article/ArticleButton";
+import {
+	appendButtonsToFormData,
+	validateButtons,
+} from "@/lib/articleButtonsForm";
 import DropDown from "@/components/Input/DropDown";
 import type { AuthorData } from "@/types/Author/Author";
 import { useCallback } from "react";
@@ -44,6 +50,7 @@ const CreatePost = ({ author_id }: { author_id?: string }) => {
 	const [tagOptions, setTagOptions] = useState<string[]>([]);	// all tags
 	const [typeOptions, setTypeOptions] = useState<string[]>([]);	// all types
 	const [markdownContent, setMarkdownContent] = useState<string>(""); // markdown content
+	const [buttons, setButtons] = useState<ArticleButtonInput[]>([]); // 文章底部按鈕
 
 	// useEffect(() => {
 	// 	console.log("title:", title);
@@ -133,6 +140,14 @@ const CreatePost = ({ author_id }: { author_id?: string }) => {
 		formData.append("image", imageFile);
 		formData.append("author_id", seletedAuthor.id); // 作者 ID
 		formData.append("markdownContent", markdownContent); // Markdown 內容
+
+		// 文章底部按鈕
+		const buttonsError = validateButtons(buttons);
+		if (buttonsError) {
+			alert(buttonsError);
+			return;
+		}
+		appendButtonsToFormData(formData, buttons);
 
 		const res = await fetch("/api/News/addPost", {
 			method: "POST",
@@ -336,6 +351,15 @@ const CreatePost = ({ author_id }: { author_id?: string }) => {
 								onChange={(value) => setMarkdownContent(value || "")}
 							/>
 						</div>
+					</div>
+
+					{/* 文章底部按鈕 */}
+					<div className="flex flex-col gap-2">
+						<ButtonsEditor
+							value={buttons}
+							onChange={setButtons}
+							bucket="news.image"
+						/>
 					</div>
 				</div>
 

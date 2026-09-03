@@ -12,6 +12,12 @@ import UploadFile from "@/components/UploadFile/UploadFile";
 import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "nextjs-toploader/app";
 import MarkdownEditor from "@/components/Markdown/MarkdownEditor";
+import ButtonsEditor from "@/components/Input/ButtonsEditor";
+import type { ArticleButtonInput } from "@/types/Article/ArticleButton";
+import {
+  appendButtonsToFormData,
+  validateButtons,
+} from "@/lib/articleButtonsForm";
 import DropDownTag from "@/components/Input/DropDownTag";
 import { useParams } from "next/navigation";
 import DropDown from "@/components/Input/DropDown";
@@ -34,6 +40,7 @@ const EditNews = () => {
   const [previewUrl, setPreviewUrl] = useState<string>(""); // 顯示舊圖或新圖
   const [filename, setFilename] = useState<string>(""); // 儲存初始的檔案名稱
   const [markdownContent, setMarkdownContent] = useState<string>(""); // markdown content
+  const [buttons, setButtons] = useState<ArticleButtonInput[]>([]); // 文章底部按鈕
 
   // console.log(markdown);
 
@@ -96,6 +103,17 @@ const EditNews = () => {
           setSelectedType(post.type || []);
           setDate(new Date(post.created_at));
           setFilename(post.filename || "");
+          setButtons(
+            Array.isArray(post.buttons)
+              ? post.buttons.map((btn: ArticleButtonInput) => ({
+                  title: btn.title || "",
+                  description: btn.description || "",
+                  link: btn.link || "",
+                  logo: btn.logo || "",
+                  logoFile: null,
+                }))
+              : [],
+          );
 
           // 作者
           const authorData = await fetchAuthorByUID(post.author_id);
@@ -252,6 +270,14 @@ const EditNews = () => {
     formData.append("author_id", author.id);
     formData.append("filename", filename); // 現有的 markdown 檔名
     formData.append("markdownContent", markdownContent); // Markdown 內容
+
+    // 文章底部按鈕
+    const buttonsError = validateButtons(buttons);
+    if (buttonsError) {
+      alert(buttonsError);
+      return;
+    }
+    appendButtonsToFormData(formData, buttons);
 
     // 如果有新圖片才 append
     if (imageFile) {
@@ -446,6 +472,15 @@ const EditNews = () => {
                 onChange={(value) => setMarkdownContent(value || "")}
               />
             </div>
+          </div>
+
+          {/* 文章底部按鈕 */}
+          <div className="flex flex-col gap-2">
+            <ButtonsEditor
+              value={buttons}
+              onChange={setButtons}
+              bucket="news.image"
+            />
           </div>
         </div>
 
