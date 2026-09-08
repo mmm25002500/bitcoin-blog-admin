@@ -26,43 +26,38 @@ const NewsTable = (props: PostTableProps) => {
 
 	const totalPages = Math.ceil(props.PostData.length / itemsPerPage);
 
+	// 一次抓完整份作者清單就好。
+	// 原本是逐一 getAuthorByUID（N+1），而且 deps 放 props.PostData —— 那是
+	// 上層 render 時現算的陣列，每次 render 都是新的 identity，導致每打一個字
+	// 就重打一輪作者 API。改成只在掛載時抓一次，順便和文章列表並行。
 	useEffect(() => {
-		const fetchAuthors = async () => {
-			const uniqueAuthorIds = Array.from(
-				new Set(props.PostData.map((post) => post.author_id)),
-			);
+		let cancelled = false;
 
-			const map: Record<string, string> = {};
+		(async () => {
+			try {
+				const res = await fetch("/api/author/getAuthor");
+				const result = await res.json();
+				if (cancelled) return;
 
-			await Promise.all(
-				uniqueAuthorIds.map(async (uid) => {
-					try {
-						const res = await fetch("/api/author/getAuthorByUID", {
-							method: "POST",
-							headers: { "Content-Type": "application/json" },
-							body: JSON.stringify({ uid }),
-						});
-						const result = await res.json();
-						if (result.success) {
-							map[uid] = result.data.name; // 或其他你要顯示的欄位
-						} else {
-							console.warn("找不到作者：", uid);
-							map[uid] = "(未知作者)";
-						}
-					} catch (err) {
-						console.error("取得作者時錯誤：", err);
-						map[uid] = "(錯誤)";
-					}
-				}),
-			);
+				if (!result.success) {
+					console.error("取得作者清單失敗：", result.error);
+					return;
+				}
 
-			setAuthorMap(map);
+				const map: Record<string, string> = {};
+				for (const author of result.data ?? []) {
+					map[author.id] = author.name;
+				}
+				setAuthorMap(map);
+			} catch (err) {
+				if (!cancelled) console.error("取得作者時錯誤：", err);
+			}
+		})();
+
+		return () => {
+			cancelled = true;
 		};
-
-		if (props.PostData.length > 0) {
-			fetchAuthors();
-		}
-	}, [props.PostData]);
+	}, []);
 
 	// 處理排序
 	const handleSort = (field: keyof PostData) => {

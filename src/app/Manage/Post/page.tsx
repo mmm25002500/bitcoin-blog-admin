@@ -5,8 +5,9 @@ import DropDown from "@/components/Input/DropDown";
 import Search from "@/components/Input/Search";
 import PostTable from "@/components/Table/PostTable";
 
+import { useDebouncedValue } from "@/hooks/useDebouncedValue";
 import type { PostData } from "@/types/Table/PostTable";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import type { DateRange } from "react-day-picker";
 import Link from "next/link";
 
@@ -17,6 +18,8 @@ const PageManage = () => {
 	const [selectedOption, setSelectedOption] = useState<string>("All");
 	// 搜尋框的值
 	const [searchValue, setSearchValue] = useState<string>("");
+	// 輸入框即時反應，篩選等停手 250ms 才做
+	const debouncedSearch = useDebouncedValue(searchValue, 250);
 	// 日期選擇的值
 	const [date, setDate] = useState<DateRange | undefined>();
 	// 文章資料
@@ -75,11 +78,6 @@ const PageManage = () => {
 		}
 	}, [selectedOption]);
 
-	useEffect(() => {
-		if (searchValue) {
-			console.log(`搜尋的值: ${searchValue}`);
-		}
-	}, [searchValue]);
 
 	useEffect(() => {
 		if (date) {
@@ -140,9 +138,11 @@ const PageManage = () => {
 	}, []);
 
 	// 篩選文章資料
-	const filteredData = postData.filter((post) => {
+	const filteredData = useMemo(
+		() =>
+			postData.filter((post) => {
 		// 搜尋關鍵字
-		const keyword = searchValue.toLowerCase();
+		const keyword = debouncedSearch.toLowerCase();
 		const matchesSearch =
 			post.title.toLowerCase().includes(keyword) ||
 			post.description?.toLowerCase().includes(keyword);
@@ -173,7 +173,9 @@ const PageManage = () => {
 		}
 
 		return matchesSearch && matchesType && matchesDate;
-	});
+			}),
+		[postData, debouncedSearch, selectedOption, date],
+	);
 
 	return (
 		<>
@@ -208,7 +210,7 @@ const PageManage = () => {
 			<PostTable
 				perPage={10}
 				type={selectedOption}
-				searchValue={searchValue}
+				searchValue={debouncedSearch}
 				date={date}
 				onDelete={handleDeleteSelected}
 				PostData={filteredData}

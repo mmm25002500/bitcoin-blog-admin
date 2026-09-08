@@ -12,13 +12,17 @@ import NoHead from "@/images/NoHead.png";
 
 const handleUser = async () => {
 	const supabase = createClient();
-	const { data, error } = await supabase.auth.getUser();
 
-	if (error || !data?.user) {
+	// 這裡只是要顯示 email，用 getSession 直接讀本機 cookie 即可，
+	// 不必每次載入都打一趟 auth server（getUser 約 120ms）。
+	// 真正的權限把關在 middleware（頁面）與各 API 路由。
+	const { data, error } = await supabase.auth.getSession();
+
+	if (error || !data.session?.user) {
 		return null;
 	}
 
-	return data.user;
+	return data.session.user;
 };
 
 const Navbar = (props: NavbarProps) => {

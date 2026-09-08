@@ -3,20 +3,6 @@ import { createClient } from "@/lib/supabase/server";
 
 export async function POST(req: Request) {
 	try {
-		const formData = await req.formData();
-
-		const fullname = formData.get("fullname") as string;
-		const name = formData.get("name") as string;
-		const description = formData.get("description") as string;
-		const image = formData.get("image") as File;
-
-		if (!fullname || !name || !description || !(image instanceof File)) {
-			return NextResponse.json(
-				{ success: false, error: "[ERR] 表單資料不完整" },
-				{ status: 400 },
-			);
-		}
-
 		const supabase = createClient();
 
 		// 驗證使用者身份
@@ -29,6 +15,20 @@ export async function POST(req: Request) {
 			return NextResponse.json(
 				{ success: false, error: "未授權訪問" },
 				{ status: 401 },
+			);
+		}
+
+		const formData = await req.formData();
+
+		const fullname = formData.get("fullname") as string;
+		const name = formData.get("name") as string;
+		const description = formData.get("description") as string;
+		const image = formData.get("image") as File;
+
+		if (!fullname || !name || !description || !(image instanceof File)) {
+			return NextResponse.json(
+				{ success: false, error: "[ERR] 表單資料不完整" },
+				{ status: 400 },
 			);
 		}
 

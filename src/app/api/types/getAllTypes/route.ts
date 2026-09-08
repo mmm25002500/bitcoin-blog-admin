@@ -1,4 +1,5 @@
 // app/api/types/getAllTypes/route.ts
+import { beginAuth } from "@/lib/supabase/auth";
 import { createClient } from "@/lib/supabase/server";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
@@ -8,20 +9,11 @@ function getErrorMessage(err: unknown): string {
 }
 
 export async function GET(req: NextRequest) {
+	// 驗證與下面的查詢並行送出，回傳前才收
+	const auth = beginAuth();
+
 	const supabase = await createClient();
 
-	// 驗證使用者身份
-	// const {
-	// 	data: { user },
-	// 	error: authError,
-	// } = await supabase.auth.getUser();
-
-	// if (authError || !user) {
-	// 	return NextResponse.json(
-	// 		{ success: false, error: "未授權訪問" },
-	// 		{ status: 401 },
-	// 	);
-	// }
 
 	try {
 		const { searchParams } = new URL(req.url);
@@ -45,6 +37,10 @@ export async function GET(req: NextRequest) {
 		}
 
 		const [postRes, newsRes] = await Promise.all([postQuery, newsQuery]);
+
+		// 查詢已經送出，這時才收驗證結果
+		const denied = await auth;
+		if (denied) return denied;
 
 		if (postRes.error) {
 			return NextResponse.json(

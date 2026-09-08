@@ -1,54 +1,34 @@
+import { beginAuth } from "@/lib/supabase/auth";
 import { createClient } from "@/lib/supabase/server";
 import { NextResponse } from "next/server";
 
 export async function GET() {
+	// 驗證與下面的查詢並行送出，回傳前才收
+	const auth = beginAuth();
+
 	const supabase = await createClient();
 
-	// 驗證使用者身份
-	// const {
-	// 	data: { user },
-	// 	error: authError,
-	// } = await supabase.auth.getUser();
 
-	// if (authError || !user) {
-	// 	return NextResponse.json(
-	// 		{ success: false, error: "未授權訪問" },
-	// 		{ status: 401 },
-	// 	);
-	// }
+	// 三個查詢互相獨立，一起送出（原本是序列，白等兩趟）
+	const [
+		{ data: authors, error: authorError },
+		{ data: newsCounts, error: newsError },
+		{ data: postCounts, error: postError },
+	] = await Promise.all([
+		supabase.from("author").select("*").order("created_at", { ascending: false }),
+		supabase.rpc("get_news_counts"),
+		supabase.rpc("get_post_counts"),
+	]);
 
-	// 1. 撈出作者清單
-	const { data: authors, error: authorError } = await supabase
-		.from("author")
-		.select("*")
-		.order("created_at", { ascending: false });
+	// 查詢已經送出，這時才收驗證結果
+	const denied = await auth;
+	if (denied) return denied;
 
-	if (authorError) {
-		console.error("[ERR] 取得作者失敗", authorError.message);
+	const failed = authorError ?? newsError ?? postError;
+	if (failed) {
+		console.error("[ERR] 取得作者清單失敗", failed.message);
 		return NextResponse.json(
-			{ success: false, error: authorError.message },
-			{ status: 500 },
-		);
-	}
-
-	// 2. 呼叫 get_news_count function
-	const { data: newsCounts, error: newsError } =
-		await supabase.rpc("get_news_counts");
-	if (newsError) {
-		console.error("[ERR] 取得 news count 失敗", newsError.message);
-		return NextResponse.json(
-			{ success: false, error: newsError.message },
-			{ status: 500 },
-		);
-	}
-
-	// 3. 呼叫 get_post_counts function
-	const { data: postCounts, error: postError } =
-		await supabase.rpc("get_post_counts");
-	if (postError) {
-		console.error("[ERR] 取得 post count 失敗", postError.message);
-		return NextResponse.json(
-			{ success: false, error: postError.message },
+			{ success: false, error: failed.message },
 			{ status: 500 },
 		);
 	}
@@ -70,7 +50,7 @@ export async function GET() {
 	}
 
 	// 5. 加入 postQuantity 至每位作者資料中
-	const enrichedAuthors = authors.map((author) => ({
+	const enrichedAuthors = (authors ?? []).map((author) => ({
 		...author,
 		postQuantity: countsMap.get(author.id) ?? 0,
 	}));

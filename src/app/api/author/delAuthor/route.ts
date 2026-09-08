@@ -3,14 +3,6 @@ import { createClient } from "@/lib/supabase/server";
 
 export async function POST(req: Request) {
 	try {
-		const { ids } = await req.json();
-		if (!ids || !Array.isArray(ids)) {
-			return NextResponse.json(
-				{ success: false, error: "無效的刪除 ID 列表" },
-				{ status: 400 },
-			);
-		}
-
 		const supabase = await createClient();
 
 		// 驗證使用者身份
@@ -23,6 +15,14 @@ export async function POST(req: Request) {
 			return NextResponse.json(
 				{ success: false, error: "未授權訪問" },
 				{ status: 401 },
+			);
+		}
+
+		const { ids } = await req.json();
+		if (!ids || !Array.isArray(ids)) {
+			return NextResponse.json(
+				{ success: false, error: "無效的刪除 ID 列表" },
+				{ status: 400 },
 			);
 		}
 

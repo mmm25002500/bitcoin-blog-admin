@@ -1,4 +1,5 @@
 // app/api/post/getPostsByUID/route.ts
+import { beginAuth } from "@/lib/supabase/auth";
 import { createClient } from "@/lib/supabase/server";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
@@ -8,26 +9,20 @@ function getErrorMessage(err: unknown): string {
 }
 
 export async function POST(req: NextRequest) {
+	// 驗證與下面的查詢並行送出，回傳前才收
+	const auth = beginAuth();
+
 	const supabase = await createClient();
-
-	// 驗證使用者身份
-	// const {
-	// 	data: { user },
-	// 	error: authError,
-	// } = await supabase.auth.getUser();
-
-	// if (authError || !user) {
-	// 	return NextResponse.json(
-	// 		{ success: false, error: "未授權訪問" },
-	// 		{ status: 401 },
-	// 	);
-	// }
 
 	try {
 		const body = await req.json();
 		const { uid } = body;
 
 		if (!uid) {
+			// 未登入的話回 401，不要先透露參數錯誤
+			const notAuthed = await auth;
+			if (notAuthed) return notAuthed;
+
 			return NextResponse.json(
 				{ success: false, error: "缺少 uid" },
 				{ status: 400 },
@@ -38,6 +33,10 @@ export async function POST(req: NextRequest) {
 			.from("News")
 			.select("*")
 			.eq("author_id", uid);
+
+		// 查詢已經送出，這時才收驗證結果
+		const denied = await auth;
+		if (denied) return denied;
 
 		if (error) {
 			console.error("[ERR] 查詢文章失敗：", error.message);
