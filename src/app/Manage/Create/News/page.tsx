@@ -8,8 +8,9 @@ import Input from "@/components/Input/Input";
 import Label from "@/components/Label/Label";
 import UploadFile from "@/components/UploadFile/UploadFile";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useRouter } from "nextjs-toploader/app";
+import { useSearchParams } from "next/navigation";
 import MarkdownEditor from "@/components/Markdown/MarkdownEditor";
 import ButtonsEditor from "@/components/Input/ButtonsEditor";
 import type { ArticleButtonInput } from "@/types/Article/ArticleButton";
@@ -22,17 +23,20 @@ import type { AuthorData } from "@/types/Author/Author";
 import { useCallback } from "react";
 import Link from "next/link";
 
-export default async function Page({
-	searchParams,
-}: {
-	searchParams: Promise<Record<string, string | string[] | undefined>>;
-}) {
-	// 先 await
-	const params = await searchParams;
-	const author_id = params.author_id as string | undefined;
+export default function Page() {
+	return (
+		<Suspense fallback={null}>
+			<CreatePostWithSearchParams />
+		</Suspense>
+	);
+}
+
+const CreatePostWithSearchParams = () => {
+	const searchParams = useSearchParams();
+	const author_id = searchParams.get("author_id") ?? undefined;
 
 	return <CreatePost author_id={author_id} />;
-}
+};
 
 
 const CreatePost = ({ author_id }: { author_id?: string }) => {
