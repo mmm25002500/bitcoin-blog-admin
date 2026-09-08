@@ -96,24 +96,21 @@ export default function CustomDatePicker(props: DateChooseProps) {
 							: `${format(selected.from, "yyyy/MM/dd")}（起）`
 						: "發佈日期"}
 				</span>
-
-				<div className="pointer-events-none absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center gap-1">
-					{selected && (
-						<span className="pointer-events-auto cursor-grab flex items-center">
-							<button type="button" onClick={handleClear}>
-								<Image
-									src={Cancel}
-									alt="cancle"
-									width={20}
-									height={20}
-									className=""
-								/>
-							</button>
-						</span>
-					)}
-					<CalendarIcon className="pointer-events-none w-5 h-5 text-gray-500" />
-				</div>
 			</button>
+
+			{/* 圖示疊在按鈕上，不能放在 button 內（button 不可巢狀 button） */}
+			<div className="pointer-events-none absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center gap-1">
+				{selected && (
+					<button
+						type="button"
+						onClick={handleClear}
+						className="pointer-events-auto cursor-grab flex items-center"
+					>
+						<Image src={Cancel} alt="cancle" width={20} height={20} />
+					</button>
+				)}
+				<CalendarIcon className="pointer-events-none w-5 h-5 text-gray-500" />
+			</div>
 
 			{open && (
 				<div className="absolute z-10 mt-2 shadow-lg border bg-white rounded-lg p-4">
