@@ -51,6 +51,15 @@ export async function updateSession(request: NextRequest) {
 		!request.nextUrl.pathname.startsWith("/login") &&
 		!request.nextUrl.pathname.startsWith("/auth")
 	) {
+		// API 回 401 JSON，否則 fetch 會跟著轉址拿到登入頁的 HTML，
+		// 呼叫端 res.json() 會直接炸掉，看不出是沒登入。
+		if (request.nextUrl.pathname.startsWith("/api")) {
+			return NextResponse.json(
+				{ success: false, error: "未授權訪問" },
+				{ status: 401 },
+			);
+		}
+
 		// no user, potentially respond by redirecting the user to the login page
 		const url = request.nextUrl.clone();
 		url.pathname = "/login";
