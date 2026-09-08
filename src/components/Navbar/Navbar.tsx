@@ -1,15 +1,17 @@
+"use client";
+
 import type { NavbarProps } from "@/types/Navbar/Navbar";
 import Image from "next/image";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "nextjs-toploader/app";
 import type { User } from "@supabase/supabase-js";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 // image
 import NoHead from "@/images/NoHead.png";
 
 const handleUser = async () => {
-	const supabase = await createClient();
+	const supabase = createClient();
 	const { data, error } = await supabase.auth.getUser();
 
 	if (error || !data?.user) {
@@ -23,15 +25,27 @@ const Navbar = (props: NavbarProps) => {
 	const router = useRouter();
 	const [user, setUser] = useState<User | null>(null);
 
+	// nextjs-toploader 的 useRouter 每次 render 都回傳新物件，
+	// 不能放進 deps，否則會 getUser -> setUser -> re-render -> getUser 無限迴圈。
+	const routerRef = useRef(router);
+	routerRef.current = router;
+
 	useEffect(() => {
+		let cancelled = false;
+
 		handleUser().then((userData) => {
+			if (cancelled) return;
 			if (userData) {
 				setUser(userData);
 			} else {
-				router.push("/login");
+				routerRef.current.push("/login");
 			}
 		});
-	}, [router]);
+
+		return () => {
+			cancelled = true;
+		};
+	}, []);
 
 	return (
 		<div
