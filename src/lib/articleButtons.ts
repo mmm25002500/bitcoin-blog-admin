@@ -1,6 +1,7 @@
 import type { createClient } from "@/lib/supabase/server";
 import type { ArticleButtonData } from "@/types/Article/ArticleButton";
 import { MAX_ARTICLE_BUTTONS } from "@/types/Article/ArticleButton";
+import { safeStorageKey } from "@/lib/storageImage";
 
 type ServerSupabaseClient = Awaited<ReturnType<typeof createClient>>;
 
@@ -55,7 +56,7 @@ export async function parseArticleButtons(
 
 		const file = formData.get(`buttonLogo_${i}`);
 		if (file instanceof File && file.size > 0) {
-			const filename = `button-${Date.now()}-${i}-${file.name}`;
+			const filename = safeStorageKey(file.name, `button-${i}-`);
 			const { error: uploadError } = await supabase.storage
 				.from(bucket)
 				.upload(filename, file, {

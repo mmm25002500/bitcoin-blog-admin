@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { safeStorageKey } from "@/lib/storageImage";
 
 export async function POST(req: Request) {
 	try {
@@ -33,7 +34,7 @@ export async function POST(req: Request) {
 		}
 
 		// 上傳圖片到 Supabase Storage
-		const filename = `${Date.now()}-${image.name}`;
+		const filename = safeStorageKey(image.name);
 		const { error: uploadError } = await (await supabase).storage
 			.from("author.image")
 			.upload(filename, image, {

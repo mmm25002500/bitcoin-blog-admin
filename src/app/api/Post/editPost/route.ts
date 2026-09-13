@@ -1,6 +1,7 @@
 // app/api/Post/editPost/route.ts
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { removeImageIfUnused, safeStorageKey } from "@/lib/storageImage";
 import {
 	parseArticleButtons,
 	removeOrphanButtonLogos,
@@ -61,23 +62,9 @@ export async function POST(req: Request) {
 
 		let finalImg = oldData.img;
 
-		// 如果有新圖片，就刪舊的再上傳
+		// 如果有新圖片，先上傳；舊圖等資料更新成功後才處理（見下方）
 		if (image) {
-			if (oldData.img) {
-				const { error: removeError } = await supabase.storage
-					.from("post.image")
-					.remove([oldData.img]);
-
-				if (removeError) {
-					console.error("[ERR] 刪除舊圖片失敗：", removeError.message);
-					return NextResponse.json(
-						{ success: false, error: removeError.message },
-						{ status: 500 },
-					);
-				}
-			}
-
-			finalImg = `${Date.now()}-${image.name}`;
+			finalImg = safeStorageKey(image.name);
 			const { error: uploadError } = await supabase.storage
 				.from("post.image")
 				.upload(finalImg, image, {
@@ -187,10 +174,19 @@ export async function POST(req: Request) {
 
 		if (updateError) {
 			console.error("[ERR] 更新 post 失敗：", updateError.message);
+			// 資料沒更新成功，剛上傳的新圖用不到了
+			if (finalImg !== oldData.img) {
+				await supabase.storage.from("post.image").remove([finalImg]);
+			}
 			return NextResponse.json(
 				{ success: false, error: updateError.message },
 				{ status: 500 },
 			);
+		}
+
+		// 已改指向新圖，舊圖沒有其他文章在用才刪
+		if (oldData.img && finalImg !== oldData.img) {
+			await removeImageIfUnused(supabase, "post.image", "Post", "img", oldData.img);
 		}
 
 		return NextResponse.json({ success: true });

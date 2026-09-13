@@ -1,6 +1,7 @@
 // app/api/author/editAuthor/route.ts
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { removeImageIfUnused, safeStorageKey } from "@/lib/storageImage";
 
 // TODO:
 // 1. 儲存功能（optional）
@@ -65,24 +66,10 @@ export async function POST(req: Request) {
 
 		let finalImg = oldData.image;
 
-		// 如果有新圖片，就刪舊的再上傳
+		// 如果有新圖片，先上傳；舊圖等資料更新成功後才處理（見下方）
 		if (image) {
-			if (oldData.image) {
-				const { error: removeError } = await supabase.storage
-					.from("author.image")
-					.remove([oldData.image]);
-
-				if (removeError) {
-					console.error("[ERR] 刪除舊圖片失敗：", removeError.message);
-					return NextResponse.json(
-						{ success: false, error: removeError.message },
-						{ status: 500 },
-					);
-				}
-			}
-
 			// image filename
-			finalImg = `${Date.now()}-${image.name}`;
+			finalImg = safeStorageKey(image.name);
 
 			// upload image
 			const { error: uploadError } = await supabase.storage
@@ -113,10 +100,19 @@ export async function POST(req: Request) {
 
 		if (updateError) {
 			console.error("[ERR] 更新 author 失敗：", updateError.message);
+			// 資料沒更新成功，剛上傳的新圖用不到了
+			if (finalImg !== oldData.image) {
+				await supabase.storage.from("author.image").remove([finalImg]);
+			}
 			return NextResponse.json(
 				{ success: false, error: updateError.message },
 				{ status: 500 },
 			);
+		}
+
+		// 已改指向新圖，舊圖沒有其他作者在用才刪
+		if (oldData.image && finalImg !== oldData.image) {
+			await removeImageIfUnused(supabase, "author.image", "author", "image", oldData.image);
 		}
 
 		return NextResponse.json({ success: true });

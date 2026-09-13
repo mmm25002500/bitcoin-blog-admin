@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { parseArticleButtons } from "@/lib/articleButtons";
+import { safeStorageKey } from "@/lib/storageImage";
 
 export async function POST(req: Request) {
 	try {
@@ -44,7 +45,7 @@ export async function POST(req: Request) {
 				.replace(/-+/g, "-") // 合併多個連字號
 				.replace(/^-|-$/g, "") // 移除開頭和結尾的連字號
 				.substring(0, 50) || "untitled"; // 如果完全沒有英數字，用 untitled
-		const imageFilename = `${timestamp}-${image.name}`;
+		const imageFilename = safeStorageKey(image.name);
 		const mdFilename = `${timestamp}-${sanitizedTitle}.md`;
 
 		// 上傳圖片
