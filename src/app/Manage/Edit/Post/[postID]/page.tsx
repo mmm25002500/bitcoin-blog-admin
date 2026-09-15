@@ -31,6 +31,7 @@ const EditPost = () => {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [selectedType, setSelectedType] = useState<string[]>([]);
   const [title, setTitle] = useState("");
+  const [slug, setSlug] = useState(""); // 自訂網址
   const [description, setDescription] = useState("");
   const [author, setAuthor] = useState<AuthorData>();
   // const [markdown, setMarkdown] = useState("");
@@ -98,6 +99,7 @@ const EditPost = () => {
           const post = result.data;
           // 將資料塞入各個 state
           setTitle(post.title);
+          setSlug(post.slug || "");
           setDescription(post.description);
           setSelectedTags(post.tags || []);
           setSelectedType(post.type || []);
@@ -264,6 +266,7 @@ const EditPost = () => {
 
     formData.append("id", postID); // 更新必填
     formData.append("title", title);
+    formData.append("slug", slug);
     formData.append("description", description);
     formData.append("tags", JSON.stringify(selectedTags));
     formData.append("type", JSON.stringify(selectedType));
@@ -345,6 +348,26 @@ const EditPost = () => {
               placeholder={"請輸入標題"}
               onChange={(e) => setTitle(e.target.value)}
             />
+          </div>
+
+          {/* 自訂網址 */}
+          <div className="flex flex-col gap-2">
+            <Label
+              text={"網址（選填）"}
+              htmlFor={"slug"}
+              required={false}
+              className={"mb-2"}
+            />
+            <Input
+              value={slug}
+              name={"slug"}
+              id={"slug"}
+              placeholder={"例如 bitcoin-wallet，留空則使用文章編號"}
+              onChange={(e) => setSlug(e.target.value)}
+            />
+            <p className="text-xs text-neutral-400">
+              前台網址：/Post/{slug.trim() || postID}（改網址後，舊網址會自動轉到新網址）
+            </p>
           </div>
 
           {/* 文章描述 */}

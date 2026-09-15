@@ -15,6 +15,7 @@ const routeInfo = {
 	"/Manage/News": { title: "新聞管理", logo: NewsIcon },
 	"/Manage/Author": { title: "作者管理", logo: AuthorIcon },
 	"/Manage/MoreInfo": { title: "moreBTC 目錄管理", logo: PostIcon },
+	"/Manage/Routes": { title: "網址管理", logo: PostIcon },
 	"/Manage/Create/Post": { title: "文章管理｜新增文章", logo: PostIcon },
 	"/Manage/Create/News": { title: "文章管理｜新增新聞", logo: PostIcon },
 	"/Manage/Create/Author": { title: "作者管理｜新增作者", logo: AuthorIcon },
@@ -35,6 +36,7 @@ const ManageLayout = ({ children }: { children: ReactNode }) => {
 		{ name: "新聞管理", path: "/Manage/News", icon: NewsIcon },
 		{ name: "作者管理", path: "/Manage/Author", icon: AuthorIcon },
 		{ name: "moreBTC 目錄", path: "/Manage/MoreInfo", icon: PostIcon },
+		{ name: "網址管理", path: "/Manage/Routes", icon: PostIcon },
 	];
 
 	return (

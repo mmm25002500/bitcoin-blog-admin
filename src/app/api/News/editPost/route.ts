@@ -2,6 +2,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { removeImageIfUnused, safeStorageKey } from "@/lib/storageImage";
+import { normalizeSlug, nextOldSlugs, slugErrorMessage } from "@/lib/slug";
 import {
 	parseArticleButtons,
 	removeOrphanButtonLogos,
@@ -46,10 +47,19 @@ export async function POST(req: Request) {
 			);
 		}
 
+		// 自訂網址（選填）
+		const { slug, error: slugError } = normalizeSlug(formData.get("slug"));
+		if (slugError) {
+			return NextResponse.json(
+				{ success: false, error: slugError },
+				{ status: 400 },
+			);
+		}
+
 		// 查舊資料
 		const { data: oldData, error: fetchError } = await supabase
 			.from("News")
-			.select("img, filename, buttons")
+			.select("img, filename, buttons, slug, old_slugs")
 			.eq("id", id)
 			.single();
 
@@ -161,6 +171,8 @@ export async function POST(req: Request) {
 				filename: finalMdFilename,
 				author_id,
 				buttons,
+				slug,
+				old_slugs: nextOldSlugs(oldData.slug, oldData.old_slugs, slug),
 			})
 			.eq("id", id);
 
@@ -171,7 +183,7 @@ export async function POST(req: Request) {
 				await supabase.storage.from("news.image").remove([finalImg]);
 			}
 			return NextResponse.json(
-				{ success: false, error: updateError.message },
+				{ success: false, error: slugErrorMessage(updateError) },
 				{ status: 500 },
 			);
 		}

@@ -45,6 +45,7 @@ const CreatePost = ({ author_id }: { author_id?: string }) => {
 
 	// 使用者輸入
 	const [title, setTitle] = useState<string>(""); // title
+	const [slug, setSlug] = useState<string>(""); // 自訂網址
 	const [description, setDescription] = useState<string>(""); // description
 	const [selectedTags, setSelectedTags] = useState<string[]>([]); // tags
 	const [selectedType, setSelectedType] = useState<string[]>([]); // type
@@ -138,6 +139,7 @@ const CreatePost = ({ author_id }: { author_id?: string }) => {
 		const formData = new FormData();
 
 		formData.append("title", title);
+		formData.append("slug", slug);
 		formData.append("description", description);
 		formData.append("tags", JSON.stringify(selectedTags)); // <-- 傳 JSON 字串
 		formData.append("type", JSON.stringify(selectedType)); // <-- 傳 JSON 字串
@@ -231,6 +233,27 @@ const CreatePost = ({ author_id }: { author_id?: string }) => {
 								setTitle(e.target.value);
 							}}
 						/>
+					</div>
+
+					{/* 自訂網址 */}
+					<div className="flex flex-col gap-2">
+						<Label
+							text={"網址（選填）"}
+							htmlFor={"slug"}
+							className={"mb-2"}
+						/>
+						<Input
+							name={"slug"}
+							id={"slug"}
+							placeholder={"例如 halving-2028，留空則使用新聞編號"}
+							value={slug}
+							onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+								setSlug(e.target.value);
+							}}
+						/>
+						<p className="text-xs text-neutral-400">
+							前台網址：/News/{slug.trim() || "新聞編號"}
+						</p>
 					</div>
 
 					{/* 文章描述 */}

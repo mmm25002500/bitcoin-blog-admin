@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { parseArticleButtons } from "@/lib/articleButtons";
 import { safeStorageKey } from "@/lib/storageImage";
+import { normalizeSlug, slugErrorMessage } from "@/lib/slug";
 
 export async function POST(req: Request) {
 	try {
@@ -33,6 +34,15 @@ export async function POST(req: Request) {
 		if (!title || !description || !tags || !type || !image || !author_id) {
 			return NextResponse.json(
 				{ success: false, error: "[ERR] 表單資料不完整" },
+				{ status: 400 },
+			);
+		}
+
+		// 自訂網址（選填）
+		const { slug, error: slugError } = normalizeSlug(formData.get("slug"));
+		if (slugError) {
+			return NextResponse.json(
+				{ success: false, error: slugError },
 				{ status: 400 },
 			);
 		}
@@ -109,6 +119,7 @@ export async function POST(req: Request) {
 			filename: mdFilename,
 			author_id,
 			buttons,
+			slug,
 		});
 		// console.log("插入 post 資料：", {
 		// 	title,
@@ -123,7 +134,7 @@ export async function POST(req: Request) {
 		if (insertError) {
 			console.error("[ERR] 插入 post 失敗：", insertError.message);
 			return NextResponse.json(
-				{ success: false, error: insertError.message },
+				{ success: false, error: slugErrorMessage(insertError) },
 				{ status: 500 },
 			);
 		}
