@@ -47,6 +47,9 @@ export async function POST(req: Request) {
 			);
 		}
 
+		// 內文頂部用比特幣價格走勢圖取代封面圖
+		const cover_chart = formData.get("cover_chart") === "true";
+
 		// 生成檔名
 		const timestamp = Date.now();
 		const sanitizedTitle =
@@ -120,6 +123,7 @@ export async function POST(req: Request) {
 			author_id,
 			buttons,
 			slug,
+			cover_chart,
 		});
 		// console.log("插入 post 資料：", {
 		// 	title,

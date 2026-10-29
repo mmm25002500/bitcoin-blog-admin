@@ -46,6 +46,7 @@ const CreatePost = ({ author_id }: { author_id?: string }) => {
   // 使用者輸入
   const [title, setTitle] = useState<string>(""); // title
   const [slug, setSlug] = useState<string>(""); // 自訂網址
+  const [coverChart, setCoverChart] = useState(false); // 內文頂部用價格走勢圖取代封面圖
   const [description, setDescription] = useState<string>(""); // description
   const [selectedTags, setSelectedTags] = useState<string[]>([]); // tags
   const [selectedType, setSelectedType] = useState<string[]>([]); // type
@@ -140,6 +141,7 @@ const CreatePost = ({ author_id }: { author_id?: string }) => {
 
     formData.append("title", title);
     formData.append("slug", slug);
+    formData.append("cover_chart", String(coverChart));
     formData.append("description", description);
     formData.append("tags", JSON.stringify(selectedTags)); // <-- 傳 JSON 字串
     formData.append("type", JSON.stringify(selectedType)); // <-- 傳 JSON 字串
@@ -363,6 +365,22 @@ const CreatePost = ({ author_id }: { author_id?: string }) => {
               onChange={(file) => setImageFile(file)}
               onDrop={(file) => setImageFile(file)}
             />
+          </div>
+
+          {/* 內文封面：圖片或圖表 */}
+          <div className="flex flex-col gap-1">
+            <label className="flex items-center gap-2 text-sm text-[#4A4A4A] w-fit cursor-pointer">
+              <input
+                type="checkbox"
+                checked={coverChart}
+                onChange={(e) => setCoverChart(e.target.checked)}
+                className="w-4 h-4"
+              />
+              文章內文改用圖表（比特幣即時價格走勢圖）
+            </label>
+            <span className="text-xs text-[#7C7C7C]">
+              勾選後內文頂部顯示走勢圖，列表縮圖與分享預覽仍使用封面圖
+            </span>
           </div>
 
           <div className="flex flex-col gap-2">

@@ -56,6 +56,9 @@ export async function POST(req: Request) {
 			);
 		}
 
+		// 內文頂部用比特幣價格走勢圖取代封面圖
+		const cover_chart = formData.get("cover_chart") === "true";
+
 		// 查舊資料
 		const { data: oldData, error: fetchError } = await supabase
 			.from("Post")
@@ -180,6 +183,7 @@ export async function POST(req: Request) {
 				author_id,
 				buttons,
 				slug,
+				cover_chart,
 				old_slugs: nextOldSlugs(oldData.slug, oldData.old_slugs, slug),
 			})
 			.eq("id", id);
