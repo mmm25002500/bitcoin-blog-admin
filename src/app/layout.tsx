@@ -4,8 +4,8 @@ import NextTopLoader from "nextjs-toploader";
 import { Toaster } from "react-hot-toast";
 
 export const metadata: Metadata = {
-	title: "manage setting",
-	description: "",
+	title: "比特幣中文網 btc.org.tw",
+	description: "比特幣中文網 btc.org.tw",
 	icons: {
 		icon: "/favicon.ico",
 	},
